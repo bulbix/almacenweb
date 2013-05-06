@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+  <testsuite errors="2" failures="0" hostname="lprado-PC" id="0" name="EntradaServiceTests" package="mx.gob.inr.farmacia" tests="3" time="0.729" timestamp="2013-04-29T20:06:51">
+      <properties />
+
+      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testCheckFolio" time="0.619" />
+
+      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testConsultaMaterial" time="0.069">
+          <error message="Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found" type="org.springframework.beans.factory.BeanCreationException">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+	at grails.test.mixin.services.ServiceUnitTestMixin.mockService(ServiceUnitTestMixin.groovy:54)
+Caused by: org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+Caused by: java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+</error>
+
+      </testcase>
+
+      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testDiponibilidad" time="0.022">
+          <error message="Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found" type="org.springframework.beans.factory.BeanCreationException">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+	at grails.test.mixin.services.ServiceUnitTestMixin.mockService(ServiceUnitTestMixin.groovy:54)
+Caused by: org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+Caused by: java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
+</error>
+
+      </testcase>
+
+      <system-out><![CDATA[--Output from testCheckFolio--
+--Output from testConsultaMaterial--
+--Output from testDiponibilidad--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from testCheckFolio--
+--Output from testConsultaMaterial--
+--Output from testDiponibilidad--
+]]></system-err>
+
+  </testsuite>
+</testsuites>

@@ -24,7 +24,7 @@ class SalidaCeye extends Salida {
 		paciente column:'id_paciente'
 		diagnostico column:'id_diagnostico'
 		area column:'cve_area'
-		id generator:'sequence' ,params:[sequence:'sq_idsalida_ceye']
+		id generator:'sequence' ,params:[sequence:'sq_idsalidaceye']
 		version false
 	}
 }

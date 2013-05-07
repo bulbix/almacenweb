@@ -1,3 +1,4 @@
+<g:javascript src="comunes.js"/>
 <g:javascript src="salida.js" />
 
 <a href="#create-salida" class="skip" tabindex="-1"><g:message
@@ -47,8 +48,7 @@
 
 	<form id="formSalida">
 
-		<input type="hidden" value="${salidaInstance?.id}" name="idSalida"
-			id="idSalida" />
+		<input type="hidden" value="${salidaInstance?.id}" name="idSalida" id="idSalida" />
 
 		<table>
 			<tr>
@@ -93,7 +93,7 @@
 
 		<table id="tblBusqueda">
 			<tr>
-				<td colspan="3"><label for="artauto">Descripción
+				<td colspan="6"><label for="artauto">Descripción
 						Articulo</label> <g:textField name="artauto" style="width: 700px;" /> <input
 					type="hidden" name="desArticulo" id="desArticulo" /></td>
 			</tr>
@@ -101,12 +101,12 @@
 				<td><label for="insumo">Insumo</label> <g:textField
 						name="insumo" size="3" /></td>
 				<td><label for="unidad">Unidad</label> <g:textField
-						name="unidad" readonly="true" /></td>
+						name="unidad" readonly="true" size="15" /></td>
 				<td><label for="costo">Costo</label> <g:textField
-						name="costoDisplay" readonly="true" /> <input type="hidden"
-					name="costo" id="costo" /></td>
-			</tr>
-			<tr>
+						name="costoDisplay" readonly="true" size="5" />
+						<input type="hidden"
+					name="costo" id="costo" />
+				</td>			
 				<td><label for="disponible">Disponible</label> <g:textField
 						name="disponible" readonly="true" size="3" /></td>
 				<td><label for="solicitado">Solicitado</label> <g:textField
@@ -154,8 +154,8 @@
 		</tbody>
 	</table>
 
-	<input type="button" id="btnActualizar" value="Actualizar" /> <input
-		type="button" id="btnBorrar" value="Borrar" />
+	<input type="button" id="btnActualizar" value="Actualizar" />
+	<input type="button" id="btnBorrar" value="Borrar" />
 
 	<form id="formDetalle">
 		<div class="list">

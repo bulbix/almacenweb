@@ -19,6 +19,6 @@ class EntradaDetalleCeye extends EntradaDetalle {
 		articulo column :'cve_art'		
 		table 'entrada_detalle_ceye'
 		id column:'id_entradadetalle'
-		id generator:'sequence' ,params:[sequence:'sq_identradadetalle_ceye']
+		id generator:'sequence' ,params:[sequence:'sq_identradadetalleceye']
     }
 }

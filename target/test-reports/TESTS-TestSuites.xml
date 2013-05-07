@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="2" failures="0" hostname="lprado-PC" id="0" name="EntradaServiceTests" package="mx.gob.inr.farmacia" tests="3" time="0.729" timestamp="2013-04-29T20:06:51">
+  <testsuite errors="0" failures="2" hostname="lprado-PC" id="0" name="UtilTests" package="almacenweb" tests="2" time="0.469" timestamp="2013-05-07T14:54:40">
       <properties />
 
-      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testCheckFolio" time="0.619" />
-
-      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testConsultaMaterial" time="0.069">
-          <error message="Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found" type="org.springframework.beans.factory.BeanCreationException">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-	at grails.test.mixin.services.ServiceUnitTestMixin.mockService(ServiceUnitTestMixin.groovy:54)
-Caused by: org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-Caused by: java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-</error>
+      <testcase classname="almacenweb.UtilTests" name="testUsuarios" time="0.434">
+          <failure message="java.lang.AssertionError: expected:&lt;5&gt; but was:&lt;8&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;5&gt; but was:&lt;8&gt;
+	at almacenweb.UtilTests.testUsuarios(UtilTests.groovy:18)
+</failure>
 
       </testcase>
 
-      <testcase classname="mx.gob.inr.farmacia.EntradaServiceTests" name="testDiponibilidad" time="0.022">
-          <error message="Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found" type="org.springframework.beans.factory.BeanCreationException">org.springframework.beans.factory.BeanCreationException: Error creating bean with name &apos;entradaFarmaciaService&apos;: Initialization of bean failed; nested exception is org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-	at grails.test.mixin.services.ServiceUnitTestMixin.mockService(ServiceUnitTestMixin.groovy:54)
-Caused by: org.springframework.beans.ConversionNotSupportedException: Failed to convert property value of type &apos;mx.gob.inr.farmacia.UtilService&apos; to required type &apos;mx.gob.inr.utils.UtilService&apos; for property &apos;utilService&apos;; nested exception is java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-Caused by: java.lang.IllegalStateException: Cannot convert value of type [mx.gob.inr.farmacia.UtilService] to required type [mx.gob.inr.utils.UtilService] for property &apos;utilService&apos;: no matching editors or conversion strategy found
-</error>
+      <testcase classname="almacenweb.UtilTests" name="testFechaDesglosada" time="0.023">
+          <failure message="java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;
+	at almacenweb.UtilTests.testFechaDesglosada(UtilTests.groovy:24)
+</failure>
 
       </testcase>
 
-      <system-out><![CDATA[--Output from testCheckFolio--
---Output from testConsultaMaterial--
---Output from testDiponibilidad--
+      <system-out><![CDATA[--Output from testUsuarios--
+Hibernate: select this_.idusuario as idusuario9_1_, this_.materno as materno9_1_, this_.nombre as nombre9_1_, this_.password as password9_1_, this_.paterno as paterno9_1_, this_.rfc as rfc9_1_, perfiles_a1_.idusuario as idusuario17_0_, perfiles_a1_.idperfil as idperfil17_0_ from usuario this_ inner join usuario_perfil perfiles_a1_ on this_.idusuario=perfiles_a1_.idusuario where (perfiles_a1_.idperfil=?) order by this_.nombre desc
+--Output from testFechaDesglosada--
 ]]></system-out>
 
-      <system-err><![CDATA[--Output from testCheckFolio--
---Output from testConsultaMaterial--
---Output from testDiponibilidad--
+      <system-err><![CDATA[--Output from testUsuarios--
+--Output from testFechaDesglosada--
 ]]></system-err>
 
   </testsuite>

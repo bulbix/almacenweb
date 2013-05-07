@@ -42,10 +42,14 @@ function autoComplete(input,url,hidden,funcSelect){
 }
 
 
+function autoCompletePaciente(funcSelect){
+	autoComplete("#pacienteauto","/almacenWeb/autoComplete/listarPaciente","#idPaciente",funcSelect)
+}
+
 function autoCompleteArticulo(funcSelect){	
-	autoComplete("#artauto","/almacenWeb/autoComplete/artlist","#insumo",
+	autoComplete("#artauto", url +"/listarArticulo","#insumo",
 			function(){
-		  		$.getJSON("/almacenWeb/util/buscarArticulo",{id:$("#insumo").val()})
+		  		$.getJSON(url + "/buscarArticulo",{id:$("#insumo").val()})
 		  		.done(function( json ) {
 		  	     $("#desArticulo").val(json.desArticulo)
 				 $("#unidad").val(json.unidad)
@@ -58,18 +62,14 @@ function autoCompleteArticulo(funcSelect){
 }
 
 function autoCompleteArea(funcSelect){
-	autoComplete("#areaauto","/almacenWeb/autoComplete/arealist","#cveArea",funcSelect)
-}
-
-function autoCompletePaciente(funcSelect){
-	autoComplete("#pacienteauto","/almacenWeb/autoComplete/pacientelist","#idPaciente",funcSelect)
+	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect)
 }
 
 function autoCompleteRecibio(funcSelect){
-	autoComplete("#recibeauto","/almacenWeb/autoComplete/recibelist",null,funcSelect)
+	autoComplete("#recibeauto", url + "/listarRecibe",null,funcSelect)
 }
 
 
 function autoCompleteAutorizo(funcSelect){
-	autoComplete("#autorizaauto","/almacenWeb/autoComplete/autorizalist",null,funcSelect)
+	autoComplete("#autorizaauto", url + "/listarAutoriza",null,funcSelect)
 }

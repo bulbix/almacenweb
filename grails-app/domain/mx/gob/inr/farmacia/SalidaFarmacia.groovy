@@ -23,7 +23,7 @@ class SalidaFarmacia extends Salida  {
 		usuario column:'id_usuario'
 		paciente column:'id_paciente'
 		area column:'cve_area'
-		id generator:'sequence' ,params:[sequence:'sq_idsalida']
+		id generator:'sequence' ,params:[sequence:'sq_idsalidafarmacia']
 		version false
 	}
 	

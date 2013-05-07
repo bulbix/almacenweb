@@ -9,7 +9,7 @@ abstract class CierreController <C extends Cierre>  {
 	protected entityCierre	
 	protected String almacen
 	
-	public SalidaController(entityCierre, almacen){
+	public CierreController(entityCierre, almacen){
 		this.entityCierre = entityCierre		
 		this.almacen = almacen
 	}   
@@ -39,7 +39,7 @@ abstract class CierreController <C extends Cierre>  {
 	
 	def consultarValue(){
 		
-		def value = cierreService.valueProgress		
+		def value = cierreService?.valueProgress		
 		log.info("VALOR PORCENTAJE " + value)		
 		render(contentType: 'text/json') {['value': value ]}
 	}

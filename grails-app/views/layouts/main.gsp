@@ -56,8 +56,7 @@
 		<g:javascript src="jquery.maskedinput.min.js"/>
 		<g:javascript src="jquery.validate.min.js"/>
 		<g:javascript src="jquery.currency.js"/>
-		<g:javascript src="jquery.timer.js"/>
-		<g:javascript src="comunes.js"/>
+		<g:javascript src="jquery.timer.js"/>		
 		<g:javascript src="validaciones.js"/>
 		<r:layoutResources />
 	</body>

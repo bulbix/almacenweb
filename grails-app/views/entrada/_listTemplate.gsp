@@ -26,7 +26,7 @@
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td>${fieldValue(bean: entradaInstance, field: "numeroEntrada")}</td>					
-						<td><g:link action="edit" id="${entradaInstance.id}">
+						<td><g:link action="create" id="${entradaInstance.id}">
 							<g:formatDate date="${entradaInstance.fechaEntrada}" format="dd/MM/yyyy" /></g:link></td>											
 						<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "numeroFactura")}</td>					

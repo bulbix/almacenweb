@@ -1,6 +1,5 @@
 $(document).ready(function() {	
-
-	//alert(url)
+	
 	$("#areaauto").focus()
 	
 	autoCompleteArticulo(function(){
@@ -8,6 +7,7 @@ $(document).ready(function() {
 		 disponibilidadArticulo($("#insumo").val(),$("#fechaSalida").val());
 		 $("#solicitado").focus()
 	});
+	
 	autoCompleteArea(function(){
 		$("#pacienteauto").focus()
 	});
@@ -245,7 +245,7 @@ function detalleAdd(){
 	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13 && $("#insumo").valid() ) {
-			$.getJSON("/almacenWeb/util/buscarArticulo",{id:this.value})
+			$.getJSON(url + "/buscarArticulo",{id:this.value})
 					.done(function( json ) {
 						 $("#artauto").val(json.desArticulo)
 						 $("#desArticulo").val(json.desArticulo)
@@ -292,8 +292,7 @@ function detalleAdd(){
 				 $("#surtidolast").html($("#surtido").val());			 
 			
 				 
-				 $('#salidadetalle').trigger("reloadGrid");
-				 //jQuery("#salidadetalle").addRowData($("#insumo").val(), data);			 
+				 $('#salidadetalle').trigger("reloadGrid");		 
 				 
 				 limpiarRenglonSalidaDetalle()
 				 $("#insumo").focus()

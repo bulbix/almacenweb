@@ -26,6 +26,6 @@ class SalidaDetalleCeye extends SalidaDetalle {
 		//entradaDetalle column:['id_entrada','renglon_entrada']
 		entradaDetalle column:'id_entradadetalle'
 		id column:'id_salidadetalle'
-		id generator:'sequence' ,params:[sequence:'sq_idsalidadetalle_ceye']
+		id generator:'sequence' ,params:[sequence:'sq_idsalidadetalleceye']
 	}    
 }

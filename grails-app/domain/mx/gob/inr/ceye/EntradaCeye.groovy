@@ -6,10 +6,10 @@ class EntradaCeye extends Entrada {
 
 	CatAreaCeye area
 	String paqueteq
-	
+		
 	static hasMany = [entradasDetalle:EntradaDetalleCeye]
 	
-	static transients = ['folioAlmacen']
+	static transients = ['folioAlmacen','devolucion']
 
 	static mapping = {
 		id column:'id_entrada'
@@ -17,7 +17,7 @@ class EntradaCeye extends Entrada {
 		supervisor column:'supervisor'
 		usuario column:'id_usuario'
 		area column:'cve_area'
-		id generator:'sequence' ,params:[sequence:'sq_identrada_ceye']
+		id generator:'sequence' ,params:[sequence:'sq_identradaceye']
 		table 'entrada_ceye'
 		version false
 	}

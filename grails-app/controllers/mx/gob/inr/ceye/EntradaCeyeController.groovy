@@ -10,7 +10,7 @@ class EntradaCeyeController extends EntradaController<EntradaCeye> {
 	EntradaCeyeService entradaCeyeService	
 	
 	public EntradaCeyeController(){
-		super(EntradaCeye,CatAreaCeye, 'C')
+		super(EntradaCeye, 'C')
 	}
 	
 	@PostConstruct

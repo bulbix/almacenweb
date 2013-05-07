@@ -30,7 +30,7 @@ class UtilService {
    }  
    
    
-   def checkFolio(entity, numero, fecha, Integer folioEntrada){
+   boolean checkFolio(entity, numero, fecha, Integer folioEntrada){
 	   
 	   def fechas = fechasAnioActual()
 			   
@@ -101,6 +101,23 @@ class UtilService {
 		   mes:cal.get(GregorianCalendar.MONTH), dia:cal.get(GregorianCalendar.DAY_OF_WEEK)]
    }
    
-   
+   boolean existeCierre(entityCierre, Date fechaCierre, String almacen){	   
+	   
+	   def criteria = entityCierre.createCriteria();
+	   
+	   def fechaDesglosada = fechaDesglosada(fechaCierre)
+	   
+	   def result = criteria.get {		   
+		   sqlRestriction("month(fecha_cierre) = $fechaDesglosada.mes")
+		   sqlRestriction("year(fecha_cierre) = $fechaDesglosada.anio")
+		   eq("almacen", almacen)
+		   maxResults(1)
+	   }
+	   
+	   if(result)
+	   	return true
+	   else
+	   	return false
+   } 
    
 }

@@ -1,15 +1,21 @@
 $(document).ready(function() {	
 	$("#remision").focus()
-	nuevo();
+	
 	autoCompleteArticulo(function(){
 		$("#cantidad").focus()
 	});
+	
+	autoCompleteArea(function(){
+		$("#registra").focus()
+	});
+	
 	jqGridDetalle();
 	detalleAdd();
-	validar();
-	guardarEntrada();
-	maskDates();
 	capturaEntrada();
+	validar();
+	
+	controlesDetalle()
+	controlesHead()
 	
 });
 
@@ -89,7 +95,7 @@ function capturaEntrada(){
 
 function jqGridMateriales(){
 	$("#entradadetalle").clearGridData();	
-	$.getJSON("/almacenWeb/entrada/jqGridMaterial",{folioAlmacen:$("#folioAlmacen").val()})
+	$.getJSON( url + "/jqGridMaterial",{folioAlmacen:$("#folioAlmacen").val()})
 	.done(function( json ) {
         for (var i = 0; i < json.rows.length; i++) {        	
         	$("#entradadetalle").addRowData(i+1, json.rows[i]);
@@ -105,69 +111,26 @@ function jqGridMateriales(){
 
 function validar(){
 	$("#formEntrada").validate({
+		
+		ignore: [],
+		
         rules: {
-                fechaEntrada: {required:true,validateDate:true},
-                folioEntrada: {required:true, uniqueFolioEntrada:true},
-                folioAlmacen: {uniqueFolioSalAlma:true}
+                fechaEntrada: {required:true,validateDate:true},                
+                insumo: {required:true, number:true,checkInsumo:true},
+                precio: {required:true, number:true}
         },
 		messages: {
-				fechaEntrada : {required:"Fecha Requerida"},
-				folioEntrada:{required:"Folio Requerido"}				
+				fechaEntrada : {required:"Requerido"},
+				insumo :{required:"Requerido", number:"Numerico"},
+				precio: {required:"Requerido", number:"Numerico"}
+							
 		}
   });
 }
 
-
 function maskDates(){
 	 $("#fechaEntrada").mask("99/99/9999");	
 	 $("#fechaCaducidad").mask("99/99/9999");
-}
-
-function guardarEntradaDetalle(){
-	
-}
-
-function guardarEntrada(){
-	$("#guardar").click(function(e){
-		
-		if($("#formEntrada").valid()){
-		
-			var gridData = jQuery("#entradadetalle").getRowData();
-		    var postData = JSON.stringify(gridData);		    
-			
-		    var frm = $("#formEntrada");
-		    var entradaData = JSON.stringify(frm.serializeObject()); 
-		    
-		    
-			var request = $.ajax({
-				type:'POST',
-				url: '/almacenWeb/entrada/guardarEntrada',
-				data:{
-					entradaData: entradaData, 
-					gridEntradaDetalle: postData
-			         
-				},
-				dataType:"json"	        
-			});		
-			
-			
-			request.always(function(data) {
-				//alert(data.status)
-				$('#mensaje').html('<h6>Entrada guardada</h6>')
-				//$("#entradadetalle").trigger("reloadGrid"); 
-			});
-		}
-		
-	});
-}
-
-function nuevo(){
-	
-	$("#nuevo").click(function(){
-		$("#remision").focus()
-		$("input[type='text']").val('')
-		
-	})
 }
 
 function limpiarRenglonEntradaDetalle(){
@@ -181,7 +144,7 @@ function detalleAdd(){
 	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13) {
-			$.getJSON("/almacenWeb/util/buscarArticulo",{id:this.value})
+			$.getJSON(url + "/buscarArticulo",{id:this.value})
 					.done(function( json ) {
 						 $("#artauto").val(json.desArticulo)
 						 $("#desArticulo").val(json.desArticulo)
@@ -211,38 +174,60 @@ function detalleAdd(){
 	
 	$("#fechaCaducidad").keypress(function(e){	
 		 if(e.which == 13) {
-			 var data = [{cveArt:$("#insumo").val(),desArticulo:$("#desArticulo").val(),unidad:$("#unidad").val(),
-		            cantidad:$("#cantidad").val(),precioEntrada:$("#precio").val(),
-		            noLote:$("#noLote").val(),fechaCaducidad:$("#fechaCaducidad").val()}];
+			 var data = [{	cveArt:$("#insumo").val(),
+				 			desArticulo:$("#desArticulo").val(),
+				 			unidad:$("#unidad").val(),
+				 			cantidad:$("#cantidad").val(),
+				 			precioEntrada:$("#precio").val(),
+				 			noLote:$("#noLote").val(),
+				 			fechaCaducidad:$("#fechaCaducidad").val()}];
 			 
-			 var RowId = $("#entradadetalle").jqGrid('getGridParam', 'reccount');
-			 ++RowId
-			 jQuery("#entradadetalle").addRowData(RowId, data, "first");			 
+			 guardarEntrada(JSON.stringify(data))
+			 
+			 $("#clavelast").html($("#insumo").val());
+			 $("#deslast").html($("#desArticulo").val());
+			 $("#unidadlast").html($("#unidad").val());
+			 $("#cantidadlast").html($("#cantidad").val());				
+			 $("#preciolast").html($("#precio").val());
+			 $("#lotelast").html($("#noLote").val());
+			 $("#caducidadlast").html($("#fechaCaducidad").val());
+		
+			 
+			 $('#entradadetalle').trigger("reloadGrid");			 
+			 			 
 			 limpiarRenglonEntradaDetalle()
 			 $("#insumo").focus()
 		 }
 	});
 	
-	$("#bDelete").click(function(){ 
+	
+}
 
-	    // Get the currently selected row
-	    toDelete = $("#entradadetalle").jqGrid('getGridParam','selrow');
-
-	    // You'll get a pop-up confirmation dialog, and if you say yes,
-	    // it will call "delete.php" on your server.
-	    $("#entradadetalle").jqGrid(
-	        'delGridRow',
-	        toDelete/*,
-	          { url: 'delete.php', 
-	            reloadAfterSubmit:false}*/
-	    );
+function guardarEntrada(detalleData){
+	
+    var frm = $("#formEntrada");
+    var entradaData = JSON.stringify(frm.serializeObject());
+    
+	var request = $.ajax({
+		type:'POST',		
+		url:  url +'/guardarEntrada',
+		async:false,
+		data:{
+			entradaData: entradaData, 
+			detalleData: detalleData,			
+			idEntrada:$('#idEntrada').val()
+		},
+		dataType:"json"	        
 	});
 	
+	request.done(function(data) {
+		$('#idEntrada').val(data.idEntrada)
+	});
 }
 
 function jqGridDetalle(){
 	$("#entradadetalle").jqGrid({
-	    url:'/almacenWeb/entrada/consultarEntradaDetalle',
+	    url: url +'/consultarEntradaDetalle',
 	    datatype: 'json',
 	    mtype: 'GET',
 	    colNames:['Clave','Descripcion', 'U. Medida','Cantidad','Precio U.','Lote','F. Caducidad'],
@@ -255,7 +240,7 @@ function jqGridDetalle(){
 	      {name:'noLote', index:'noLote', width:100,editable:true},
 	      {name:'fechaCaducidad', index:'fechaCaducidad', width:100,editable:true,sorttype:'date',align:'center'}
 	    ],
-	    postData:{idEntrada:$("#idEntrada").val()},
+	    postData:{idEntrada:function() { return $('#idEntrada').val() }},
 	    onSelectRow: function(id){	
 		},		
 		afterInsertRow:function (rowid, 
@@ -263,10 +248,11 @@ function jqGridDetalle(){
 				rowelem){
 		},
 	    pager: '#pager',
+	    editurl: url + "/actualizarEntradaDetalle",
 	    rowNum:20,
 	    rowList:[20, 40, 60 ,80],
-	    sortname: 'id',
-	    sortorder: 'asc',
+	    //sortname: 'id',
+	    //sortorder: 'asc',
 	    viewrecords: true,
 	    gridview: true,
 	    caption: 'Entrada Detalle'			   
@@ -275,7 +261,133 @@ function jqGridDetalle(){
 	$("#entradadetalle").jqGrid('setGridWidth', 950);
 	$("#entradadetalle").jqGrid('setGridHeight', 250);
 	
-	$("#entradadetalle").jqGrid("navGrid", "#pager", {add: false, edit: false, del: true, search: false, refresh: false});
-     $('#entradadetalle').jqGrid('inlineNav',"#pager");
+	$("#entradadetalle").jqGrid("navGrid", "#pager",
+			{
+		add: false,
+		edit: false,
+		del: false,
+		search: true,
+		refresh: false
+			},	
+			{//edit
+			},
+			{},//add
+			{//del
+				savekey: [true, 13],
+				width:500,
+				closeOnEscape: true,
+				reloadAfterSubmit:true,
+				closeAfterSubmit:true,
+				afterSubmit: function (data) {
+					alert('prueb')
+					return [true,'',''];
+				}
+			},	
+			{},
+			{});
 	
 }
+
+
+function controlesHead(){
+	$("#actualizar").click(function(){
+		
+		if($("#fechaEntrada").valid()){
+			actualizarEntrada();
+		}		
+			
+	})
+	
+	$("#cancelar").click(function(){
+		cancelarEntrada()
+	})
+	
+}
+
+
+function controlesDetalle(){
+	
+	$("#btnActualizar").click(function(){
+		
+		var gr = jQuery("#entradadetalle").jqGrid('getGridParam','selrow');
+		
+		$("#entradadetalle").jqGrid('editGridRow',gr, {
+			   editData:{idEntrada:$("#idEntrada").val()},
+			   height:240,
+			   reloadAfterSubmit: true,
+			   editCaption:'Editar Detalle',
+			   bSubmit:'Actualizar',
+			   width:500,
+			   //url:'someurl.php',
+			   closeAfterEdit:true,
+			   viewPagerButtons:false,
+			   afterComplete: function(data){
+				   //alert(data)
+			   }
+		});
+	});
+	
+	$("#btnBorrar").click(function(){
+		
+		var gr = jQuery("#entradadetalle").jqGrid('getGridParam','selrow');
+		
+		$("#salidadetalle").jqGrid('delGridRow',gr, {
+			   delData:{idEntrada:$("#idEntrada").val()},
+			   height:240,
+			   reloadAfterSubmit: true,
+			   editCaption:'Borrar Detalle',
+			   bSubmit:'Borrar',
+			   width:500,
+			   //url:'someurl.php',
+			   closeAfterEdit:true,
+			   viewPagerButtons:false,
+			   afterComplete: function(data){
+				   //alert(data)
+			   }
+		});
+	});
+}
+
+function actualizarEntrada(){
+	
+	  var frm = $("#formEntrada");
+	  var entradaData = JSON.stringify(frm.serializeObject());
+	  
+	  var request = $.ajax({
+			type:'POST',		
+			url: url +'/actualizarSalida',
+			async:false,
+			data:{
+				entradaData: entradaData,
+				idEntrada:$('#idEntrada').val()
+			},
+			dataType:"json"	        
+		});
+		
+		request.done(function(data) {
+			//$('#idSalida').val(data.idSalida)
+			alert(data.mensaje)
+		});
+	
+}
+
+function cancelarEntrada(){	 
+	  
+	  var request = $.ajax({
+			type:'POST',		
+			url: url + '/cancelarSalida',
+			async:false,
+			data:{				
+				idEntrada:$('#idEntrada').val()
+			},
+			dataType:"json"	        
+		});
+		
+		request.done(function(data) {
+			//$('#idSalida').val(data.idSalida)
+			alert(data.mensaje)
+		});
+	
+}
+
+

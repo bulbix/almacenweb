@@ -14,7 +14,7 @@ class EntradaFarmacia extends Entrada {
 		recibio column:'recibio'
 		supervisor column:'supervisor'		
 		usuario column:'id_usuario' 
-        id generator:'sequence' ,params:[sequence:'sq_identrada']
+        id generator:'sequence' ,params:[sequence:'sq_identradafarmacia']
         table 'entrada'        
         version false
     }    

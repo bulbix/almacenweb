@@ -17,7 +17,7 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 	
 	
 	public EntradaFarmaciaController(){
-		super(EntradaFarmacia,CatAreaFarmacia, 'F')
+		super(EntradaFarmacia,'F')
 	}
 	
 	@PostConstruct

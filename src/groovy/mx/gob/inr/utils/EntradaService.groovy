@@ -1,5 +1,6 @@
 package mx.gob.inr.utils
 
+import grails.converters.JSON
 import java.util.Date;
 
 abstract class EntradaService<E extends Entrada> {
@@ -8,61 +9,86 @@ abstract class EntradaService<E extends Entrada> {
 	public final int PERFIL_CEYE  = 10
 	
 	public UtilService utilService
+	public AutoCompleteService autoCompleteService	
 	
 	protected entityEntrada	
 	protected entityEntradaDetalle
 	protected entityArticulo
+	protected entityArea
 	
-	public EntradaService(entityEntrada, entityEntradaDetalle, entityArticulo){
+	protected String almacen
+	
+	public EntradaService(entityEntrada, entityEntradaDetalle, entityArticulo, entityArea ,almacen){
 		this.entityEntrada = entityEntrada		
 		this.entityEntradaDetalle = entityEntradaDetalle
 		this.entityArticulo = entityArticulo
+		this.entityArea = entityArea
+		this.almacen = almacen
 	}
 	
+	E setJsonEntrada(jsonEntrada,  String ip){
+		
+		def entrada = entityEntrada.newInstance()
+		entrada.almacen = almacen
+		entrada.ipTerminal = ip
+		
+		entrada.numeroEntrada = jsonEntrada.folioEntrada as int
+		entrada.fechaEntrada = new Date().parse("dd/MM/yyyy",jsonEntrada.fechaEntrada)
+		
+		if(jsonEntrada.idSalAlma)
+			entrada.idSalAlma = jsonEntrada.idSalAlma as int
+					
+		entrada.numeroFactura = jsonEntrada.remision
+		entrada.usuario = Usuario.get(jsonEntrada.registra)
+		entrada.recibio = Usuario.get(jsonEntrada.recibe)
+		entrada.supervisor = Usuario.get(jsonEntrada.supervisa)		
+		entrada.presupuesto = null
+		entrada.actividad = null
+		
+		return entrada
+	}
 	
-	def guardarSalidaMaterial(jsonArrayEntrada,jsonArrayDetalle,ipTerminal){
+	def guardarSalidaMaterial(E entrada, jsonDetalle){
 			
-		if(jsonArrayEntrada.idEntrada){
-			entrada = entityEntrada.get(jsonArrayEntrada.idEntrada)
-			
+		if(entrada.idEntrada){
+									
 			def e = entityEntradaDetalle.createCriteria()
 			e.list(){
 				eq("entrada", entrada)
 			}*.delete()
 		}
 		
-		def entrada = entityEntrada.newInstance()
+		entrada.save()
 		
-		entrada.numeroEntrada = Integer.parseInt(jsonArrayEntrada.folioEntrada)
-		entrada.fechaEntrada = new Date().parse("dd/MM/yyyy",jsonArrayEntrada.fechaEntrada)
-		
-		log.info("ID salida almacen"  + jsonArrayEntrada.idSalAlma);
-		
-		if(jsonArrayEntrada.idSalAlma)
-			entrada.idSalAlma = Integer.parseInt(jsonArrayEntrada.idSalAlma)
-					
-		entrada.numeroFactura = jsonArrayEntrada.remision
-		entrada.usuario = Usuario.get(jsonArrayEntrada.registra)
-		entrada.recibio = Usuario.get(jsonArrayEntrada.recibe)
-		entrada.supervisor = Usuario.get(jsonArrayEntrada.supervisa)
-		entrada.ipTerminal = ipTerminal
-		entrada.presupuesto = null
-		entrada.actividad = null
-		
-		entrada.save([validate:false,flush:true])
-		
-		def renglonEntrada = 0
-		
-		jsonArrayDetalle.each() {
-			
-			guardarEntradaDetalle(it, entrada)
+		jsonDetalle.each() {			
+			guardarDetalle(it, entrada)
 		}
 	}
 		
-	
 	def guardar(E entrada){
 		entrada.save([validate:false,flush:true])
 		return entrada		
+	}
+	
+	def guardarDetalle(jsonDetalle, E entrada){
+		
+		def articulo = entityArticulo.get(jsonDetalle[0].cveArt)
+		
+		def entradaDetalle = entityEntradaDetalle.newInstance()
+				
+		entradaDetalle.entrada = entrada
+		entradaDetalle.articulo = articulo
+		entradaDetalle.cantidad = jsonDetalle[0].cantidad as double
+		entradaDetalle.existencia = jsonDetalle[0].cantidad as double
+		entradaDetalle.noLote = jsonDetalle[0].noLote
+		entradaDetalle.precioEntrada = jsonDetalle[0].precioEntrada as double
+		entradaDetalle.renglonEntrada = consecutivoRenglon(entrada)
+		
+		if(jsonDetalle[0].fechaCaducidad)
+			entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonDetalle[0].fechaCaducidad)
+					
+		entradaDetalle.save([validate:false,flush:true])
+		
 	}
 	
 	def actualizar(E entrada, Integer idEntradaUpdate){
@@ -82,57 +108,75 @@ abstract class EntradaService<E extends Entrada> {
 	}
 	
 	
-	def listar(){
+	def listar(params){
 		
+		def fechas = utilService.fechasAnioActual()
+		
+		def entradaList = entityEntrada.createCriteria().list(params){	
+			between("fechaEntrada",fechas.fechaInicio,fechas.fechaFin)
+			order("numeroEntrada","desc")
+		}
+		
+		entradaList.each(){
+			if(it.idSalAlma)
+				it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).numeroSalida;
+		}
+
+		def entradaTotal = entityEntrada.createCriteria().get{
+			projections{
+				count()
+			}
+			between("fechaEntrada",fechas.fechaInicio,fechas.fechaFin)
+		}
+
+		[entradaList:entradaList, entradaTotal:entradaTotal]
+	}
+			
+	def actualizarDetalle(Long idEntrada, Long clave, Double cantidad, Double precio, String noLote, Date fechaCaducidad){
+		
+		def detalle = entityEntradaDetalle.createCriteria().get{
+			eq('entrada.id', idEntrada)
+			eq("articulo.id", clave)
+			maxResults(1)
+		}
+		
+		if(detalle){
+			detalle.cantidad = cantidad
+			detalle.precioEntrada = precio
+			detalle.noLote = noLote
+			detalle.fechaCaducidad = fechaCaducidad
+		}
+		
+		detalle.save()
 	}
 	
-	
-	def guardarDetalle(jsonEntradaDetalle, E entrada){		
-		
-		def articulo = entityArticulo.get(jsonEntradaDetalle.cveArt)		
-		def entradaDetalle = entityEntradaDetalle.class.newInstance()
-		
-		entradaDetalle.entrada = entrada
-		entradaDetalle.articulo articulo,
-		entradaDetalle.cantidad = Double.parseDouble(jsonEntradaDetalle.cantidad),
-		entradaDetalle.existencia = Double.parseDouble(jsonEntradaDetalle.cantidad),
-		entradaDetalle.noLote = jsonEntradaDetalle.noLote,
-		entradaDetalle.precioEntrada = Double.parseDouble(jsonEntradaDetalle.precioEntrada),
-		entradaDetalle.renglonEntrada = consecutivoRenglon(entrada)		
-		
-		if(jsonEntradaDetalle.fechaCaducidad)
-			entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonEntradaDetalle.fechaCaducidad)
-					
-		entradaDetalle.save([validate:false,flush:true])
-		
-	}
-	
-	def actualizarDetalle(){
-		
-	}
-	
-	def borrarDetalle(){
-		
-	}
-	
+	def borrarDetalle(Long idEntrada, Long clave){
+		def detalle = entityEntradaDetalle.createCriteria().list(){
+			eq('entrada.id', idEntrada)
+			eq("articulo.id", clave)
+		}*.delete()
+	}	
 	
 	def consultarDetalle(params){
 		
-		def sortIndex = params.sidx ?: 'name'
+		def sortIndex = params.sidx ?: 'id'
 		def sortOrder  = params.sord ?: 'asc'
 		def maxRows = Integer.valueOf(params.rows)
 		def currentPage = Integer.valueOf(params.page) ?: 1
-		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
+		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows		
+		def idEntrada  = params.long('idEntrada')
 		
 		log.info("IDENTRADA " + params.idEntrada)
 		
 		def detalleCount = entityEntradaDetalle.createCriteria().list(){
-			eq('entrada.id',Long.parseLong(params.idEntrada))
+			eq('entrada.id',idEntrada)
 		}
 		
-		def detalle = entityEntradaDetalle.createCriteria().list(max: maxRows, offset: rowOffset) {
-			eq('entrada.id',Long.parseLong(params.idEntrada))
-			order(sortIndex, sortOrder)
+		def criteria = entityEntradaDetalle.createCriteria() 
+		
+		def detalle = criteria.list(max: maxRows, offset: rowOffset) {
+			eq('entrada.id',idEntrada)
+			//order(sortIndex, sortOrder)
 		}
 		
 		def totalRows = detalleCount.size();
@@ -182,8 +226,7 @@ abstract class EntradaService<E extends Entrada> {
 		
 		return [rows:results,idSalAlma:idSalAlma]
 	}
-	
-	
+		
 	def consecutivoRenglon(E entrada){
 		utilService.consecutivoRenglon(entityEntradaDetalle,"renglonEntrada","entrada",entrada)
 	}
@@ -275,8 +318,21 @@ abstract class EntradaService<E extends Entrada> {
 	}
 	
 	def usuarios(Integer idPerfil){
-		return utilService.usuarios(idPerfil)
-		
+		return utilService.usuarios(idPerfil)	
+	}
+	
+	def buscarArticulo(Long id){
+		def articulo = entityArticulo.get(id)
+		articulo.desArticulo = articulo.desArticulo.trim()
+		return articulo
+	}
+	
+	def listarArticulo(String term){
+		 autoCompleteService.listarArticulo(term, entityArticulo)
+	}
+	
+	def listarArea(String term){
+		autoCompleteService.listarArea(term, entityArea)
 	}
 	
 	

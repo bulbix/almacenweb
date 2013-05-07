@@ -24,6 +24,6 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 		entradaDetalle column:'id_entradadetalle'
 		entrada column:'id_entrada'		
 		id column:'id_salidadetalle'
-		id generator:'sequence' ,params:[sequence:'sq_idsalidadetalle']
+		id generator:'sequence' ,params:[sequence:'sq_idsalidadetallefarmacia']
 	}    
 }

@@ -10,22 +10,43 @@ abstract class SalidaService<S extends Salida> {
 	
 	public UtilService utilService
 	public EntradaService entradaService
+	public AutoCompleteService autoCompleteService
 	
 	protected entitySalida
 	protected entitySalidaDetalle
 	protected entityEntradaDetalle
 	protected entityArticulo
+	protected entityArea
 	
 	protected String almacen
 	
 	public SalidaService(entitySalida, entitySalidaDetalle,
-		 entityEntradaDetalle, entityArticulo, almacen){
+		 entityEntradaDetalle, entityArticulo, entityArea, almacen){
 		this.entitySalida = entitySalida
 		this.entitySalidaDetalle = entitySalidaDetalle	
 		this.entityEntradaDetalle = entityEntradaDetalle
 		this.entityArticulo = entityArticulo
-		
+		this.entityArea = entityArea
 		this.almacen = almacen		
+	}
+		 
+	S setJsonSalida(jsonSalida, String ip){		
+		
+		def salida = entitySalida.newInstance()
+		salida.almacen = almacen
+		salida.ipTerminal = ip
+				
+		salida.numeroSalida = jsonSalida.folioSalida as int
+		salida.fechaSalida = new Date().parse("dd/MM/yyyy",jsonSalida.fechaSalida)
+		salida.jefeServicio = jsonSalida.autorizaauto
+		salida.recibio  = jsonSalida.recibeauto
+		salida.entrego = Usuario.get(jsonSalida.entrega)
+		salida.area = entityArea.get(jsonSalida.cveArea)
+		salida.noOrden = null
+		salida.usuario = Usuario.get(6558)
+		salida.paciente = Paciente.get(jsonSalida.idPaciente)
+		
+		return salida
 	}
 	
 	def S guardar(S salida){				
@@ -59,7 +80,7 @@ abstract class SalidaService<S extends Salida> {
 		
 	}
 	
-	def consultar(params){
+	def listar(params){
 		
 		def fechas = utilService.fechasAnioActual()
 				
@@ -129,7 +150,7 @@ abstract class SalidaService<S extends Salida> {
 	}
 	
 	def consultarDetalle(params){
-		def sortIndex = params.sidx ?: 'name'
+		def sortIndex = params.sidx ?: 'id'
 		def sortOrder  = params.sord ?: 'asc'
 		def maxRows = Integer.valueOf(params.rows)
 		def currentPage = Integer.valueOf(params.page) ?: 1
@@ -274,15 +295,21 @@ abstract class SalidaService<S extends Salida> {
 		utilService.consecutivoNumero(entitySalida, "numeroSalida","fechaSalida")
 	}
 	
-	def checkFolioSalida(Integer folioSalida){
-		
-		utilService.checkFolio(entitySalida,"numeroSalida","fechaSalida", folioSalida)
-		
+	def checkFolioSalida(Integer folioSalida){		
+		utilService.checkFolio(entitySalida,"numeroSalida","fechaSalida", folioSalida)		
 	}
 	
 	def usuarios(Integer idPerfil){
-		return utilService.usuarios(idPerfil)
-		
+		return utilService.usuarios(idPerfil)		
+	}
+	
+	def listarRecibe(String term){
+		autoCompleteService.listarNombre(entitySalida, "recibio", term)
+	}
+	
+	
+	def listarAutoriza(String term){
+		autoCompleteService.listarNombre(entitySalida, "jefeServicio", term)
 	}
 	
 }

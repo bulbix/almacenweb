@@ -12,7 +12,7 @@ abstract class Salida {
 	String recibio
 	Usuario entrego
 	String estadoSalida = 'A'
-	String almacen = 'F'
+	String almacen
 	CatArea area
 	String noOrden
 	Usuario usuario

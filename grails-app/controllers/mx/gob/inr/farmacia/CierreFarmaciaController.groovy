@@ -11,8 +11,9 @@ class CierreFarmaciaController extends CierreController<CierreFarmacia> {
 	CierreFarmaciaService cierreFarmaciaService
 	
 	public CierreFarmaciaController(){
-		super(CierreFarmacia, 'F')
+		super(CierreFarmacia,  'F')
 	}
+	
 	
 	@PostConstruct
 	public void init(){

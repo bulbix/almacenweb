@@ -19,7 +19,7 @@ class EntradaDetalleFarmacia extends EntradaDetalle {
 		version false
 		table 'entrada_detalle'
 		id column:'id_entradadetalle'
-		id generator:'sequence' ,params:[sequence:'sq_identradadetalle']
+		id generator:'sequence' ,params:[sequence:'sq_identradadetallefarmacia']
 		
 		
 		//id composite: ['entrada','renglonEntrada']

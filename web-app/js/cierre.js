@@ -14,7 +14,7 @@ function generarCierre(){
 	
 	var request = $.ajax({
 		type:'POST',		
-		url: '/almacenWeb/cierreFarmacia/generarCierrre',
+		url: url + '/generarCierrre',
 		async:true,
 		data:{				
 			fechaCierre:$('#fechaCierre').val()
@@ -31,7 +31,7 @@ function progressValue(){
 	var progressbar = $("#progressbar"), progressLabel = $(".progress-label");
 	
 	var timer = $.timer(function() {
-		 $.getJSON("/almacenWeb/cierreFarmacia/consultarValue",{})
+		 $.getJSON( url + "/consultarValue",{})
 			.done(function( json ) {
 				//alert(json.value)
 				var val = progressbar.progressbar("value") || 0;

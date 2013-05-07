@@ -8,12 +8,10 @@ abstract class SalidaController <S extends Salida> {
 	public SalidaService salidaService	
 	
 	protected entitySalida
-	protected entityArea
 	protected String almacen
 	
-	public SalidaController(entitySalida, entityArea, almacen){
-		this.entitySalida = entitySalida
-		this.entityArea = entityArea
+	public SalidaController(entitySalida, almacen){
+		this.entitySalida = entitySalida	
 		this.almacen = almacen
 	}
 	
@@ -47,32 +45,17 @@ abstract class SalidaController <S extends Salida> {
 	def guardarSalida(){
 		
 		S salida;
-		def salidaData = JSON.parse(params.salidaData)
-		def detalleData = JSON.parse(params.detalleData)
+		def jsonSalida = JSON.parse(params.salidaData)
+		def jsonDetalle = JSON.parse(params.detalleData)
 		def idSalida = params.int('idSalida')
 		
-		def clave = detalleData[0].cveArt as long
-		def solicitado = Double.parseDouble(detalleData[0].solicitado)
-		def surtido = Double.parseDouble(detalleData[0].surtido)
-		
-		log.info(detalleData)
+		def clave = jsonDetalle[0].cveArt as long
+		def solicitado = jsonDetalle[0].solicitado as double
+		def surtido = jsonDetalle[0].surtido as double
 				
 		if(!idSalida){//Centinela
-			
-			salida = entitySalida.newInstance()
-			
-			salida.numeroSalida = Integer.parseInt(salidaData.folioSalida)
-			salida.fechaSalida = new Date().parse("dd/MM/yyyy",salidaData.fechaSalida)
-			salida.jefeServicio = salidaData.autorizaauto
-			salida.recibio  = salidaData.recibeauto
-			salida.entrego = Usuario.get(salidaData.entrega)
-			salida.area = entityArea.get(salidaData.cveArea)
-			salida.noOrden = null
-			salida.usuario = Usuario.get(6558)
-			salida.ipTerminal = request.getRemoteAddr()
-			salida.paciente = Paciente.get(salidaData.idPaciente)
-			
-			salida = salidaService.guardar(salida);
+			salida = salidaService.setJsonSalida(jsonSalida, request.getRemoteAddr())
+			salida = salidaService.guardar(salida);			
 			salidaService.guardarDetalle(clave,solicitado,surtido, salida)
 		}
 		else{
@@ -89,22 +72,11 @@ abstract class SalidaController <S extends Salida> {
 		
 		def mensaje = ""
 		S salida
-		def salidaData = JSON.parse(params.salidaData)
+		def jsonSalida = JSON.parse(params.salidaData)
 		def idSalida = params.int('idSalida')
-		
-		salida = entitySalida.newInstance()
-		
-		salida.numeroSalida = Integer.parseInt(salidaData.folioSalida)
-		salida.fechaSalida = new Date().parse("dd/MM/yyyy",salidaData.fechaSalida)
-		salida.jefeServicio = salidaData.autorizaauto
-		salida.recibio  = salidaData.recibeauto
-		salida.entrego = Usuario.get(salidaData.entrega)
-		salida.area = entityArea.get(salidaData.cveArea)
-		salida.noOrden = null
-		salida.usuario = Usuario.get(6558)
-		salida.ipTerminal = request.getRemoteAddr()
-		salida.paciente = Paciente.get(salidaData.idPaciente)
-		
+				
+		salida = salidaService.setJsonSalida(jsonSalida, request.getRemoteAddr())	
+				
 		if(idSalida){
 			mensaje = salidaService.actualizar(salida, idSalida)
 		}
@@ -161,7 +133,7 @@ abstract class SalidaController <S extends Salida> {
 	public def list(Integer max) {
 		params.max = Math.min(max ?: 10, 100)
 		
-		def salidas = salidaService.consultar(params)
+		def salidas = salidaService.listar(params)
 		
 		[salidaInstanceList: salidas.salidaList, salidaInstanceTotal: salidas.salidaTotal]
 	}
@@ -181,4 +153,32 @@ abstract class SalidaController <S extends Salida> {
 		
 		[usuariosList:salidaService.usuarios(salidaService.PERFIL_FARMACIA),salidaInstance: salidaInstance]
 	}
+	
+	def listarRecibe(){
+		render salidaService.listarRecibe(params.term) as JSON
+	}
+	
+	
+	def listarAutoriza(){
+		render salidaService.listarAutoriza(params.term) as JSON		
+	}
+	
+	
+	def buscarArticulo(){
+		def clave = params.long('id')
+		def articulo = entradaService.buscarArticulo(clave)		
+		def articuloJSON = articulo as JSON		
+		render articuloJSON
+	}
+	
+	def listarArticulo(){
+		render entradaService.listarArticulo(params.term) as JSON
+	}
+	
+	
+	def listarArea(){
+		render entradaService.listarArea(params.term) as JSON
+	}
+	
+	
 }

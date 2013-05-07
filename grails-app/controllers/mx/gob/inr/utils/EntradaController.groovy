@@ -7,18 +7,15 @@ abstract class EntradaController <E extends Entrada> {
 
 	//static allowedMethods = [guardarEntrada:'POST',jqGridDetalle:'POST']
 	
-	EntradaService entradaService
+	public EntradaService entradaService
 	
 	protected entityEntrada
-	protected entityArea
 	protected String almacen
 	
-	public SalidaController(entityEntrada, entityArea, almacen){
-		this.entityEntrada = entityEntrada
-		this.entityArea = entityArea
+	public EntradaController(entityEntrada,almacen){
+		this.entityEntrada = entityEntrada		
 		this.almacen = almacen
 	}
-	
 	
 
 	def index() {
@@ -26,28 +23,37 @@ abstract class EntradaController <E extends Entrada> {
 	}
 
 	def list(Integer max) {
-		params.max = Math.min(max ?: 10, 100)
+		params.max = Math.min(max ?: 10, 100)		
+		def entradas = entradaService.listar(params)
 		
-		def listaEntradas = entityEntrada.list(params).each() {
-			
-			if(it.idSalAlma)
-				it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).numeroSalida;
-		}
-		
-		[entradaInstanceList: listaEntradas, entradaInstanceTotal: entityEntrada.count()]
+		[entradaInstanceList: entradas.entradaList, entradaInstanceTotal: entradas.entradaTotal]
 	}
 
-	def create() {
+	def create(Integer id) {
 						
 		def entradaInstance = entityEntrada.newInstance()
 		entradaInstance.fechaEntrada = new Date()
 		entradaInstance.numeroEntrada = entradaService.consecutivoNumeroEntrada()
+		entradaInstance.almacen = almacen
 		
 		if(id){
 			entradaInstance = entityEntrada.get(id)
+			
+			if(entradaInstance.idSalAlma)
+				entradaInstance.folioAlmacen = SalidaMaterial.get(entradaInstance.idSalAlma).numeroSalida
+			
 		}
 		
-		[usuariosList:entradaService.usuarios(entradaService.PERFIL_FARMACIA),entradaInstance: entradaInstance]
+		def usuariosList = null
+		
+		if(almacen == 'F'){
+			usuariosList = entradaService.usuarios(entradaService.PERFIL_FARMACIA)
+		}
+		else{
+			usuariosList = entradaService.usuarios(entradaService.PERFIL_CEYE)
+		}		
+		
+		[usuariosList:usuariosList,entradaInstance: entradaInstance]
 	}
 	
 	def consultarEntradaDetalle(){
@@ -64,10 +70,36 @@ abstract class EntradaController <E extends Entrada> {
 	}
 		
 	def guardarEntrada(){
-		def jsonArrayDetalle = JSON.parse(params.gridEntradaDetalle)
-		def jsonArrayEntrada = JSON.parse(params.entradaData)
-		entradaService.guardarSalidaMaterial(jsonArrayEntrada, jsonArrayDetalle,request.getRemoteAddr());
+		
+		E entrada		
+		def jsonEntrada = JSON.parse(params.entradaData)
+		def jsonDetalle = JSON.parse(params.detalleData)
+		def idEntrada = params.int('idEntrada')
+		
+		if(!idEntrada){//Centinela
+			entrada = entradaService.setJsonEntrada(jsonEntrada, request.getRemoteAddr())
+			entrada = entradaService.guardar(entrada);
+			entradaService.guardarDetalle(jsonDetalle, entrada)
+		}
+		else{
+			entrada = entityEntrada.get(idEntrada)
+			entradaService.guardarDetalle(jsonDetalle,entrada)
+		}
+		
+		render(contentType: 'text/json') {['idEntrada': entrada.id]}
+		
+	}
+	
+	def guardarSalidaMaterial(){
+		
+		def jsonEntrada = JSON.parse(params.entradaData)
+		def jsonDetalle = JSON.parse(params.gridEntradaDetalle)
+		
+		def entrada = entradaService.setJsonEntrada(jsonEntrada, request.getRemoteAddr())
+		entradaService.guardarSalidaMaterial(entrada, jsonDetalle);
+		
 		render(contentType: 'text/json') {['status': 'ok']}
+				
 	}
 		
 	def uniqueFolioEntrada(){
@@ -89,6 +121,23 @@ abstract class EntradaController <E extends Entrada> {
 		}
 		
 		render text: result, contentType:"text/html", encoding:"UTF-8"
+	}
+	
+	
+	def buscarArticulo(){
+		def clave = params.long('id')
+		def articulo = entradaService.buscarArticulo(clave)		
+		def articuloJSON = articulo as JSON		
+		render articuloJSON
+	}
+	
+	def listarArticulo(){
+		render entradaService.listarArticulo(params.term) as JSON
+	}
+	
+	
+	def listarArea(){
+		render entradaService.listarArea(params.term) as JSON
 	}
    
 }

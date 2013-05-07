@@ -11,7 +11,7 @@ abstract class Entrada {
 	Usuario recibio
 	Usuario supervisor
 	String estadoEntrada = 'A'
-	String almacen = 'F'
+	String almacen
 	String actividad
 	String presupuesto
 	Usuario usuario

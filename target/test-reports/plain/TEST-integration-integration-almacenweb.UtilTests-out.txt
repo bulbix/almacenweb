@@ -1,0 +1,3 @@
+--Output from testUsuarios--
+Hibernate: select this_.idusuario as idusuario9_1_, this_.materno as materno9_1_, this_.nombre as nombre9_1_, this_.password as password9_1_, this_.paterno as paterno9_1_, this_.rfc as rfc9_1_, perfiles_a1_.idusuario as idusuario17_0_, perfiles_a1_.idperfil as idperfil17_0_ from usuario this_ inner join usuario_perfil perfiles_a1_ on this_.idusuario=perfiles_a1_.idusuario where (perfiles_a1_.idperfil=?) order by this_.nombre desc
+--Output from testFechaDesglosada--

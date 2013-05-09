@@ -1,22 +1,21 @@
-$.validator.addMethod("uniqueFolioEntrada", function(value, element) {		
+$.validator.addMethod("uniqueFolio", function(value, element) {	
 	
-	return uniqueFolio("/almacenWeb/entrada/uniqueFolioEntrada", value)
+	//alert($("#idPadre").val())
+	var result = true
+	
+	if($("#idPadre").val() == ''){
+		result = uniqueFolio(url + "/uniqueFolio", value) 
+	}
+	
+	return result
 	
 }, "Folio ya existe");
 
 $.validator.addMethod("uniqueFolioSalAlma", function(value, element) {		
 	
-	return uniqueFolio("/almacenWeb/entrada/uniqueFolioSalAlma", value)
+	return uniqueFolio( url + "/uniqueFolioSalAlma", value)
 	
 }, "Folio ya utilizado");
-
-
-$.validator.addMethod("uniqueFolioSalida", function(value, element) {		
-	
-	return uniqueFolio("/almacenWeb/salida/uniqueFolioSalida", value)
-	
-}, "Folio ya existe");
-
 
 $.validator.addMethod("checkExistencia", function(value, element) {		
 	
@@ -26,7 +25,7 @@ $.validator.addMethod("checkExistencia", function(value, element) {
 
 $.validator.addMethod("checkInsumo", function(value, element) {
 	
-	var gridData = jQuery("#salidadetalle").getRowData();
+	var gridData = jQuery("#detalle").getRowData();
 	
 	var result = true
     

@@ -10,14 +10,20 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
-			<table style="text-align:center">
+			<table>
 				<thead>
 					<tr>					
-						<g:sortableColumn property="numeroEntrada" title="Folio Entrada" />					
-						<g:sortableColumn property="fechaEntrada" title="Fecha Entrada" />					
-						<g:sortableColumn property="idSalAlma" title="Salida Almacen" />					
+						<g:sortableColumn property="numeroEntrada" title="Folio" />					
+						<g:sortableColumn property="fechaEntrada" title="Fecha" />					
+						<g:sortableColumn property="idSalAlma" title="Almacen" />					
 						<g:sortableColumn property="numeroFactura" title="Remision" />
 						<g:sortableColumn property="usuario" title="Registro" />
+						
+						<g:if test="${almacen != 'F'}">
+							<g:sortableColumn property="paqueteq" title="Paquete" />
+							<g:sortableColumn property="area" title="Area" />						
+						</g:if>
+						
 						<g:sortableColumn property="estadoEntrada" title="Estado" />					
 					</tr>
 				</thead>
@@ -31,7 +37,14 @@
 						<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "numeroFactura")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "usuario")}</td>
-						<td>${fieldValue(bean: entradaInstance, field: "estadoEntrada")}</td>					
+						
+						<g:if test="${almacen != 'F'}">
+							<td>${fieldValue(bean: entradaInstance, field: "paqueteq")}</td>					
+							<td>${fieldValue(bean: entradaInstance, field: "area")}</td>						
+						</g:if>
+						
+						
+						<td>${fieldValue(bean: entradaInstance, field: "estadoEntrada")=='A'?'ACTIVO':'CANCELADO'}</td>					
 											
 					</tr>
 				</g:each>

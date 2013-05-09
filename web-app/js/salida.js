@@ -2,12 +2,11 @@ $(document).ready(function() {
 	
 	$("#areaauto").focus()
 	
-	autoCompleteArticulo(function(){
-						 
+	autoCompleteArticulo(function(){						 
 		 disponibilidadArticulo($("#insumo").val(),$("#fechaSalida").val());
 		 $("#solicitado").focus()
 	});
-	
+		
 	autoCompleteArea(function(){
 		$("#pacienteauto").focus()
 	});
@@ -23,25 +22,22 @@ $(document).ready(function() {
 		$("#insumo").focus()		
 	})
 	
-	
-	jqGridDetalle();
+	consultarDetalle();
 	detalleAdd();
-	capturaSalida();
-	validar();
-	
+	capturar();
+	validar();	
 	controlesDetalle()
 	controlesHead()
 });
 
-
 function validar(){
-	$("#formSalida").validate({
+	$("#formPadre").validate({
 		
 		ignore: [],
 		
         rules: {
         		fechaSalida: {required:true,validateDate:true,dateToday:true},
-        		//folioSalida: {required:true, uniqueFolioSalida:true},
+        		folioSalida: {required:true, uniqueFolio:true},
         		cveArea:{required:true},
         		recibeauto:{required:true},
         		autorizaauto:{required:true},
@@ -51,7 +47,7 @@ function validar(){
         },
 		messages: {
 				fechaSalida : {required:"Requerido"},
-				//folioSalida:{required:"Requerido"},
+				folioSalida:{required:"Requerido"},
 				cveArea:{required:"Requerido"},
 				recibeauto:{required:"Requerido"},
         		autorizaauto:{required:"Requerido"},
@@ -62,7 +58,7 @@ function validar(){
   });
 }
 
-function capturaSalida(){
+function capturar(){
 	
 	var area = $("#areaauto")
 
@@ -100,13 +96,12 @@ function capturaSalida(){
 
 }
 
-
-function jqGridDetalle(){
+function consultarDetalle(){
 	
-	//alert($("#idSalida").val())
+	//alert($("#idPadre").val())
 	
-	$("#salidadetalle").jqGrid({
-	    url: url + '/consultarSalidaDetalle',
+	$("#detalle").jqGrid({
+	    url: url + '/consultarDetalle',
 	    datatype: 'json',
 	    mtype: 'GET',
 	    colNames:['Clave','Descripcion', 'U. Medida','Costo','Disponible','Solicitado','Surtido'],
@@ -119,7 +114,7 @@ function jqGridDetalle(){
 	      {name:'solicitado', index:'solicitado', width:60,editable:true,align:'center'},	      
 	      {name:'surtido', index:'surtido', width:60,editable:true,align:'center'}
 	    ],
-	    postData:{idSalida: function() { return $('#idSalida').val() }},
+	    postData:{idPadre: function() { return $('#idPadre').val() }},
 	    onSelectRow: function(id){	
 		},		
 		afterInsertRow:function (rowid, 
@@ -127,7 +122,7 @@ function jqGridDetalle(){
 				rowelem){
 		},
 	    pager: '#pager',
-	    editurl: url + "/actualizarSalidaDetalle",
+	    editurl: url + "/actualizarDetalle",
 	    rowNum:20,
 	    rowList:[20, 40, 60 ,80],
 	    //sortname: 'id',
@@ -138,10 +133,10 @@ function jqGridDetalle(){
 	    //multiselect: true
 	})	
 	
-	$("#salidadetalle").jqGrid('setGridWidth', 950);
-	$("#salidadetalle").jqGrid('setGridHeight', 250);
+	$("#detalle").jqGrid('setGridWidth', 950);
+	$("#detalle").jqGrid('setGridHeight', 250);
 	
-	$("#salidadetalle").jqGrid("navGrid", "#pager",
+	$("#detalle").jqGrid("navGrid", "#pager",
 	{
 		add: false,
 		edit: false,
@@ -166,7 +161,7 @@ function jqGridDetalle(){
 	{},
 	{});
 	
-    //$('#salidadetalle').jqGrid('inlineNav',"#pager");
+    //$('#detalle').jqGrid('inlineNav',"#pager");
 	
 }
 
@@ -175,71 +170,16 @@ function controlesHead(){
 		
 		if( $("#cveArea").valid() && $("#fechaSalida").valid() 
 		    && $("#recibeauto").valid() && $("#autorizaauto").valid() ){
-			actualizarSalida();
+			actualizar();
 		}		
 			
 	})
 	
 	$("#cancelar").click(function(){
-		cancelarSalida()
+		cancelar()
 	})
 	
 }
-
-
-function controlesDetalle(){
-	
-	$("#btnActualizar").click(function(){
-		//alert('prueba')
-		var gr = jQuery("#salidadetalle").jqGrid('getGridParam','selrow');
-		
-		///alert(gr)
-		
-		$("#salidadetalle").jqGrid('editGridRow',gr, {
-			   editData:{idSalida:$("#idSalida").val()},
-			   height:240,
-			   reloadAfterSubmit: true,
-			   editCaption:'Editar Detalle',
-			   bSubmit:'Actualizar',
-			   width:500,
-			   //url:'someurl.php',
-			   closeAfterEdit:true,
-			   viewPagerButtons:false,
-			   afterComplete: function(data){
-				   //alert(data)
-			   }
-		});
-	});
-	
-	$("#btnBorrar").click(function(){
-		
-		var gr = jQuery("#salidadetalle").jqGrid('getGridParam','selrow');
-		
-		$("#salidadetalle").jqGrid('delGridRow',gr, {
-			   delData:{idSalida:$("#idSalida").val()},
-			   height:240,
-			   reloadAfterSubmit: true,
-			   editCaption:'Borrar Detalle',
-			   bSubmit:'Borrar',
-			   width:500,
-			   //url:'someurl.php',
-			   closeAfterEdit:true,
-			   viewPagerButtons:false,
-			   afterComplete: function(data){
-				   //alert(data)
-			   }
-		});
-	});
-}
-
-
-function limpiarRenglonSalidaDetalle(){
-	
-	$("#tblBusqueda :input").each(function(){
-		$(this).val('');
-	});	
-}
-
 
 function detalleAdd(){
 	
@@ -271,7 +211,7 @@ function detalleAdd(){
 	$("#surtido").keypress(function(e){	
 		 if(e.which == 13) {
 			 
-			 if($("#formSalida").valid()){			 
+			 if($("#formPadre").valid()){			 
 				 var data = [{ cveArt:$("#insumo").val(),
 					 		   desArticulo:$("#desArticulo").val(),
 					 		   unidad:$("#unidad").val(),
@@ -281,7 +221,7 @@ function detalleAdd(){
 					 		   surtido:$("#surtido").val()
 					 		}];
 				 
-				 guardarSalida(JSON.stringify(data))			 
+				 guardar(JSON.stringify(data))			 
 				
 				 
 				 $("#clavelast").html($("#insumo").val());
@@ -292,9 +232,9 @@ function detalleAdd(){
 				 $("#surtidolast").html($("#surtido").val());			 
 			
 				 
-				 $('#salidadetalle').trigger("reloadGrid");		 
+				 $('#detalle').trigger("reloadGrid");		 
 				 
-				 limpiarRenglonSalidaDetalle()
+				 limpiarRenglonDetalle()
 				 $("#insumo").focus()
 			 }
 		 }
@@ -302,71 +242,7 @@ function detalleAdd(){
 }
 
 
-function guardarSalida(detalleData){
-	
-    var frm = $("#formSalida");
-    var salidaData = JSON.stringify(frm.serializeObject());
-    
-	var request = $.ajax({
-		type:'POST',		
-		url:  url +'/guardarSalida',
-		async:false,
-		data:{
-			salidaData: salidaData, 
-			detalleData: detalleData,			
-			idSalida:$('#idSalida').val()
-		},
-		dataType:"json"	        
-	});
-	
-	request.done(function(data) {
-		//alert(data.idSalida)
-		$('#idSalida').val(data.idSalida)		
-		$("#disponiblelast").html(data.disponible)
-	});
-}
-
-function actualizarSalida(){
-	
-	  var frm = $("#formSalida");
-	  var salidaData = JSON.stringify(frm.serializeObject());
-	  
-	  var request = $.ajax({
-			type:'POST',		
-			url: url +'/actualizarSalida',
-			async:false,
-			data:{
-				salidaData: salidaData,
-				idSalida:$('#idSalida').val()
-			},
-			dataType:"json"	        
-		});
-		
-		request.done(function(data) {
-			//$('#idSalida').val(data.idSalida)
-			alert(data.mensaje)
-		});
-	
-}
-
-function cancelarSalida(){	 
-	  
-	  var request = $.ajax({
-			type:'POST',		
-			url: url + '/cancelarSalida',
-			async:false,
-			data:{				
-				idSalida:$('#idSalida').val()
-			},
-			dataType:"json"	        
-		});
-		
-		request.done(function(data) {
-			//$('#idSalida').val(data.idSalida)
-			alert(data.mensaje)
-		});
-	
-}
+/////////////////FUNCIONES PROPIAS////////////
 
 function disponibilidadArticulo(clave, fecha){
 	
@@ -383,5 +259,4 @@ function disponibilidadArticulo(clave, fecha){
 	 })
 }
 
-
-
+	

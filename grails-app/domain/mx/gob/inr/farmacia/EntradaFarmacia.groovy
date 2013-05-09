@@ -5,6 +5,8 @@ import mx.gob.inr.utils.Usuario;
 
 class EntradaFarmacia extends Entrada {	
 	
+	String devolucion
+	
 	static hasMany = [entradasDetalle:EntradaDetalleFarmacia]
 	
 	static transients = ['folioAlmacen']

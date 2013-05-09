@@ -9,7 +9,7 @@ class EntradaCeye extends Entrada {
 		
 	static hasMany = [entradasDetalle:EntradaDetalleCeye]
 	
-	static transients = ['folioAlmacen','devolucion']
+	static transients = ['folioAlmacen']
 
 	static mapping = {
 		id column:'id_entrada'

@@ -1,3 +1,6 @@
+
+
+<g:javascript src="validaciones.js"/>
 <g:javascript src="comunes.js"/>
 <g:javascript src="salida.js" />
 
@@ -46,9 +49,9 @@
 
 	<div id="mensaje"></div>
 
-	<form id="formSalida">
+	<form id="formPadre">
 
-		<input type="hidden" value="${salidaInstance?.id}" name="idSalida" id="idSalida" />
+		<input type="hidden" value="${salidaInstance?.id}" name="idPadre" id="idPadre" />
 
 		<table>
 			<tr>
@@ -98,7 +101,7 @@
 					type="hidden" name="desArticulo" id="desArticulo" /></td>
 			</tr>
 			<tr>
-				<td><label for="insumo">Insumo</label> <g:textField
+				<td><label for="insumo">Clave</label> <g:textField
 						name="insumo" size="3" /></td>
 				<td><label for="unidad">Unidad</label> <g:textField
 						name="unidad" readonly="true" size="15" /></td>
@@ -119,8 +122,6 @@
 
 
 	<table>
-
-
 		<thead>
 			<tr>
 				<td><label>Clave</label></td>
@@ -159,7 +160,7 @@
 
 	<form id="formDetalle">
 		<div class="list">
-			<table id="salidadetalle"></table>
+			<table id="detalle"></table>
 			<div id="pager"></div>
 		</div>
 	</form>

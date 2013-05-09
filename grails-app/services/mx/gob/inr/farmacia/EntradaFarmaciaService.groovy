@@ -18,7 +18,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 	UtilService utilService	
 	AutoCompleteService autoCompleteService
 	
-	final int AREA_FARMACIA = 6220	
+	final short AREA_FARMACIA = 6220	
 	final int PERFIL_FARMACIA = 8
 	final int PERFIL_CEYE  = 10
 	
@@ -31,10 +31,40 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 	public void init(){
 		super.utilService = this.utilService
 		super.autoCompleteService = this.autoCompleteService		
-	}	
+	}
 	
-	 def consultaMaterial(Integer folioAlmacen) {
-		 super.consultaMaterial(folioAlmacen, AREA_FARMACIA)
-	 };
+	
+	
+	def consultarDetalleMaterial (Integer folioAlmacen, Short cveArea){
+		
+		def query = """\
+			select sd from SalidaDetalleMaterial sd join fetch sd.id.salida s 
+			where s.numeroSalida = :folio and s.fechaSalida between :fecha1 and :fecha2 and s.almacen = 'F' 
+			and s.cveArea = :area and s.estadoSalida <> 'C' order by sd.articulo
+		"""
+		
+		def fechas = utilService.fechasAnioActual()
+		
+		def detalle  = SalidaDetalleMaterial.executeQuery(query,
+			[folio:folioAlmacen,fecha1:fechas.fechaInicio,fecha2:fechas.fechaFin, area:cveArea])
+		
+		def idSalAlma = null
+		
+		if(detalle.size() > 0)
+			idSalAlma = detalle[0].salida.id
+			
+		//log.info("ID salida almacen "  + detalle[0].salida.id);
+		
+		
+		def results = detalle?.collect {
+			[
+				cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
+				cantidad:it.cantidadSurtida,precioEntrada:it.precioUnitario,noLote:it.noLote,
+				fechaCaducidad:it.fechaCaducidad?.format('dd/MM/yyyy')
+			]
+		}
+		
+		return [rows:results,idSalAlma:idSalAlma]
+	}
 	
 }

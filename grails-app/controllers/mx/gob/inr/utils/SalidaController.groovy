@@ -2,7 +2,7 @@ package mx.gob.inr.utils
 
 import grails.converters.JSON
 
-abstract class SalidaController <S extends Salida> {
+abstract class SalidaController <S extends Salida> implements IOperacionController {
 
 	public EntradaService entradaService
 	public SalidaService salidaService	
@@ -14,40 +14,42 @@ abstract class SalidaController <S extends Salida> {
 		this.entitySalida = entitySalida	
 		this.almacen = almacen
 	}
-	
-	
-	def disponibilidadArticulo(){
-		
-		def clave = params.long('clave');
-		def fecha = new Date().parse("dd/MM/yyyy", params.fecha)
-		
-		def disponible = entradaService.disponibilidadArticulo(clave, fecha, almacen)
-		
-		log.info(String.format("Disponibilidad %s", disponible))
-		
-		def json = [disponible:disponible] as JSON
-		
-		log.info(json)
-		
-		render json
+
+	@Override
+	def index() {
+		redirect(action: "list", params: params)
 	}
-	
-	def uniqueFolioSalida(){
+
+	@Override
+	def create(Integer id) {
 		
-		def folioSalida  = params.int('checkFolio')
+		def salidaInstance = entitySalida.newInstance()
+		salidaInstance.fechaSalida = new Date()
+		salidaInstance.numeroSalida = salidaService.consecutivoNumeroSalida()
 		
-		log.info("FolioSalida: " + folioSalida)
+		if(id){
+			salidaInstance = entitySalida.get(id)
+		}
 		
-		def result = !salidaService.checkFolioSalida(folioSalida)
-		render text: result, contentType:"text/html", encoding:"UTF-8"
+		[usuariosList:salidaService.usuarios(salidaService.PERFIL_FARMACIA),salidaInstance: salidaInstance]
+		
 	}
-	
-	def guardarSalida(){
+
+	@Override
+	def list(Integer max) {
+		params.max = Math.min(max ?: 10, 100)		
+		def salidas = salidaService.listar(params)
 		
+		[salidaInstanceList: salidas.salidaList, salidaInstanceTotal: salidas.salidaTotal]
+		
+	}
+
+	@Override
+	def guardar() {
 		S salida;
-		def jsonSalida = JSON.parse(params.salidaData)
-		def jsonDetalle = JSON.parse(params.detalleData)
-		def idSalida = params.int('idSalida')
+		def jsonSalida = JSON.parse(params.dataPadre)
+		def jsonDetalle = JSON.parse(params.dataDetalle)
+		def idSalida = params.int('idPadre')
 		
 		def clave = jsonDetalle[0].cveArt as long
 		def solicitado = jsonDetalle[0].solicitado as double
@@ -65,15 +67,22 @@ abstract class SalidaController <S extends Salida> {
 		
 		def disponible = entradaService.disponibilidadArticulo(clave, salida.fechaSalida,almacen)
 		
-		render(contentType: 'text/json') {['idSalida': salida.id , 'disponible':disponible]}
+		render(contentType: 'text/json') {['idPadre': salida.id , 'disponible':disponible]}
+		
 	}
 	
-	def actualizarSalida(){
+	@Override
+	def guardarTodo(){
 		
+	}
+	
+
+	@Override
+	def actualizar() {
 		def mensaje = ""
 		S salida
-		def jsonSalida = JSON.parse(params.salidaData)
-		def idSalida = params.int('idSalida')
+		def jsonSalida = JSON.parse(params.dataPadre)
+		def idSalida = params.int('idPadre')
 				
 		salida = salidaService.setJsonSalida(jsonSalida, request.getRemoteAddr())	
 				
@@ -82,10 +91,12 @@ abstract class SalidaController <S extends Salida> {
 		}
 			
 		render(contentType: 'text/json') {['mensaje': mensaje ]}
+		
 	}
-	
-	def cancelarSalida(){
-		def idSalida = params.int('idSalida')
+
+	@Override
+	def cancelar() {
+		def idSalida = params.int('idPadre')
 		def mensaje = ""
 		
 		if(idSalida){
@@ -96,19 +107,21 @@ abstract class SalidaController <S extends Salida> {
 			mensaje = "Error"
 			
 		render(contentType: 'text/json') {['mensaje': mensaje ]}
+		
 	}
-	
-	def consultarSalidaDetalle(){
+
+	@Override
+	def consultarDetalle() {
 		def json = salidaService.consultarDetalle(params) as JSON
 		log.info(json)
 		render json
-	}
-	
-	def actualizarSalidaDetalle(params){
-	
-		log.info(params)
 		
-		def idSalida = params.long('idSalida')
+	}
+
+	@Override
+	def actualizarDetalle(Object params) {
+				
+		def idSalida = params.long('idPadre')
 		def clave = params.long('id')
 		def solicitado = params.double('solicitado')
 		def surtido = params.double('surtido')
@@ -124,61 +137,69 @@ abstract class SalidaController <S extends Salida> {
 		}
 		
 		render(contentType: 'text/json') {['responseText': 'weno']}
+		
+	}
+
+	@Override
+	def uniqueFolio() {
+		def folioSalida  = params.int('checkFolio')
+		
+		log.info("FolioSalida: " + folioSalida)
+		
+		def result = !salidaService.checkFolioSalida(folioSalida)
+		render text: result, contentType:"text/html", encoding:"UTF-8"
+		
+	}
+
+	@Override
+	def buscarArticulo() {
+		def clave = params.long('id')
+		def articulo = entradaService.buscarArticulo(clave)		
+		def articuloJSON = articulo as JSON		
+		render articuloJSON
+		
+	}
+
+	@Override
+	def listarArticulo() {
+		render entradaService.listarArticulo(params.term) as JSON
+		
+	}
+
+	@Override
+	def listarArea() {
+		render entradaService.listarArea(params.term) as JSON
+		
 	}
 	
-	public def index() {
-		redirect(action: "list", params: params)
-	}
-
-	public def list(Integer max) {
-		params.max = Math.min(max ?: 10, 100)
+	////////////METODOS PROPIOS////////////////////////////////
+	
+	def disponibilidadArticulo(){
 		
-		def salidas = salidaService.listar(params)
+		def clave = params.long('clave');
+		def fecha = new Date().parse("dd/MM/yyyy", params.fecha)
 		
-		[salidaInstanceList: salidas.salidaList, salidaInstanceTotal: salidas.salidaTotal]
-	}
-
-	def create(Integer id) {
-		def salidaInstance = entitySalida.newInstance()
-		salidaInstance.fechaSalida = new Date()
-		salidaInstance.numeroSalida = salidaService.consecutivoNumeroSalida()
+		def disponible = entradaService.disponibilidadArticulo(clave, fecha, almacen)
 		
-		log.info("IDDDD " + id)
+		log.info(String.format("Disponibilidad %s", disponible))
 		
-		if(id){
-			salidaInstance = entitySalida.get(id)
-		}
+		def json = [disponible:disponible] as JSON
 		
-		log.info("Salida www " + salidaInstance.numeroSalida)
+		log.info(json)
 		
-		[usuariosList:salidaService.usuarios(salidaService.PERFIL_FARMACIA),salidaInstance: salidaInstance]
+		render json
 	}
 	
 	def listarRecibe(){
 		render salidaService.listarRecibe(params.term) as JSON
 	}
-	
-	
+		
 	def listarAutoriza(){
-		render salidaService.listarAutoriza(params.term) as JSON		
+		render salidaService.listarAutoriza(params.term) as JSON
 	}
 	
 	
-	def buscarArticulo(){
-		def clave = params.long('id')
-		def articulo = entradaService.buscarArticulo(clave)		
-		def articuloJSON = articulo as JSON		
-		render articuloJSON
-	}
 	
-	def listarArticulo(){
-		render entradaService.listarArticulo(params.term) as JSON
-	}
-	
-	
-	def listarArea(){
-		render entradaService.listarArea(params.term) as JSON
-	}
 	
 	
 }

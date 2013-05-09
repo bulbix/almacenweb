@@ -16,8 +16,7 @@ abstract class Entrada {
 	String presupuesto
 	Usuario usuario
 	Date fechaCaptura = new Date()
-	String ipTerminal
-	String devolucion = "0"	
+	String ipTerminal		
 	Integer folioAlmacen
 	
 	String toString(){

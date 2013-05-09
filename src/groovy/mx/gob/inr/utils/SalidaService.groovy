@@ -155,9 +155,9 @@ abstract class SalidaService<S extends Salida> {
 		def maxRows = Integer.valueOf(params.rows)
 		def currentPage = Integer.valueOf(params.page) ?: 1
 		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
-		def idSalida  = Long.parseLong(params.idSalida)
+		def idSalida  = Long.parseLong(params.idPadre)
 		
-		log.info("IDSALIDA " + params.idSalida)
+		log.info("IDSALIDA " + params.idPadre)
 		
 		def entitySalidaDetalleName = entitySalidaDetalle.name
 		
@@ -292,11 +292,11 @@ abstract class SalidaService<S extends Salida> {
 	}
 	
 	def consecutivoNumeroSalida(){
-		utilService.consecutivoNumero(entitySalida, "numeroSalida","fechaSalida")
+		utilService.consecutivoNumero(entitySalida, "numeroSalida","fechaSalida",almacen)
 	}
 	
 	def checkFolioSalida(Integer folioSalida){		
-		utilService.checkFolio(entitySalida,"numeroSalida","fechaSalida", folioSalida)		
+		utilService.checkFolio(entitySalida,"numeroSalida","fechaSalida", folioSalida,almacen)		
 	}
 	
 	def usuarios(Integer idPerfil){

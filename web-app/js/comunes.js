@@ -41,7 +41,6 @@ function autoComplete(input,url,hidden,funcSelect){
 	
 }
 
-
 function autoCompletePaciente(funcSelect){
 	autoComplete("#pacienteauto","/almacenWeb/autoComplete/listarPaciente","#idPaciente",funcSelect)
 }
@@ -69,7 +68,124 @@ function autoCompleteRecibio(funcSelect){
 	autoComplete("#recibeauto", url + "/listarRecibe",null,funcSelect)
 }
 
-
 function autoCompleteAutorizo(funcSelect){
 	autoComplete("#autorizaauto", url + "/listarAutoriza",null,funcSelect)
 }
+
+////FUNCIONES PERSISTENCIA////////////////////
+
+function guardar(dataDetalle){
+	
+    var frm = $("#formPadre");
+    var dataPadre = JSON.stringify(frm.serializeObject());
+    
+	var request = $.ajax({
+		type:'POST',		
+		url:  url +'/guardar',
+		async:false,
+		data:{
+			dataPadre: dataPadre, 
+			dataDetalle: dataDetalle,			
+			idPadre:$('#idPadre').val()
+		},
+		dataType:"json"	        
+	});
+	
+	request.done(function(data) {
+		$('#idPadre').val(data.idPadre)
+		
+		//alert(data.disponible)
+		if(data.disponible != undefined)
+			$('#disponiblelast').html(data.disponible)
+	});
+}
+
+function actualizar(){
+	
+	var frm = $("#formPadre");
+	var dataPadre = JSON.stringify(frm.serializeObject());
+
+	var request = $.ajax({
+		type:'POST',		
+		url: url +'/actualizar',
+		async:false,
+		data:{
+			dataPadre: dataPadre,
+			idPadre:$('#idPadre').val()
+		},
+		dataType:"json"	        
+	});
+
+	request.done(function(data) {
+		alert(data.mensaje)
+	});
+	
+}
+
+function cancelar(){	 
+	  
+	var request = $.ajax({
+		type:'POST',		
+		url: url + '/cancelar',
+		async:false,
+		data:{				
+			idPadre:$('#idPadre').val()
+		},
+		dataType:"json"	        
+	});
+
+	request.done(function(data) {			
+		alert(data.mensaje)
+	});	
+}
+
+function controlesDetalle(){
+	
+	$("#btnActualizar").click(function(){
+		
+		var gr = jQuery("#detalle").jqGrid('getGridParam','selrow');
+		
+		$("#detalle").jqGrid('editGridRow',gr, {
+			   editData:{idPadre:$("#idPadre").val()},
+			   height:300,
+			   reloadAfterSubmit: true,
+			   editCaption:'Editar Detalle',
+			   bSubmit:'Actualizar',
+			   width:500,
+			   //url:'someurl.php',
+			   closeAfterEdit:true,
+			   viewPagerButtons:false,
+			   afterComplete: function(data){
+				   //alert(data)
+			   }
+		});
+	});
+	
+	$("#btnBorrar").click(function(){
+		
+		var gr = jQuery("#detalle").jqGrid('getGridParam','selrow');
+		
+		$("#detalle").jqGrid('delGridRow',gr, {
+			   delData:{idPadre:$("#idPadre").val()},
+			   height:240,
+			   reloadAfterSubmit: true,
+			   editCaption:'Borrar Detalle',
+			   bSubmit:'Borrar',
+			   width:500,
+			   //url:'someurl.php',
+			   closeAfterEdit:true,
+			   viewPagerButtons:false,
+			   afterComplete: function(data){
+				   //alert(data)
+			   }
+		});
+	});
+}
+
+function limpiarRenglonDetalle(){
+	
+	$(".busqueda :input").each(function(){
+		$(this).val('');
+	});	
+}
+

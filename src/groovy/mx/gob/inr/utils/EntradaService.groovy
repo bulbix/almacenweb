@@ -3,6 +3,11 @@ package mx.gob.inr.utils
 import grails.converters.JSON
 import java.util.Date;
 
+import mx.gob.inr.ceye.EntradaCeye;
+import mx.gob.inr.farmacia.EntradaFarmacia
+import mx.gob.inr.materiales.*
+
+
 abstract class EntradaService<E extends Entrada> {
 
 	public final int PERFIL_FARMACIA = 8
@@ -45,12 +50,57 @@ abstract class EntradaService<E extends Entrada> {
 		entrada.presupuesto = null
 		entrada.actividad = null
 		
+		
+		if(entrada instanceof EntradaFarmacia){			
+			entrada.devolucion  = jsonEntrada.devolucion == 'on'?'1':'0'
+		}
+		else if(entrada instanceof EntradaCeye){
+			entrada.area =  entityArea.get(jsonEntrada.cveArea)
+			entrada.paqueteq = jsonEntrada.paqueteq
+		}
+		
+		
 		return entrada
+	}	
+		
+	def guardar(E entrada){
+		entrada.save([validate:false,flush:true])
+		return entrada		
 	}
 	
-	def guardarSalidaMaterial(E entrada, jsonDetalle){
+	def guardarDetalle(jsonDetalle, E entrada, Integer renglonEntrada){
+		
+		def articulo = entityArticulo.get(jsonDetalle.cveArt)
+		
+		def entradaDetalle = entityEntradaDetalle.newInstance()
+				
+		entradaDetalle.entrada = entrada
+		entradaDetalle.articulo = articulo
+		entradaDetalle.cantidad = jsonDetalle.cantidad as double
+		entradaDetalle.existencia = jsonDetalle.cantidad as double
+		entradaDetalle.noLote = jsonDetalle.noLote
+		entradaDetalle.precioEntrada = jsonDetalle.precioEntrada as double
+		
+		if(!renglonEntrada)		
+			entradaDetalle.renglonEntrada = consecutivoRenglon(entrada)
+		else
+			entradaDetalle.renglonEntrada = renglonEntrada
 			
-		if(entrada.idEntrada){
+		
+		try{
+			entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonDetalle.fechaCaducidad)
+		}
+		catch(Exception e){
+			entradaDetalle.fechaCaducidad = null
+		}
+					
+		entradaDetalle.save([validate:false,flush:true])
+		
+	}
+	
+	def guardarTodo(E entrada, jsonArrayDetalle){
+		
+		if(entrada.id){
 									
 			def e = entityEntradaDetalle.createCriteria()
 			e.list(){
@@ -58,41 +108,29 @@ abstract class EntradaService<E extends Entrada> {
 			}*.delete()
 		}
 		
-		entrada.save()
+		entrada = guardar(entrada)
 		
-		jsonDetalle.each() {			
-			guardarDetalle(it, entrada)
+		Integer renglonEntrada = 1
+		
+		jsonArrayDetalle.each() {
+			guardarDetalle(it, entrada, renglonEntrada++)
 		}
-	}
-		
-	def guardar(E entrada){
-		entrada.save([validate:false,flush:true])
-		return entrada		
-	}
-	
-	def guardarDetalle(jsonDetalle, E entrada){
-		
-		def articulo = entityArticulo.get(jsonDetalle[0].cveArt)
-		
-		def entradaDetalle = entityEntradaDetalle.newInstance()
-				
-		entradaDetalle.entrada = entrada
-		entradaDetalle.articulo = articulo
-		entradaDetalle.cantidad = jsonDetalle[0].cantidad as double
-		entradaDetalle.existencia = jsonDetalle[0].cantidad as double
-		entradaDetalle.noLote = jsonDetalle[0].noLote
-		entradaDetalle.precioEntrada = jsonDetalle[0].precioEntrada as double
-		entradaDetalle.renglonEntrada = consecutivoRenglon(entrada)
-		
-		if(jsonDetalle[0].fechaCaducidad)
-			entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonDetalle[0].fechaCaducidad)
-					
-		entradaDetalle.save([validate:false,flush:true])
-		
 	}
 	
 	def actualizar(E entrada, Integer idEntradaUpdate){
 		
+		def entradaUpdate = entityEntrada.get(idEntradaUpdate)
+		
+		if(entradaUpdate.numeroEntrada != entrada.numeroEntrada){
+			if(checkFolioEntrada(entrada.numeroEntrada)){
+				return "Folio ya existe"
+			}
+		}
+		
+		entradaUpdate.properties = entrada.properties
+		entradaUpdate.save([validate:false,flush:true])
+		
+		return "Entrada Actualizada"
 	}
 	
 	def consultar(Integer idEntrada){
@@ -147,7 +185,7 @@ abstract class EntradaService<E extends Entrada> {
 			detalle.fechaCaducidad = fechaCaducidad
 		}
 		
-		detalle.save()
+		detalle.save([validate:false,flush:true])
 	}
 	
 	def borrarDetalle(Long idEntrada, Long clave){
@@ -164,9 +202,9 @@ abstract class EntradaService<E extends Entrada> {
 		def maxRows = Integer.valueOf(params.rows)
 		def currentPage = Integer.valueOf(params.page) ?: 1
 		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows		
-		def idEntrada  = params.long('idEntrada')
+		def idEntrada  = params.long('idPadre')
 		
-		log.info("IDENTRADA " + params.idEntrada)
+		log.info("IDENTRADA " + params.idPadre)
 		
 		def detalleCount = entityEntradaDetalle.createCriteria().list(){
 			eq('entrada.id',idEntrada)
@@ -186,7 +224,7 @@ abstract class EntradaService<E extends Entrada> {
 			[
 				 cell:[it.articulo.id,it.articulo.desArticulo?.trim(),
 					 it.articulo.unidad?.trim(),it.cantidad,it.precioEntrada,
-					 it.noLote,it.fechaCaducidad?.format('dd/MM/yyyy')], id: it.renglonEntrada
+					 it.noLote,it.fechaCaducidad?.format('dd/MM/yyyy')], id: it.articulo.id
 			]
 		}
 		
@@ -195,37 +233,7 @@ abstract class EntradaService<E extends Entrada> {
 		
 	}
 	
-	def consultaMaterial (Integer folioAlmacen, Integer cveArea){
-		
-		def query = """\
-			select sd from SalidaDetalleMat sd join fetch sd.id.salida s 
-			where s.numeroSalida = :folio and s.fechaSalida between :fecha1 and :fecha2 and s.almacen = 'F' 
-			and s.cveArea = :area and s.estadoSalida <> 'C' order by sd.articulo
-		"""
-		
-		def fechas = utilService.fechasAnioActual()
-		
-		def detalle  = SalidaDetalleMaterial.executeQuery(query,
-			[folio:folioAlmacen,fecha1:fechas.fechaInicio,fecha2:fechas.fechaFin, area:cveArea])
-		
-		def idSalAlma = null
-		
-		if(detalle.size() > 0)
-			idSalAlma = detalle[0].salida.id
-			
-		log.info("ID salida almacen "  + detalle[0].salida.id);
-		
-		
-		def results = detalle?.collect {
-			[
-				cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-				cantidad:it.cantidadSurtida,precioEntrada:it.precioUnitario,noLote:it.noLote,
-				fechaCaducidad:it.fechaCaducidad?.format('dd/MM/yyyy')
-			]
-		}
-		
-		return [rows:results,idSalAlma:idSalAlma]
-	}
+	
 		
 	def consecutivoRenglon(E entrada){
 		utilService.consecutivoRenglon(entityEntradaDetalle,"renglonEntrada","entrada",entrada)
@@ -233,7 +241,7 @@ abstract class EntradaService<E extends Entrada> {
 	
 	def checkFolioEntrada(Integer folioEntrada){
 		
-		utilService.checkFolio(entityEntrada,"numeroEntrada","fechaEntrada", folioEntrada)
+		utilService.checkFolio(entityEntrada,"numeroEntrada","fechaEntrada", folioEntrada,almacen)
 		
 	}
 	
@@ -262,7 +270,7 @@ abstract class EntradaService<E extends Entrada> {
 	}
 	
 	def consecutivoNumeroEntrada(){		
-		utilService.consecutivoNumero(entityEntrada, "numeroEntrada","fechaEntrada")
+		utilService.consecutivoNumero(entityEntrada, "numeroEntrada","fechaEntrada",almacen)
 	}	
 	
 	def disponibilidadArticulo(Long clave, Date fecha, String almacen){

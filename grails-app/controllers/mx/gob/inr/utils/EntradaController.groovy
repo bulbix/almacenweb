@@ -2,13 +2,11 @@ package mx.gob.inr.utils
 
 import grails.converters.JSON
 import mx.gob.inr.farmacia.EntradaFarmaciaService;
+import mx.gob.inr.materiales.*;
 
-abstract class EntradaController <E extends Entrada> {
-
-	//static allowedMethods = [guardarEntrada:'POST',jqGridDetalle:'POST']
-	
-	public EntradaService entradaService
-	
+abstract class EntradaController <E extends Entrada> implements IOperacionController {
+		
+	public EntradaService entradaService	
 	protected entityEntrada
 	protected String almacen
 	
@@ -16,21 +14,16 @@ abstract class EntradaController <E extends Entrada> {
 		this.entityEntrada = entityEntrada		
 		this.almacen = almacen
 	}
-	
 
+	@Override
 	def index() {
 		redirect(action: "list", params: params)
-	}
-
-	def list(Integer max) {
-		params.max = Math.min(max ?: 10, 100)		
-		def entradas = entradaService.listar(params)
 		
-		[entradaInstanceList: entradas.entradaList, entradaInstanceTotal: entradas.entradaTotal]
 	}
 
+	@Override
 	def create(Integer id) {
-						
+		
 		def entradaInstance = entityEntrada.newInstance()
 		entradaInstance.fechaEntrada = new Date()
 		entradaInstance.numeroEntrada = entradaService.consecutivoNumeroEntrada()
@@ -54,90 +47,144 @@ abstract class EntradaController <E extends Entrada> {
 		}		
 		
 		[usuariosList:usuariosList,entradaInstance: entradaInstance]
-	}
-	
-	def consultarEntradaDetalle(){
-		def json = entradaService.consultarDetalle(params) as JSON
-		log.info(json)
-		render json
-	}
-	
-	def jqGridMaterial(){
-		def folioMaterial = params.int('folioAlmacen')
-		def json = entradaService.consultaMaterial(folioMaterial) as JSON
-		log.info(json)
-		render json
-	}
 		
-	def guardarEntrada(){
+	}
+
+	@Override
+	def list(Integer max) {
+		params.max = Math.min(max ?: 10, 100)		
+		def entradas = entradaService.listar(params)
 		
+		[almacen:almacen, entradaInstanceList: entradas.entradaList, entradaInstanceTotal: entradas.entradaTotal]
+		
+	}
+
+	@Override
+	def guardar() {
 		E entrada		
-		def jsonEntrada = JSON.parse(params.entradaData)
-		def jsonDetalle = JSON.parse(params.detalleData)
-		def idEntrada = params.int('idEntrada')
+		def jsonEntrada = JSON.parse(params.dataPadre)
+		def jsonDetalle = JSON.parse(params.dataDetalle)
+		def idEntrada = params.int('idPadre')
 		
 		if(!idEntrada){//Centinela
 			entrada = entradaService.setJsonEntrada(jsonEntrada, request.getRemoteAddr())
 			entrada = entradaService.guardar(entrada);
-			entradaService.guardarDetalle(jsonDetalle, entrada)
+			entradaService.guardarDetalle(jsonDetalle[0], entrada, null)
 		}
 		else{
 			entrada = entityEntrada.get(idEntrada)
-			entradaService.guardarDetalle(jsonDetalle,entrada)
+			entradaService.guardarDetalle(jsonDetalle[0],entrada,null)
 		}
 		
-		render(contentType: 'text/json') {['idEntrada': entrada.id]}
+		render(contentType: 'text/json') {['idPadre': entrada.id]}
 		
 	}
 	
-	def guardarSalidaMaterial(){
+	@Override
+	def guardarTodo(){
 		
-		def jsonEntrada = JSON.parse(params.entradaData)
-		def jsonDetalle = JSON.parse(params.gridEntradaDetalle)
+		def jsonEntrada = JSON.parse(params.dataPadre)
+		def jsonArrayDetalle = JSON.parse(params.dataArrayDetalle)
 		
 		def entrada = entradaService.setJsonEntrada(jsonEntrada, request.getRemoteAddr())
-		entradaService.guardarSalidaMaterial(entrada, jsonDetalle);
+		entradaService.guardarTodo(entrada,jsonArrayDetalle)
 		
-		render(contentType: 'text/json') {['status': 'ok']}
-				
+		render(contentType: 'text/json') {['idPadre': entrada.id]}
+		
 	}
+
+	@Override
+	def actualizar() {
+		def mensaje = ""
+		E entrada
+		def jsonEntrada = JSON.parse(params.dataPadre)
+		def idEntrada = params.int('idPadre')
 		
-	def uniqueFolioEntrada(){
+		entrada = entradaService.setJsonEntrada(jsonEntrada, request.getRemoteAddr())
 		
+		if(idEntrada){
+			mensaje = entradaService.actualizar(entrada, idEntrada)
+		}
+		
+		render(contentType: 'text/json') {['mensaje': mensaje ]}
+		
+	}
+
+	@Override
+	def cancelar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	def consultarDetalle() {
+		def json = entradaService.consultarDetalle(params) as JSON
+		log.info(json)
+		render json
+		
+	}
+
+	@Override
+	def actualizarDetalle(params) {
+		
+		log.info(params)
+		
+		def idEntrada = params.long('idPadre')
+		def clave = params.long('id')
+		def cantidad = params.double('cantidad')
+		def precio = params.double('precioEntrada')
+		def nolote = params.noLote
+		
+		Date fechaCaducidad = null
+		
+		try{
+			fechaCaducidad = new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
+		}
+		catch(Exception e){
+			fechaCaducidad = null
+		} 
+					
+		switch(params.oper){
+			case "edit":
+				entradaService.actualizarDetalle(idEntrada,clave,cantidad,precio,nolote,fechaCaducidad)
+				break
+			case "del":							
+				entradaService.borrarDetalle(idEntrada,clave)
+				break
+		}
+		
+		render(contentType: 'text/json') {['responseText': 'weno']}
+		
+	}
+
+	@Override
+	def uniqueFolio() {
 		def folioEntrada = params.int('checkFolio')		
 		log.info("FolioEntrada: " + folioEntrada)		
 		def result = !entradaService.checkFolioEntrada(folioEntrada)		
 		render text: result, contentType:"text/html", encoding:"UTF-8"
-	}
-	
-	def uniqueFolioSalAlma(){
-				
-		def result=true
-				
-		if(params.checkFolioSalAlma){
-			def folioSalAlma  = params.int('checkFolio')
-			log.info("FolioSalAlma: " + folioSalAlma)
-			result = !entradaService.checkFolioSalAlma(folioSalAlma)
-		}
 		
-		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
-	
-	
-	def buscarArticulo(){
+
+	@Override
+	def buscarArticulo() {
 		def clave = params.long('id')
 		def articulo = entradaService.buscarArticulo(clave)		
 		def articuloJSON = articulo as JSON		
 		render articuloJSON
+		
 	}
-	
-	def listarArticulo(){
+
+	@Override
+	def listarArticulo() {
 		render entradaService.listarArticulo(params.term) as JSON
+		
 	}
-	
-	
-	def listarArea(){
+
+	@Override
+	def listarArea() {
 		render entradaService.listarArea(params.term) as JSON
-	}
-   
+		
+	}	
+	
 }

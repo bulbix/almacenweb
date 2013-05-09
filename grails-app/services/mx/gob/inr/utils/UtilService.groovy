@@ -30,7 +30,7 @@ class UtilService {
    }  
    
    
-   boolean checkFolio(entity, numero, fecha, Integer folioEntrada){
+   boolean checkFolio(entity, numero, fecha, Integer folioEntrada, String almacen){
 	   
 	   def fechas = fechasAnioActual()
 			   
@@ -39,7 +39,7 @@ class UtilService {
 	   def result = criteria.get(){
 		   eq(numero,folioEntrada)
 		   between(fecha,fechas.fechaInicio,fechas.fechaFin)
-		   eq("almacen",'F')
+		   eq("almacen",almacen)
 	   }
 	    
 	   if(result)
@@ -48,7 +48,7 @@ class UtilService {
 		   return false
    }
    
-   def consecutivoNumero(entity, numero, fecha){
+   def consecutivoNumero(entity, numero, fecha, String almacen){
 	   
 	   def fechas = fechasAnioActual()
 	   
@@ -61,6 +61,7 @@ class UtilService {
 		   }
 		   
 		   between(fecha,fechas.fechaInicio,fechas.fechaFin)
+		   eq("almacen",almacen)
 		   
 	   }
 	   

@@ -7,8 +7,7 @@ class ArticuloFarmacia extends Articulo {
 	static mapping = {
 		id column:'cve_art'
 		version false		
-		table 'articulo'
-		datasources (['DEFAULT', 'materiales'])
+		table 'articulo'		
 	}
 	
 }

@@ -15,16 +15,24 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'main.css')}" type="text/css">
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">		
 		<link rel='stylesheet' href="${resource(dir: 'css', file: 'jquery.dataTables.css')}" type="text/css"/> 
-		<link rel="stylesheet" href="${resource(dir:'css',file:'ui.jqgrid.css')}" type="text/css" />		
-		<g:layoutHead/>
+		<link rel="stylesheet" href="${resource(dir:'css',file:'ui.jqgrid.css')}" type="text/css" />
+		
 		<g:javascript library="jquery"/>
-		<g:javascript library="jquery-ui"/>
+		<g:javascript library="jquery-ui"/>		
+		<g:javascript library="application"/>
 		
-		
-		
+		<g:layoutHead/>
 		<r:layoutResources />
 	</head>
 	<body>
+	
+		
+		<g:javascript src="i18n/grid.locale-es.js"/>
+		<g:javascript src="jquery.jqGrid.min.js"/>
+		<g:javascript src="jquery.maskedinput.min.js"/>
+		<g:javascript src="jquery.validate.min.js"/>
+		<g:javascript src="jquery.currency.js"/>
+		<g:javascript src="jquery.timer.js"/>	
 	
 		<table>
 			<tr>
@@ -50,14 +58,8 @@
 		<g:message code="spinner.alt" default="Loading&hellip;"/>
 		</div>
 		
-		<g:javascript library="application"/>
-		<g:javascript src="i18n/grid.locale-es.js"/>
-		<g:javascript src="jquery.jqGrid.min.js"/>
-		<g:javascript src="jquery.maskedinput.min.js"/>
-		<g:javascript src="jquery.validate.min.js"/>
-		<g:javascript src="jquery.currency.js"/>
-		<g:javascript src="jquery.timer.js"/>		
-		<g:javascript src="validaciones.js"/>
+		
+		
 		<r:layoutResources />
 	</body>
 </html>

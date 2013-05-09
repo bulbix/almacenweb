@@ -10,7 +10,7 @@ class SalidaDetalleMaterial implements Serializable {
 
 	SalidaMaterial salida
 	Integer renglonSalida
-	ArticuloFarmacia articulo
+	ArticuloMaterial articulo
 	Integer cantidadPedida
 	Integer cantidadSurtida
 	Date fechaCaducidad

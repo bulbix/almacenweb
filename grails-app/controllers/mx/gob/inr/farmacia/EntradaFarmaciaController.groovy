@@ -25,4 +25,28 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 		super.entradaService = entradaFarmaciaService		
 	}
 	
+	////////////METODOS PROPIOS////////////////////////////////
+	
+	def consultarDetalleMaterial(){
+		def folioMaterial = params.int('folioAlmacen')
+		def json = entradaFarmaciaService.consultarDetalleMaterial(folioMaterial,entradaFarmaciaService.AREA_FARMACIA) as JSON
+		log.info(json)
+		render json
+	}
+	
+	
+	
+	def uniqueFolioSalAlma(){
+				
+		def result=true
+				
+		if(params.checkFolioSalAlma){
+			def folioSalAlma  = params.int('checkFolio')
+			log.info("FolioSalAlma: " + folioSalAlma)
+			result = !entradaService.checkFolioSalAlma(folioSalAlma)
+		}
+		
+		render text: result, contentType:"text/html", encoding:"UTF-8"
+	}
+	
 }

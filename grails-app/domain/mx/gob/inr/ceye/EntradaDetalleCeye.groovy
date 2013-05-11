@@ -17,6 +17,8 @@ class EntradaDetalleCeye extends EntradaDetalle {
 		version false
 		entrada column:'id_entrada'
 		articulo column :'cve_art'		
+		renglon column:'renglon_entrada'
+		
 		table 'entrada_detalle_ceye'
 		id column:'id_entradadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_identradadetalleceye']

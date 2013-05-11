@@ -26,4 +26,5 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 		super.entradaService =  this.entradaCeyeService
 		super.autoCompleteService = this.autoCompleteService	
 	}
+	
 }

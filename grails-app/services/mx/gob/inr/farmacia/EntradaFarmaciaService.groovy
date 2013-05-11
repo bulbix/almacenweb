@@ -16,11 +16,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 
 	static transactional = true		
 	UtilService utilService	
-	AutoCompleteService autoCompleteService
-	
-	final short AREA_FARMACIA = 6220	
-	final int PERFIL_FARMACIA = 8
-	final int PERFIL_CEYE  = 10
+	AutoCompleteService autoCompleteService	
 	
 	public EntradaFarmaciaService(){
 		super(EntradaFarmacia, EntradaDetalleFarmacia,
@@ -39,8 +35,8 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 		
 		def query = """\
 			select sd from SalidaDetalleMaterial sd join fetch sd.id.salida s 
-			where s.numeroSalida = :folio and s.fechaSalida between :fecha1 and :fecha2 and s.almacen = 'F' 
-			and s.cveArea = :area and s.estadoSalida <> 'C' order by sd.articulo
+			where s.folio = :folio and s.fecha between :fecha1 and :fecha2 and s.almacen = 'F' 
+			and s.cveArea = :area and s.estado <> 'C' order by sd.articulo
 		"""
 		
 		def fechas = utilService.fechasAnioActual()

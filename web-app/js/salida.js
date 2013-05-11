@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$("#areaauto").focus()
 	
 	autoCompleteArticulo(function(){						 
-		 disponibilidadArticulo($("#insumo").val(),$("#fechaSalida").val());
+		 disponibilidadArticulo($("#insumo").val(),$("#fecha").val());
 		 $("#solicitado").focus()
 	});
 		
@@ -36,8 +36,8 @@ function validar(){
 		ignore: [],
 		
         rules: {
-        		fechaSalida: {required:true,validateDate:true,dateToday:true},
-        		folioSalida: {required:true, uniqueFolio:true},
+        		fecha: {required:true,validateDate:true,dateToday:true},
+        		folio: {required:true, uniqueFolio:true},
         		cveArea:{required:true},
         		recibeauto:{required:true},
         		autorizaauto:{required:true},
@@ -46,8 +46,8 @@ function validar(){
                 surtido: {required:true,number:true,checkExistencia:true}
         },
 		messages: {
-				fechaSalida : {required:"Requerido"},
-				folioSalida:{required:"Requerido"},
+				fecha : {required:"Requerido"},
+				folio:{required:"Requerido"},
 				cveArea:{required:"Requerido"},
 				recibeauto:{required:"Requerido"},
         		autorizaauto:{required:"Requerido"},
@@ -168,7 +168,7 @@ function consultarDetalle(){
 function controlesHead(){
 	$("#actualizar").click(function(){
 		
-		if( $("#cveArea").valid() && $("#fechaSalida").valid() 
+		if( $("#cveArea").valid() && $("#fecha").valid() 
 		    && $("#recibeauto").valid() && $("#autorizaauto").valid() ){
 			actualizar();
 		}		
@@ -193,7 +193,7 @@ function detalleAdd(){
 						 $("#costo").val(json.movimientoProm)
 						 $("#costoDisplay").val(json.movimientoProm)
 						 $("#costoDisplay").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })						 
-						 disponibilidadArticulo($("#insumo").val(),$("#fechaSalida").val());	
+						 disponibilidadArticulo($("#insumo").val(),$("#fecha").val());	
 						 $("#solicitado").focus()
 						 
 			})

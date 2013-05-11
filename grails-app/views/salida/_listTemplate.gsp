@@ -13,23 +13,23 @@
 			<table>
 				<thead>
 					<tr>
-					<g:sortableColumn property="numeroSalida" title="Folio Salida" />					
-					<g:sortableColumn property="fechaSalida" title="Fecha Salida" />										
+					<g:sortableColumn property="folio" title="Folio" />					
+					<g:sortableColumn property="fecha" title="Fecha" />										
 					<g:sortableColumn property="usuario" title="Registro" />
 					<g:sortableColumn property="area" title="Area" />					
-					<g:sortableColumn property="estadoSalida" title="Estado" />					
+					<g:sortableColumn property="estado" title="Estado" />					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${salidaInstanceList}" status="i" var="salidaInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td>${fieldValue(bean: salidaInstance, field: "numeroSalida")}</td>					
+						<td>${fieldValue(bean: salidaInstance, field: "folio")}</td>					
 						<td><g:link action="create" id="${salidaInstance.id}">
-							<g:formatDate date="${salidaInstance.fechaSalida}" format="dd/MM/yyyy" /></g:link></td>
+							<g:formatDate date="${salidaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>
 						<td>${fieldValue(bean: salidaInstance, field: "usuario")}</td>
 						<td>${fieldValue(bean: salidaInstance, field: "area")}</td>
-						<td>${fieldValue(bean: salidaInstance, field: "estadoSalida")}</td>
+						<td>${fieldValue(bean: salidaInstance, field: "estado")}</td>
 					
 					</tr>
 				</g:each>

@@ -14,7 +14,7 @@
 			</g:link></li>
 		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
 
-		<g:if test="${salidaInstance?.estadoSalida != 'C'}">
+		<g:if test="${salidaInstance?.estado != 'C'}">
 			<g:if test="${salidaInstance?.id != null}">
 				<li><input type="button" id="actualizar" value="Actualizar" />
 				</li>
@@ -55,14 +55,14 @@
 
 		<table>
 			<tr>
-				<td><label for="folioSalida">Folio Salida</label> <g:field
-						min="1" max="10000" name="folioSalida" type="number"
-						value="${salidaInstance?.numeroSalida}" size="5" /></td>
-
-				<td><label for="fechaSalida">Fecha Salida</label> <g:textField
-						name="fechaSalida"
-						value="${salidaInstance?.fechaSalida.format('dd/MM/yyy')}"
+				<td><label for="fechaa">Fecha</label> <g:textField
+						name="fecha"
+						value="${salidaInstance?.fecha.format('dd/MM/yyy')}"
 						size="8" /></td>
+			
+				<td><label for="folio">Folio</label> <g:field
+						min="1" max="10000" name="folio" type="number"
+						value="${salidaInstance?.folio}" size="5" /></td>				
 			</tr>
 
 			<tr>

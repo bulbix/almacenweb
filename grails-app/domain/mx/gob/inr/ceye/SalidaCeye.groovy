@@ -18,7 +18,12 @@ class SalidaCeye extends Salida {
 
 	static mapping = {
 		table 'salida_ceye'
-		id column:'id_salida'		
+		id column:'id_salida'
+		
+		folio column:'numero_salida'
+		fecha column:'fecha_salida'
+		estado column:'estado_salida'
+				
 		entrego column:'entrego'		
 		usuario column:'id_usuario'
 		paciente column:'id_paciente'

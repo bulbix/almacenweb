@@ -16,7 +16,7 @@ class EntradaCeyeController extends EntradaController<EntradaCeye> {
 	
 	@PostConstruct
 	public void init(){
-		super.entradaService = entradaCeyeService
+		servicio = entradaCeyeService
 	}
 	
 	def convertidora(){

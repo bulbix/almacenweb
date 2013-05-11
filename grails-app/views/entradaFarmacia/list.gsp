@@ -8,6 +8,6 @@
 	<body>
 	
 		<g:render template="/entrada/listTemplate" 
-			model="[entradaInstanceList: entradaInstanceList, entradaInstanceTotal: entradaInstanceTotal]" />
+			model="[entradaInstanceList: almacenInstanceList, entradaInstanceTotal: almacenInstanceTotal, almacen:almacen]" />
 	</body>
 </html>

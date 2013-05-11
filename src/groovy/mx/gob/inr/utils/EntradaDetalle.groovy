@@ -7,7 +7,7 @@ import java.util.Date;
 abstract class EntradaDetalle implements Serializable {
 	
 	Entrada entrada
-	Integer renglonEntrada
+	Integer renglon
 	Articulo articulo
 	Double cantidad
 	Double existencia

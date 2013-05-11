@@ -30,15 +30,15 @@ class UtilService {
    }  
    
    
-   boolean checkFolio(entity, numero, fecha, Integer folioEntrada, String almacen){
+   boolean checkFolio(entity, Integer folio, String almacen){
 	   
 	   def fechas = fechasAnioActual()
 			   
 	   def criteria  = entity.createCriteria();
 	   
 	   def result = criteria.get(){
-		   eq(numero,folioEntrada)
-		   between(fecha,fechas.fechaInicio,fechas.fechaFin)
+		   eq("folio",folio)
+		   between("fecha",fechas.fechaInicio,fechas.fechaFin)
 		   eq("almacen",almacen)
 	   }
 	    
@@ -48,7 +48,7 @@ class UtilService {
 		   return false
    }
    
-   def consecutivoNumero(entity, numero, fecha, String almacen){
+   def consecutivoFolio(entity, String almacen){
 	   
 	   def fechas = fechasAnioActual()
 	   
@@ -57,10 +57,10 @@ class UtilService {
 	   def maxNumber = criteria.get {
 		   
 		   projections {
-			   max(numero)
+			   max("folio")
 		   }
 		   
-		   between(fecha,fechas.fechaInicio,fechas.fechaFin)
+		   between("fecha",fechas.fechaInicio,fechas.fechaFin)
 		   eq("almacen",almacen)
 		   
 	   }
@@ -72,7 +72,7 @@ class UtilService {
 	   
 	}
    
-   def consecutivoRenglon(entity, renglon, parent, id){
+   def consecutivoRenglon(entity, parent, id){
 	   
 	   def fechas = fechasAnioActual()
 	   
@@ -81,7 +81,7 @@ class UtilService {
 	   def maxNumber = criteria.get {
 		   
 		   projections {
-			   max(renglon)
+			   max("renglon")
 		   }
 		   
 		   eq(parent, id)

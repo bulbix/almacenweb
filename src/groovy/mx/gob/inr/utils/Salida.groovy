@@ -6,12 +6,12 @@ import mx.gob.inr.farmacia.CatAreaFarmacia;
 
 abstract class Salida {
 
-	Integer numeroSalida
-	Date fechaSalida
+	Integer folio
+	Date fecha
 	String jefeServicio
 	String recibio
 	Usuario entrego
-	String estadoSalida = 'A'
+	String estado = 'A'
 	String almacen
 	CatArea area
 	String noOrden

@@ -15,7 +15,7 @@ $.validator.addMethod("uniqueFolioSalAlma", function(value, element) {
 	
 	return uniqueFolio( url + "/uniqueFolioSalAlma", value)
 	
-}, "Folio ya utilizado");
+}, "Folio no existe o utilizado");
 
 $.validator.addMethod("checkExistencia", function(value, element) {		
 	

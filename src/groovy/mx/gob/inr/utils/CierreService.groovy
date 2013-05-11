@@ -98,10 +98,10 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		def entityEntradaName = entityEntrada.name
 				
 		def strQueryEntrada = """
-        select new mx.gob.inr.utils.ConcentradoraCierre(e.fechaEntrada,'E',ed.cantidad,ed.precioEntrada,e.id,e.almacen) 
+        select new mx.gob.inr.utils.ConcentradoraCierre(e.fecha,'E',ed.cantidad,ed.precioEntrada,e.id,e.almacen) 
 		from $entityEntradaName e inner join e.entradasDetalle ed 
-		where ed.articulo = :articulo and e.fechaEntrada between :fechaInicio and :fechaFin 
-		and e.estadoEntrada <> 'C' and e.almacen = '$almacen' 
+		where ed.articulo = :articulo and e.fecha between :fechaInicio and :fechaFin 
+		and e.estado <> 'C' and e.almacen = '$almacen' 
 		""" 
 			
 		listaConcentradora.addAll(entityEntrada.executeQuery(strQueryEntrada,
@@ -110,10 +110,10 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		def entitySalidaName = entitySalida.name
 		
 		def strQuerySalida = """
-        select new mx.gob.inr.utils.ConcentradoraCierre(s.fechaSalida,'S',sd.cantidadSurtida,sd.precioUnitario,s.id,s.almacen) 
+        select new mx.gob.inr.utils.ConcentradoraCierre(s.fecha,'S',sd.cantidadSurtida,sd.precioUnitario,s.id,s.almacen) 
 		from $entitySalidaName s inner join s.salidasDetalle sd 
-		where sd.articulo = :articulo and s.fechaSalida between :fechaInicio and :fechaFin 
-		and s.estadoSalida <> 'C' and s.almacen = '$almacen' 
+		where sd.articulo = :articulo and s.fecha between :fechaInicio and :fechaFin 
+		and s.estado <> 'C' and s.almacen = '$almacen' 
 		""" 
 			
 		listaConcentradora.addAll(entitySalida.executeQuery(strQuerySalida,

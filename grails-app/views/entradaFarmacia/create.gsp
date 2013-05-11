@@ -11,7 +11,7 @@
 			var url = '/almacenWeb/entradaFarmacia'
 	</script>
 				
-	<g:render template="/entrada/createTemplate" model="[usuariosList:usuariosList,entradaInstance: entradaInstance]" />
+	<g:render template="/entrada/createTemplate" model="[usuariosList:usuariosList,entradaInstance: almacenInstance]" />
 	
 </body>
 </html>

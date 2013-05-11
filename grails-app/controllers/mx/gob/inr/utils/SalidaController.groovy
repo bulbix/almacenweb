@@ -1,175 +1,15 @@
 package mx.gob.inr.utils
 
+import javax.annotation.PostConstruct;
+
 import grails.converters.JSON
 
-abstract class SalidaController <S extends Salida> implements IOperacionController {
+class SalidaController <S extends Salida> extends OperacionController<S> {
 
-	public EntradaService entradaService
 	public SalidaService salidaService	
 	
-	protected entitySalida
-	protected String almacen
-	
 	public SalidaController(entitySalida, almacen){
-		this.entitySalida = entitySalida	
-		this.almacen = almacen
-	}
-
-	@Override
-	def index() {
-		redirect(action: "list", params: params)
-	}
-
-	@Override
-	def create(Integer id) {
-		
-		def salidaInstance = entitySalida.newInstance()
-		salidaInstance.fechaSalida = new Date()
-		salidaInstance.numeroSalida = salidaService.consecutivoNumeroSalida()
-		
-		if(id){
-			salidaInstance = entitySalida.get(id)
-		}
-		
-		[usuariosList:salidaService.usuarios(salidaService.PERFIL_FARMACIA),salidaInstance: salidaInstance]
-		
-	}
-
-	@Override
-	def list(Integer max) {
-		params.max = Math.min(max ?: 10, 100)		
-		def salidas = salidaService.listar(params)
-		
-		[salidaInstanceList: salidas.salidaList, salidaInstanceTotal: salidas.salidaTotal]
-		
-	}
-
-	@Override
-	def guardar() {
-		S salida;
-		def jsonSalida = JSON.parse(params.dataPadre)
-		def jsonDetalle = JSON.parse(params.dataDetalle)
-		def idSalida = params.int('idPadre')
-		
-		def clave = jsonDetalle[0].cveArt as long
-		def solicitado = jsonDetalle[0].solicitado as double
-		def surtido = jsonDetalle[0].surtido as double
-				
-		if(!idSalida){//Centinela
-			salida = salidaService.setJsonSalida(jsonSalida, request.getRemoteAddr())
-			salida = salidaService.guardar(salida);			
-			salidaService.guardarDetalle(clave,solicitado,surtido, salida)
-		}
-		else{
-			salida = entitySalida.get(idSalida)
-			salidaService.guardarDetalle(clave,solicitado,surtido, salida)
-		}
-		
-		def disponible = entradaService.disponibilidadArticulo(clave, salida.fechaSalida,almacen)
-		
-		render(contentType: 'text/json') {['idPadre': salida.id , 'disponible':disponible]}
-		
-	}
-	
-	@Override
-	def guardarTodo(){
-		
-	}
-	
-
-	@Override
-	def actualizar() {
-		def mensaje = ""
-		S salida
-		def jsonSalida = JSON.parse(params.dataPadre)
-		def idSalida = params.int('idPadre')
-				
-		salida = salidaService.setJsonSalida(jsonSalida, request.getRemoteAddr())	
-				
-		if(idSalida){
-			mensaje = salidaService.actualizar(salida, idSalida)
-		}
-			
-		render(contentType: 'text/json') {['mensaje': mensaje ]}
-		
-	}
-
-	@Override
-	def cancelar() {
-		def idSalida = params.int('idPadre')
-		def mensaje = ""
-		
-		if(idSalida){
-			salidaService.cancelar(idSalida);
-			mensaje = "Salida Cancelada"
-		}
-		else
-			mensaje = "Error"
-			
-		render(contentType: 'text/json') {['mensaje': mensaje ]}
-		
-	}
-
-	@Override
-	def consultarDetalle() {
-		def json = salidaService.consultarDetalle(params) as JSON
-		log.info(json)
-		render json
-		
-	}
-
-	@Override
-	def actualizarDetalle(Object params) {
-				
-		def idSalida = params.long('idPadre')
-		def clave = params.long('id')
-		def solicitado = params.double('solicitado')
-		def surtido = params.double('surtido')
-					
-		switch(params.oper){
-			case "edit":
-				salidaService.actualizarDetalle(idSalida,clave,solicitado,surtido)
-				break
-			case "del":
-							
-				salidaService.borrarDetalle(idSalida,clave)
-				break
-		}
-		
-		render(contentType: 'text/json') {['responseText': 'weno']}
-		
-	}
-
-	@Override
-	def uniqueFolio() {
-		def folioSalida  = params.int('checkFolio')
-		
-		log.info("FolioSalida: " + folioSalida)
-		
-		def result = !salidaService.checkFolioSalida(folioSalida)
-		render text: result, contentType:"text/html", encoding:"UTF-8"
-		
-	}
-
-	@Override
-	def buscarArticulo() {
-		def clave = params.long('id')
-		def articulo = entradaService.buscarArticulo(clave)		
-		def articuloJSON = articulo as JSON		
-		render articuloJSON
-		
-	}
-
-	@Override
-	def listarArticulo() {
-		render entradaService.listarArticulo(params.term) as JSON
-		
-	}
-
-	@Override
-	def listarArea() {
-		render entradaService.listarArea(params.term) as JSON
-		
+		super(entitySalida,almacen)		
 	}
 	
 	////////////METODOS PROPIOS////////////////////////////////
@@ -179,7 +19,7 @@ abstract class SalidaController <S extends Salida> implements IOperacionControll
 		def clave = params.long('clave');
 		def fecha = new Date().parse("dd/MM/yyyy", params.fecha)
 		
-		def disponible = entradaService.disponibilidadArticulo(clave, fecha, almacen)
+		def disponible = salidaService.disponibilidadArticulo(clave, fecha, almacen)
 		
 		log.info(String.format("Disponibilidad %s", disponible))
 		

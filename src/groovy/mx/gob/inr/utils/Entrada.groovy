@@ -4,13 +4,13 @@ import java.util.Date;
 
 abstract class Entrada {
 	
-	Integer numeroEntrada
-	Date fechaEntrada
+	Integer folio
+	Date fecha
 	String numeroFactura
 	Integer idSalAlma
 	Usuario recibio
 	Usuario supervisor
-	String estadoEntrada = 'A'
+	String estado = 'A'
 	String almacen
 	String actividad
 	String presupuesto
@@ -20,7 +20,7 @@ abstract class Entrada {
 	Integer folioAlmacen
 	
 	String toString(){
-		return numeroEntrada
+		return folio
 	}
 
 }

@@ -9,7 +9,7 @@ import mx.gob.inr.farmacia.ArticuloFarmacia
 class SalidaDetalleMaterial implements Serializable {
 
 	SalidaMaterial salida
-	Integer renglonSalida
+	Integer renglon
 	ArticuloMaterial articulo
 	Integer cantidadPedida
 	Integer cantidadSurtida
@@ -27,7 +27,8 @@ class SalidaDetalleMaterial implements Serializable {
 		table 'salida_detalle'
 		salida column:'id_salida'
 		articulo column :'cve_art'
-		id composite: ['salida','renglonSalida']
+		renglon column: 'renglon_salida'
+		id composite: ['salida','renglon']
 		datasource 'materiales'
 	}
 	

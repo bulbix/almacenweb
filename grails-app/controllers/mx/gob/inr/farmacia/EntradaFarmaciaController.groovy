@@ -9,12 +9,11 @@ import mx.gob.inr.farmacia.EntradaFarmaciaService;
 import mx.gob.inr.farmacia.EntradaFarmacia;
 import mx.gob.inr.materiales.SalidaMaterial;
 import mx.gob.inr.utils.EntradaController
+import mx.gob.inr.utils.IOperacionService
 
 class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
-
     
-	EntradaFarmaciaService entradaFarmaciaService
-	
+	EntradaFarmaciaService entradaFarmaciaService	
 	
 	public EntradaFarmaciaController(){
 		super(EntradaFarmacia,'F')
@@ -22,7 +21,7 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 	
 	@PostConstruct
 	public void init(){
-		super.entradaService = entradaFarmaciaService		
+		servicio = entradaFarmaciaService		
 	}
 	
 	////////////METODOS PROPIOS////////////////////////////////
@@ -40,10 +39,10 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 				
 		def result=true
 				
-		if(params.checkFolioSalAlma){
+		if(params.checkFolio){
 			def folioSalAlma  = params.int('checkFolio')
 			log.info("FolioSalAlma: " + folioSalAlma)
-			result = !entradaService.checkFolioSalAlma(folioSalAlma)
+			result = !entradaFarmaciaService.checkFolioSalAlma(folioSalAlma)
 		}
 		
 		render text: result, contentType:"text/html", encoding:"UTF-8"

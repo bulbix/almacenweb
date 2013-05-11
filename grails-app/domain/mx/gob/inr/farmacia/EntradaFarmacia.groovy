@@ -13,6 +13,11 @@ class EntradaFarmacia extends Entrada {
 
 	static mapping = {
         id column:'id_entrada'
+		
+		folio column:'numero_entrada'
+		fecha column:'fecha_entrada'
+		estado column:'estado_entrada'
+		
 		recibio column:'recibio'
 		supervisor column:'supervisor'		
 		usuario column:'id_usuario' 

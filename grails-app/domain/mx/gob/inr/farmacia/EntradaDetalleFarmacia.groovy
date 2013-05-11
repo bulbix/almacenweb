@@ -16,6 +16,8 @@ class EntradaDetalleFarmacia extends EntradaDetalle {
 		
 		entrada column:'id_entrada'
 		articulo column :'cve_art'
+		renglon column:'renglon_entrada'
+		
 		version false
 		table 'entrada_detalle'
 		id column:'id_entradadetalle'

@@ -13,8 +13,8 @@
 			<table>
 				<thead>
 					<tr>					
-						<g:sortableColumn property="numeroEntrada" title="Folio" />					
-						<g:sortableColumn property="fechaEntrada" title="Fecha" />					
+						<g:sortableColumn property="folio" title="Folio" />					
+						<g:sortableColumn property="fecha" title="Fecha" />					
 						<g:sortableColumn property="idSalAlma" title="Almacen" />					
 						<g:sortableColumn property="numeroFactura" title="Remision" />
 						<g:sortableColumn property="usuario" title="Registro" />
@@ -24,16 +24,16 @@
 							<g:sortableColumn property="area" title="Area" />						
 						</g:if>
 						
-						<g:sortableColumn property="estadoEntrada" title="Estado" />					
+						<g:sortableColumn property="estado" title="Estado" />					
 					</tr>
 				</thead>
 				<tbody>
 				<g:each in="${entradaInstanceList}" status="i" var="entradaInstance">
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
-						<td>${fieldValue(bean: entradaInstance, field: "numeroEntrada")}</td>					
+						<td>${fieldValue(bean: entradaInstance, field: "folio")}</td>					
 						<td><g:link action="create" id="${entradaInstance.id}">
-							<g:formatDate date="${entradaInstance.fechaEntrada}" format="dd/MM/yyyy" /></g:link></td>											
+							<g:formatDate date="${entradaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>											
 						<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "numeroFactura")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "usuario")}</td>
@@ -44,7 +44,7 @@
 						</g:if>
 						
 						
-						<td>${fieldValue(bean: entradaInstance, field: "estadoEntrada")=='A'?'ACTIVO':'CANCELADO'}</td>					
+						<td>${fieldValue(bean: entradaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>					
 											
 					</tr>
 				</g:each>

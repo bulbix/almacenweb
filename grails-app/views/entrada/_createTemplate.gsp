@@ -16,7 +16,7 @@
 
 		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>		
 		
-		<g:if test="${entradaInstance?.estadoEntrada != 'C'}">
+		<g:if test="${entradaInstance?.estado != 'C'}">
 			<g:if test="${entradaInstance?.id != null}">
 				<li><input type="button" id="actualizar" value="Actualizar" />
 				</li>
@@ -61,13 +61,13 @@
 		<table>
 			<tr>
 				
-				<td><label for="fechaEntrada">Fecha</label>
-				 <g:textField name="fechaEntrada" 
-				 value="${entradaInstance?.fechaEntrada?.format('dd/MM/yyy')}" size="8"  />
+				<td><label for="fecha">Fecha</label>
+				 <g:textField name="fecha" 
+				 value="${entradaInstance?.fecha?.format('dd/MM/yyy')}" size="8"  />
 				</td>
 				
-				<td><label for="folioEntrada">Folio</label>
-				<g:textField name="folioEntrada" value="${entradaInstance?.numeroEntrada}" size="5" /></td>
+				<td><label for="folio">Folio</label>
+				<g:textField name="folio" value="${entradaInstance?.folio}" size="5" /></td>
 				
 				<g:if test="${entradaInstance.almacen == 'F'}">
 				

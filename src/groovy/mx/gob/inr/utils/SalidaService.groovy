@@ -1,12 +1,12 @@
 package mx.gob.inr.utils
 
 import java.lang.reflect.Constructor
+import java.util.Date;
+
 import mx.gob.inr.farmacia.SalidaFarmacia;
 
-abstract class SalidaService<S extends Salida> {
+abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
-	public final int PERFIL_FARMACIA = 8
-	public final int PERFIL_CEYE  = 10
 	
 	public UtilService utilService
 	public EntradaService entradaService
@@ -30,14 +30,15 @@ abstract class SalidaService<S extends Salida> {
 		this.almacen = almacen		
 	}
 		 
-	S setJsonSalida(jsonSalida, String ip){		
+    @Override
+	S setJson(jsonSalida, String ip){		
 		
 		def salida = entitySalida.newInstance()
 		salida.almacen = almacen
-		salida.ipTerminal = ip
-				
-		salida.numeroSalida = jsonSalida.folioSalida as int
-		salida.fechaSalida = new Date().parse("dd/MM/yyyy",jsonSalida.fechaSalida)
+		salida.ipTerminal = ip				
+		salida.folio = jsonSalida.folio as int
+		salida.fecha = new Date().parse("dd/MM/yyyy",jsonSalida.fecha)
+		
 		salida.jefeServicio = jsonSalida.autorizaauto
 		salida.recibio  = jsonSalida.recibeauto
 		salida.entrego = Usuario.get(jsonSalida.entrega)
@@ -49,81 +50,31 @@ abstract class SalidaService<S extends Salida> {
 		return salida
 	}
 	
-	def S guardar(S salida){				
+	@Override
+	S guardar(S salida){				
 		salida.save([validate:false,flush:true])
 		return salida		
 	}
 	
-	def String actualizar(S salida, Integer idSalidaUpdate){		
-	
-	 def salidaUpdate = entitySalida.get(idSalidaUpdate);
-	 
-	 if(salidaUpdate.numeroSalida != salida.numeroSalida){
-		 //Aplicar Validacion
-		 if (checkFolioSalida(salida.numeroSalida)){
-			 return "Folio ya existe";
-		 }
-	 }
-	 
-	 /**Si cambio la fecha de salida
-	  * hay que regresar existencias y vlver a insertar
-	  *
-	  * */
-	 if(salidaUpdate.fechaSalida.compareTo(salida.fechaSalida) != 0){
-		 
-	 }
-	 
-	 salidaUpdate.properties = salida.properties;
-	 salidaUpdate.save([validate:false,flush:true])
-	 
-	 return "Salida Actualizada";
+	@Override
+	def guardarDetalle(jsonDetalle, S salida, Integer renglon ){
 		
-	}
-	
-	def listar(params){
+		Long clave = jsonDetalle.cveArt as long 
+		Double solicitado = jsonDetalle.solicitado as double
+		Double surtido = jsonDetalle.surtido as double
 		
-		def fechas = utilService.fechasAnioActual()
-				
-		def salidaList = entitySalida.createCriteria().list(params){
-			
-			between("fechaSalida",fechas.fechaInicio,fechas.fechaFin)			
-			order("numeroSalida","desc")
-		}
-		
-		def salidaTotal = entitySalida.createCriteria().get{
-			projections{
-				count()
-			}			
-			between("fechaSalida",fechas.fechaInicio,fechas.fechaFin)
-		}
-		
-		[salidaList:salidaList, salidaTotal:salidaTotal]
-		
-	}
-	
-	def cancelar(Long idSalida){		
-	
-		def salida =  entitySalida.get(idSalida);
-		regresarExistencias(salida)
-		
-		salida.estadoSalida = 'C'
-		salida.save([validate:false,flush:true])
-	}
-	
-	def guardarDetalle(Long clave, Double solicitado, Double surtido, S salida ){
-		
-		def entradas = cargarEntradasDeSalida(clave, salida.fechaSalida, almacen, surtido)
+		def entradas = cargarEntradasDeSalida(clave, salida.fecha, almacen, surtido)
 		
 		entradas.each(){
 			
-			def articulo = entityArticulo.get(clave)
+			def articulo = entityArticulo.get(jsonDetalle.cveArt)
 			
 			def salidaDetalle = entitySalidaDetalle.newInstance()
 			
 			salidaDetalle.salida = salida
-			salidaDetalle.renglonSalida =consecutivoRenglon(salida)
+			salidaDetalle.renglon =consecutivoRenglon(salida)
 			salidaDetalle.entrada = it.entrada
-			salidaDetalle.renglonEntrada = it.renglonEntrada
+			salidaDetalle.renglonEntrada = it.renglon
 			salidaDetalle.articulo = articulo
 			salidaDetalle.cantidadPedida = solicitado
 			salidaDetalle.cantidadSurtida = it.restarExistencia
@@ -142,13 +93,104 @@ abstract class SalidaService<S extends Salida> {
 		
 	}
 	
-	def actualizarDetalle(Long idSalida, Long clave,Double solicitado, Double surtido){	
-		
-		borrarDetalle(idSalida, clave)
-		guardarDetalle(clave,solicitado,surtido, entitySalida.get(idSalida))
+	@Override
+	def guardarTodo(S salida, jsonArrayDetalle){
 		
 	}
 	
+	@Override
+	def String actualizar(S salida, Long idSalidaUpdate){		
+	
+	 def salidaUpdate = entitySalida.get(idSalidaUpdate);
+	 
+	 if(salidaUpdate.folio != salida.folio){
+		 //Aplicar Validacion
+		 if (checkFolio(salida.folio)){
+			 return "Folio ya existe";
+		 }
+	 }
+	 
+	 /**Si cambio la fecha de salida
+	  * hay que regresar existencias y vlver a insertar
+	  *
+	  * */
+	 if(salidaUpdate.fecha.compareTo(salida.fecha) != 0){
+		 
+	 }
+	 
+	 salidaUpdate.properties = salida.properties;
+	 salidaUpdate.save([validate:false,flush:true])
+	 
+	 return "Salida Actualizada";
+		
+	}
+	
+	@Override
+	def consultar(Long idSalida){
+		
+	}	
+	
+	@Override
+	def cancelar(Long idSalida){
+		
+		def salida =  entitySalida.get(idSalida);
+		regresarExistencias(salida)
+
+		salida.estado = 'C'
+		salida.save([validate:false,flush:true])
+	}
+	
+	@Override
+	def listar(params){
+		
+		def fechas = utilService.fechasAnioActual()
+				
+		def salidaList = entitySalida.createCriteria().list(params){
+			
+			between("fecha",fechas.fechaInicio,fechas.fechaFin)			
+			order("folio","desc")
+		}
+		
+		def salidaTotal = entitySalida.createCriteria().get{
+			projections{
+				count()
+			}			
+			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+		}
+		
+		[lista:salidaList, total:salidaTotal]
+		
+	}
+	
+	@Override
+	def actualizarDetalle(Long idSalida,params){	
+		
+		long clave  = params.long('id')
+		borrarDetalle(idSalida, clave)
+		guardarDetalle(clave,params.double('solicitado'),params.double('surtido'), entitySalida.get(idSalida))
+		
+	}
+	
+	@Override
+	def borrarDetalle(Long idSalida, Long clave){
+		
+		def detalle = entitySalidaDetalle.createCriteria().list(){
+			eq('salida.id', idSalida)
+			eq("articulo.id", clave)
+		}
+		
+		detalle.each(){
+			def entradaDetalle  = it.entradaDetalle
+			
+			if(entradaDetalle)
+				entradaDetalle.existencia += it.cantidadSurtida
+			
+			it.delete([flush:true])
+		}
+		
+	}
+	
+	@Override
 	def consultarDetalle(params){
 		def sortIndex = params.sidx ?: 'id'
 		def sortOrder  = params.sord ?: 'asc'
@@ -164,11 +206,11 @@ abstract class SalidaService<S extends Salida> {
 		def query =
 		"""\
 			select sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
-			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fechaSalida
+			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fecha
 			from $entitySalidaDetalleName sd 			
 			where sd.salida.id = $idSalida and sd.salida.almacen = '$almacen' 
 			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
-			sd.cantidadPedida,sd.salida.fechaSalida 
+			sd.cantidadPedida,sd.salida.fecha 
 			order by sd.articulo.id
 
 		"""
@@ -195,23 +237,7 @@ abstract class SalidaService<S extends Salida> {
 		
 	}
 		
-	def borrarDetalle(Long idSalida, Long clave){
-		
-		def detalle = entitySalidaDetalle.createCriteria().list(){
-			eq('salida.id', idSalida)
-			eq("articulo.id", clave)
-		}
-		
-		detalle.each(){
-			def entradaDetalle  = it.entradaDetalle
-			
-			if(entradaDetalle)
-				entradaDetalle.existencia += it.cantidadSurtida
-			
-			it.delete([flush:true])
-		}
-		
-	}
+	
 		
 	private def regresarExistencias(S salida){
 		
@@ -286,21 +312,41 @@ abstract class SalidaService<S extends Salida> {
 		return result
 	}
 	
-	
+	@Override
 	def consecutivoRenglon(S salida){
-		utilService.consecutivoRenglon(entitySalidaDetalle,"renglonSalida","salida",salida)
+		utilService.consecutivoRenglon(entitySalidaDetalle,"salida",salida)
 	}
 	
-	def consecutivoNumeroSalida(){
-		utilService.consecutivoNumero(entitySalida, "numeroSalida","fechaSalida",almacen)
+	@Override
+	def checkFolio(Integer folio){		
+		utilService.checkFolio(entitySalida, folio,almacen)		
 	}
 	
-	def checkFolioSalida(Integer folioSalida){		
-		utilService.checkFolio(entitySalida,"numeroSalida","fechaSalida", folioSalida,almacen)		
+	@Override
+	def consecutivoFolio(){
+		utilService.consecutivoFolio(entitySalida,almacen)
 	}
 	
+	@Override
 	def usuarios(Integer idPerfil){
 		return utilService.usuarios(idPerfil)		
+	}
+	
+	@Override
+	def buscarArticulo(Long id){
+		def articulo = entityArticulo.get(id)
+		articulo.desArticulo = articulo.desArticulo.trim()
+		return articulo
+	}
+
+	@Override
+	def listarArticulo(String term){
+		autoCompleteService.listarArticulo(term, entityArticulo)
+	}
+
+	@Override
+	def listarArea(String term){
+		autoCompleteService.listarArea(term, entityArea)
 	}
 	
 	def listarRecibe(String term){
@@ -310,6 +356,33 @@ abstract class SalidaService<S extends Salida> {
 	
 	def listarAutoriza(String term){
 		autoCompleteService.listarNombre(entitySalida, "jefeServicio", term)
+	}
+	
+	def disponibilidadArticulo(Long clave, Date fecha, String almacen){
+		
+		def criteria = entityEntradaDetalle.createCriteria()
+
+		def disponible = criteria.get {
+
+			projections {
+				sum("existencia")
+			}
+
+			entrada {
+				eq("almacen", almacen)
+				eq("estado","A")
+				le("fecha",fecha)
+			}
+
+			articulo {
+				eq("id",clave)
+			}
+		}
+
+		if(!disponible)
+			return 0
+		else
+			return disponible
 	}
 	
 }

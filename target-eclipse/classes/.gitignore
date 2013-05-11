@@ -1,3 +1,13 @@
+/almacenweb
+/com
+/dbdoc
+/grails
+/hibernate
+/messages.properties
+/mx
+/org
+/spring
+/templates
 /ApplicationResources$_run_closure1.class
 /ApplicationResources$_run_closure1_closure2.class
 /ApplicationResources.class
@@ -77,10 +87,5 @@
 /UrlMappings$__clinit__closure1_closure2.class
 /UrlMappings$__clinit__closure1_closure2_closure3.class
 /UrlMappings.class
-/almacenweb
-/com
-/grails
-/mx
-/org
 /resources$_run_closure1.class
 /resources.class

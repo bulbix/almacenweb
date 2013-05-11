@@ -20,6 +20,7 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 		table 'salida_detalle'
 		salida column:'id_salida'
 		articulo column :'cve_art'
+		renglon column: 'renglon_salida'
 		//entradaDetalle column:['id_entrada','renglon_entrada']
 		entradaDetalle column:'id_entradadetalle'
 		entrada column:'id_entrada'		

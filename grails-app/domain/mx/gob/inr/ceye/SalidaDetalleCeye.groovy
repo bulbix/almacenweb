@@ -22,6 +22,7 @@ class SalidaDetalleCeye extends SalidaDetalle {
 		table 'salida_detalle_ceye'
 		salida column:'id_salida'
 		articulo column :'cve_art'
+		renglon column: 'renglon_salida'
 		entrada column:'id_entrada'
 		//entradaDetalle column:['id_entrada','renglon_entrada']
 		entradaDetalle column:'id_entradadetalle'

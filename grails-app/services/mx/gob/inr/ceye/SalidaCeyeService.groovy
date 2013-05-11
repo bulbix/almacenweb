@@ -27,4 +27,23 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 		super.autoCompleteService = this.autoCompleteService	
 	}
 	
+	def consultarPaquete(String tipo){
+		
+		def detalle = PaqueteQuirurgicoCeye.createCriteria().list(){
+			eq("tipo", tipo)
+		}
+		
+		def results = detalle?.collect {		
+			 
+			//def convertido = convertidora(it.articulo.id, it.cantidad)
+			//def precioAlmacen = precioAlmacen(it.articulo.id)
+					
+			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
+			costo:it.articulo.movimientoProm,disponible:null,solicitado:it.cantidad,surtido:it.cantidad]				
+		}
+		
+		results
+		
+	}
+	
 }

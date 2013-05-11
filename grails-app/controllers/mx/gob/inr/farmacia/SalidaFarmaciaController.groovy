@@ -15,9 +15,6 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class SalidaFarmaciaController extends SalidaController<SalidaFarmacia> {
 	
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	
-	EntradaFarmaciaService entradaFarmaciaService
 	SalidaFarmaciaService salidaFarmaciaService
 	
 	public SalidaFarmaciaController(){
@@ -25,8 +22,8 @@ class SalidaFarmaciaController extends SalidaController<SalidaFarmacia> {
 	}
 	
 	@PostConstruct
-	public void init(){
-		super.entradaService = entradaFarmaciaService
+	public void init(){		
+		servicio = salidaFarmaciaService
 		super.salidaService = salidaFarmaciaService
 	}
 }

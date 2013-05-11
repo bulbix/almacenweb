@@ -76,10 +76,11 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 		
 		def results = detalle?.collect {		
 			 
-			def convertido = convertidora(it.articulo.id, it.cantidad)
+			//def convertido = convertidora(it.articulo.id, it.cantidad)
+			def precioAlmacen = precioAlmacen(it.articulo.id)
 					
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-			cantidad:convertido.cantidad,precioEntrada:convertido.precio,noLote:null,fechaCaducidad:null]				
+			cantidad:it.cantidad,precioEntrada:precioAlmacen,noLote:null,fechaCaducidad:null]				
 		}
 		
 		results

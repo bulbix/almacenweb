@@ -96,15 +96,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	@Override
 	def guardarTodo(E entrada, jsonArrayDetalle){
-
-		if(entrada.id){
-
-			def e = entityEntradaDetalle.createCriteria()
-			e.list(){
-				eq("entrada", entrada)
-			}*.delete()
-		}
-
+		
 		entrada = guardar(entrada)
 
 		Integer renglon = 1

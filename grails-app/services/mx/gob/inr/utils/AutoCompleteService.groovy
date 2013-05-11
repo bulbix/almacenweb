@@ -8,6 +8,7 @@ class AutoCompleteService {
 	   def query = {
 		   ilike("desArticulo", aprox)
 		   maxResults(10)
+		   order("desArticulo","asc")
 	   }
 	   
 	   def alist = entityArticulo.createCriteria().list(query)
@@ -31,6 +32,7 @@ class AutoCompleteService {
 			   sqlRestriction("(cve_area || '') like '$aprox'")
 		   }
 		   maxResults(10)
+		   order("desArea","asc")
 	   }
 	   
 	   def alist = entityArea.createCriteria().list(query)
@@ -38,6 +40,29 @@ class AutoCompleteService {
 	   def results = alist?.collect {
 		   def display = String.format("(%s) %s",it.id,it.desArea.trim())
 		   [id:it.id,value:display,label:display]
+	   }
+
+	   return results
+   }
+   
+   def listarProcedimiento(String term){
+	   
+	   def aprox = term + "%"
+	   
+	   def query = {
+		   or{
+			   ilike("descdiag", aprox)
+			   sqlRestriction("(clavediag || '') like '$aprox'")
+		   }
+		   maxResults(10)
+		   order("descdiag","asc")
+	   }
+	   
+	   def alist = Cie09.createCriteria().list(query)
+
+	   def results = alist?.collect {
+		   def display = String.format("(%s) %s",it.clavediag,it.descdiag.trim())
+		   [id:it.clavediag,value:display,label:display]
 	   }
 
 	   return results
@@ -72,7 +97,7 @@ class AutoCompleteService {
    
    def listarNombre(entity, campo, term){
 	   
-	   def aprox = "%" + term
+	   def aprox = term + "%"
 	   
 	   log.info("stringlist " + aprox)
 	   

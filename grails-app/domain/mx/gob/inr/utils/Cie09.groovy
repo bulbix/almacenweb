@@ -15,4 +15,9 @@ class Cie09 {
 	
     static constraints = {
     }
+	
+	String toString(){
+		return  String.format("(%s) %s",clavediag ,descdiag)
+	}
+	
 }

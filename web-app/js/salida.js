@@ -1,6 +1,6 @@
 $(document).ready(function() {	
 	
-	$("#areaauto").focus()
+	$("#fecha").focus()
 	
 	autoCompleteArticulo(function(){						 
 		 disponibilidadArticulo($("#insumo").val(),$("#fecha").val());
@@ -9,10 +9,19 @@ $(document).ready(function() {
 		
 	autoCompleteArea(function(){
 		$("#pacienteauto").focus()
-	});
+	});	
+	
 	autoCompletePaciente(function(){
-		$("#entrega").focus()
+		
+		if($("#procedimientoauto").val() != undefined)
+			$("#procedimientoauto").focus()
+		else		
+			$("#entrega").focus()
 	});
+	
+	autoCompleteProcedimiento(function(){
+		$("#entrega").focus()
+	})
 	
 	autoCompleteRecibio(function(){
 		$("#autorizaauto").focus()	
@@ -38,6 +47,7 @@ function validar(){
         rules: {
         		fecha: {required:true,validateDate:true,dateToday:true},
         		folio: {required:true, uniqueFolio:true},
+        		nosala:{number:true},
         		cveArea:{required:true},
         		recibeauto:{required:true},
         		autorizaauto:{required:true},
@@ -48,6 +58,7 @@ function validar(){
 		messages: {
 				fecha : {required:"Requerido"},
 				folio:{required:"Requerido"},
+				nosala:{number:"Numerico"},
 				cveArea:{required:"Requerido"},
 				recibeauto:{required:"Requerido"},
         		autorizaauto:{required:"Requerido"},
@@ -60,7 +71,35 @@ function validar(){
 
 function capturar(){
 	
+	$("#fecha").keypress(function(e){	
+		 if(e.which == 13) {
+			$("#folio").focus()		
+		 }
+	});
+	
+	$("#folio").keypress(function(e){	
+		 if(e.which == 13) {
+			 if($("#nosala").val() != undefined)
+					$("#nosala").focus()
+				else		
+					$("#areaauto").focus()	
+		 }
+	});
+	
+	$("#nosala").keypress(function(e){	
+		 if(e.which == 13) {
+			$("#areaauto").focus()		
+		 }
+	});
+	
+	
 	var area = $("#areaauto")
+	
+	area.keypress(function(e){	
+		 if(e.which == 13) {
+			 $("#pacienteauto").focus()	
+		 }
+	});
 
 	area.change( function() {
 		if(area.val() == "")
@@ -74,14 +113,36 @@ function capturar(){
 			$("#idPaciente").val("")
 	});
 	
-	
-	$("#entrega").keypress(function(e){	
+	paciente.keypress(function(e){	
 		 if(e.which == 13) {
-			$("#recibeaauto").focus()		
+			 if($("#procedimientoauto").val() != undefined)
+					$("#procedimientoauto").focus()
+				else		
+					$("#entrega").focus()	
 		 }
 	});
 	
-	$("#recibeaauto").keypress(function(e){	
+	var procedimiento = $("#procedimientoauto")
+	
+	procedimiento.keypress(function(e){	
+		 if(e.which == 13) {
+			 $("#entrega").focus()	
+		 }
+	});
+
+	procedimiento.change( function() {
+		if(procedimiento.val() == "")
+			$("#idProcedimiento").val("")
+	});
+	
+	
+	$("#entrega").keypress(function(e){	
+		 if(e.which == 13) {
+			$("#recibeauto").focus()		
+		 }
+	});
+	
+	$("#recibeauto").keypress(function(e){	
 		 if(e.which == 13) {
 			$("#autorizaauto").focus()		
 		 }
@@ -91,6 +152,20 @@ function capturar(){
 		 if(e.which == 13) {
 			$("#insumo").focus()		
 		 }
+	});
+	
+	$("#paqueteq").change(function(){
+		
+		if($("#paqueteq").val() == ''){
+			$("#guardarPaquete").hide()
+			$(".busqueda").show()
+		}
+		else{
+			$("#guardarPaquete").show()
+			$(".busqueda").hide()
+		}
+		
+		consultarPaquete()			
 	});
 	
 
@@ -166,6 +241,15 @@ function consultarDetalle(){
 }
 
 function controlesHead(){
+	
+	if($("#idPadre").val() != ''){
+		$("#paqueteq").prop('disabled', true)
+	}
+	
+	if($("#paqueteq").val() != undefined && $("#paqueteq").val() !=''){
+		$(".busqueda").hide()
+	}
+	
 	$("#actualizar").click(function(){
 		
 		if( $("#cveArea").valid() && $("#fecha").valid() 
@@ -174,6 +258,12 @@ function controlesHead(){
 		}		
 			
 	})
+	
+	$("#guardarPaquete").click(function(){	
+		if($("#fecha").valid() && $("#folio").valid() ){
+			guardarTodo()
+		}
+	});
 	
 	$("#cancelar").click(function(){
 		cancelar()

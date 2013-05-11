@@ -1,5 +1,5 @@
 $(document).ready(function() {	
-	$("#folio").focus()
+	$("#fecha").focus()
 	
 	autoCompleteArticulo(function(){
 		$("#cantidad").focus()
@@ -74,7 +74,10 @@ function capturar(){
 	
 	$("#remision").keypress(function(e){	
 		 if(e.which == 13) {
-			$("#registra").focus()		
+			 if($("#areaauto").val() != undefined)
+					$("#areaauto").focus()
+				else		
+					$("#registra").focus()		
 		 }
 	});
 	
@@ -93,6 +96,12 @@ function capturar(){
 	area.change( function() {
 		if(area.val() == "")
 			$("#cveArea").val("")
+	});
+	
+	area.keypress(function(e){	
+		 if(e.which == 13) {
+			 $("#registra").focus()	
+		 }
 	});
 	
 	$("#registra").keypress(function(e){	
@@ -140,12 +149,16 @@ function capturar(){
 	
 	$("#paqueteq").change(function(){
 		
-		if($("#paqueteq").val() == '')
+		if($("#paqueteq").val() == ''){
 			$("#guardarPaquete").hide()
-		else
+			$(".busqueda").show()
+		}
+		else{
 			$("#guardarPaquete").show()
+			$(".busqueda").hide()
+		}
 		
-		consultarPaquete()
+		consultarPaquete()				
 	});
 	
 }
@@ -368,6 +381,11 @@ function agregar(){
 
 /////////////////FUNCIONES PROPIAS////////////
 
+function maskDates(){
+	 //$("#fecha").mask("99/99/9999");	
+	 $("#fechaCaducidad").mask("99/99/9999");
+}
+
 function consultarDetalleMaterial(){
 	
 	$("#detalle").clearGridData();	
@@ -386,52 +404,9 @@ function consultarDetalleMaterial(){
 	$("#guardar").show()
 }
 
-function maskDates(){
-	 //$("#fecha").mask("99/99/9999");	
-	 $("#fechaCaducidad").mask("99/99/9999");
-}
 
-function guardarTodo(){
-	
-    var frm = $("#formPadre");
-    var dataPadre = JSON.stringify(frm.serializeObject());
-    var dataArrayDetalle = JSON.stringify($("#detalle").getRowData())
-    
-    //alert(dataDetalle)
-    
-	var request = $.ajax({
-		type:'POST',		
-		url:  url +'/guardarTodo',
-		async:false,
-		data:{
-			dataPadre: dataPadre, 
-			dataArrayDetalle: dataArrayDetalle,			
-			idPadre:$('#idPadre').val()
-		},
-		dataType:"json"	        
-	});
-	
-	request.done(function(data) {
-		$('#idPadre').val(data.idPadre)
-		alert("Entrada Guardada")
-	});
-}
 
-function consultarPaquete(){
-	
-	$("#detalle").clearGridData();
-	
-	$.getJSON( url + "/consultarPaquete",{tipo:$("#paqueteq").val()})
-		.done(function( jsonArray ) {
-	        for (var i = 0; i < jsonArray.length; i++) {        	
-	        	$("#detalle").addRowData(jsonArray[i].cveArt, jsonArray[i]);
-	        }
-	})	
-	
-	$("#registra").focus()
-	$(".busqueda").hide()
-	$("#guardar").show()
-}
+
 
 
 

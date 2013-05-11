@@ -3,6 +3,7 @@ package mx.gob.inr.utils
 import java.lang.reflect.Constructor
 import java.util.Date;
 
+import mx.gob.inr.ceye.SalidaCeye
 import mx.gob.inr.farmacia.SalidaFarmacia;
 
 abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
@@ -47,6 +48,15 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		salida.usuario = Usuario.get(6558)
 		salida.paciente = Paciente.get(jsonSalida.idPaciente)
 		
+		if(salida instanceof SalidaFarmacia){			
+		}
+		else if(salida instanceof SalidaCeye){
+			salida.diagnostico =  Cie09.get(jsonSalida.idProcedimiento)
+			salida.nosala = jsonSalida.nosala?jsonSalida.nosala as short:null
+			salida.paqueteq = jsonSalida.paqueteq
+		}
+		
+		
 		return salida
 	}
 	
@@ -67,12 +77,16 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		
 		entradas.each(){
 			
-			def articulo = entityArticulo.get(jsonDetalle.cveArt)
-			
+			def articulo = entityArticulo.get(jsonDetalle.cveArt)			
 			def salidaDetalle = entitySalidaDetalle.newInstance()
 			
-			salidaDetalle.salida = salida
-			salidaDetalle.renglon =consecutivoRenglon(salida)
+			salidaDetalle.salida = salida			
+			
+			if(!renglon)
+				salidaDetalle.renglon = consecutivoRenglon(salida)
+			else
+				salidaDetalle.renglon = renglon
+			
 			salidaDetalle.entrada = it.entrada
 			salidaDetalle.renglonEntrada = it.renglon
 			salidaDetalle.articulo = articulo
@@ -88,6 +102,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salidaDetalle.save([validate:false,flush:true])
 			
 			it.existencia -=  it.restarExistencia
+			it.save([validate:false,flush:true])
 		}
 		
 		
@@ -95,6 +110,14 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
 	@Override
 	def guardarTodo(S salida, jsonArrayDetalle){
+
+		salida = guardar(salida)
+
+		Integer renglon = 1
+
+		jsonArrayDetalle.each() {
+			guardarDetalle(it, salida, renglon++)
+		}
 		
 	}
 	
@@ -182,8 +205,10 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		detalle.each(){
 			def entradaDetalle  = it.entradaDetalle
 			
-			if(entradaDetalle)
+			if(entradaDetalle){
 				entradaDetalle.existencia += it.cantidadSurtida
+				entradaDetalle.save([validate:false,flush:true])
+			}
 			
 			it.delete([flush:true])
 		}
@@ -226,7 +251,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			[
 				 cell:[it[0], it[1]?.trim(),
 					 it[2]?.trim(), it[3],
-					  entradaService.disponibilidadArticulo(it[0], it[6],almacen),
+					  disponibilidadArticulo(it[0], it[6],almacen),
 					  it[4],it[5]], id: it[0]
 			]
 		}
@@ -357,6 +382,11 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	def listarAutoriza(String term){
 		autoCompleteService.listarNombre(entitySalida, "jefeServicio", term)
 	}
+	
+	def listarProcedimiento(String term){
+		autoCompleteService.listarProcedimiento(term)
+	}
+	
 	
 	def disponibilidadArticulo(Long clave, Date fecha, String almacen){
 		

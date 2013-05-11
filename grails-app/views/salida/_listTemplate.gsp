@@ -16,7 +16,13 @@
 					<g:sortableColumn property="folio" title="Folio" />					
 					<g:sortableColumn property="fecha" title="Fecha" />										
 					<g:sortableColumn property="usuario" title="Registro" />
-					<g:sortableColumn property="area" title="Area" />					
+					<g:sortableColumn property="area" title="Area" />
+					
+					<g:if test="${almacen != 'F'}">
+							<g:sortableColumn property="diagnostico" title="Procedimiento" />
+							<g:sortableColumn property="paqueteq" title="Paquete" />						
+						</g:if>
+										
 					<g:sortableColumn property="estado" title="Estado" />					
 					</tr>
 				</thead>
@@ -29,6 +35,12 @@
 							<g:formatDate date="${salidaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>
 						<td>${fieldValue(bean: salidaInstance, field: "usuario")}</td>
 						<td>${fieldValue(bean: salidaInstance, field: "area")}</td>
+						
+						<g:if test="${almacen != 'F'}">
+							<td>${fieldValue(bean: salidaInstance, field: "diagnostico")}</td>					
+							<td>${fieldValue(bean: salidaInstance, field: "paqueteq")}</td>						
+						</g:if>
+						
 						<td>${fieldValue(bean: salidaInstance, field: "estado")}</td>
 					
 					</tr>

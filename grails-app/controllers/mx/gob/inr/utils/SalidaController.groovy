@@ -30,6 +30,10 @@ class SalidaController <S extends Salida> extends OperacionController<S> {
 		render json
 	}
 	
+	def listarProcedimiento(){
+		render salidaService.listarProcedimiento(params.term) as JSON
+	}
+	
 	def listarRecibe(){
 		render salidaService.listarRecibe(params.term) as JSON
 	}

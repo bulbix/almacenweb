@@ -2,13 +2,13 @@ package mx.gob.inr.ceye
 import mx.gob.inr.farmacia.SalidaFarmacia;
 import mx.gob.inr.utils.SalidaController;
 
+import grails.converters.JSON
 import javax.annotation.PostConstruct;
 
 import mx.gob.inr.farmacia.EntradaFarmaciaService;
 import mx.gob.inr.farmacia.SalidaFarmaciaService;
 
 class SalidaCeyeController extends SalidaController<SalidaCeye> {
-	EntradaCeyeService entradaCeyeService
 	SalidaCeyeService salidaCeyeService
 	
 	public SalidaCeyeController(){
@@ -16,8 +16,15 @@ class SalidaCeyeController extends SalidaController<SalidaCeye> {
 	}
 	
 	@PostConstruct
-	public void init(){
-		super.entradaService = entradaCeyeService
+	public void init(){		
+		servicio = salidaCeyeService
 		super.salidaService = salidaCeyeService
+	}
+	
+	def consultarPaquete(){
+		def tipo = params.tipo
+		def jsonArray = salidaCeyeService.consultarPaquete(tipo) as JSON
+		//log.info(json)
+		render jsonArray
 	}
 }

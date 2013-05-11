@@ -1,4 +1,5 @@
 
+<%@ page import="mx.gob.inr.ceye.PaqueteTipoQuirurgicoCeye" %>
 
 <g:javascript src="validaciones.js"/>
 <g:javascript src="comunes.js"/>
@@ -58,11 +59,19 @@
 				<td><label for="fechaa">Fecha</label> <g:textField
 						name="fecha"
 						value="${salidaInstance?.fecha.format('dd/MM/yyy')}"
-						size="8" /></td>
+						size="9" /></td>
 			
-				<td><label for="folio">Folio</label> <g:field
-						min="1" max="10000" name="folio" type="number"
-						value="${salidaInstance?.folio}" size="5" /></td>				
+				<td><label for="folio">Folio</label> <g:textField
+						name="folio" 
+						value="${salidaInstance?.folio}" size="5" /></td>
+						
+				<g:if test="${salidaInstance?.almacen != 'F'}">
+					<td><label for="nosala">No. Sala</label> <g:textField
+							 name="nosala" 	value="${salidaInstance?.nosala}" size="5" /></td>
+				</g:if>				
+				<g:else>
+					<td></td>
+				</g:else>
 			</tr>
 
 			<tr>
@@ -79,6 +88,19 @@
 					name="idPaciente" id="idPaciente"
 					value="${salidaInstance?.paciente?.id}" /></td>
 			<tr>
+			
+			<g:if test="${salidaInstance?.almacen != 'F'}">
+				<tr>
+					<td colspan="3"><label for="procedimientoauto">Procedimiento</label> <g:textField
+							name="procedimientoauto" style="width: 700px;"
+							value="${salidaInstance?.diagnostico}" /> <input type="hidden"
+						name="idProcedimiento" id="idProcedimiento"
+						value="${salidaInstance?.diagnostico?.id}" /></td>
+				<tr>
+			
+			</g:if>
+			
+			
 			<tr>
 				<td><label for="entrega">Entrega</label> <g:select
 						name="entrega" from="${usuariosList}" optionKey="id"
@@ -90,11 +112,23 @@
 				<td><label for="autoriza">Autoriza</label> <g:textField
 						name="autorizaauto" value="${salidaInstance?.jefeServicio}" /></td>
 			</tr>
+			
+			<g:if test="${salidaInstance?.almacen != 'F'}" >		
+				<tr>		
+					<td colspan="3" >
+						<label for="paqueteq">Paquete Quirurgico</label>
+						<g:select name="paqueteq" from="${PaqueteTipoQuirurgicoCeye.list()}" optionKey="tipo"
+						optionValue="descripcion" value="${salidaInstance?.paqueteq}" 
+						noSelection="${['':'SELECCIONE PAQUETE']}" />
+						<input type="button" id="guardarPaquete" style="display:none" value="Guardar" />
+					</td>
+				</tr>		
+			</g:if>
 
 		</table>
 
 
-		<table id="tblBusqueda">
+		<table id="tblBusqueda" class="busqueda">
 			<tr>
 				<td colspan="6"><label for="artauto">Descripción
 						Articulo</label> <g:textField name="artauto" style="width: 700px;" /> <input
@@ -121,7 +155,7 @@
 	</form>
 
 
-	<table>
+	<table class="busqueda">
 		<thead>
 			<tr>
 				<td><label>Clave</label></td>
@@ -155,8 +189,8 @@
 		</tbody>
 	</table>
 
-	<input type="button" id="btnActualizar" value="Actualizar" />
-	<input type="button" id="btnBorrar" value="Borrar" />
+	<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
+	<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
 
 	<form id="formDetalle">
 		<div class="list">

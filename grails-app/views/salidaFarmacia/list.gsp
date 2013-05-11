@@ -10,6 +10,6 @@
 	<body>
 		
 		<g:render template="/salida/listTemplate" 
-			model="[salidaInstanceList: salidaInstanceList, salidaInstanceTotal: salidaInstanceTotal]" />
+			model="[salidaInstanceList: almacenInstanceList, salidaInstanceTotal: almacenInstanceTotal,almacen:almacen]" />
 	</body>
 </html>

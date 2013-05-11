@@ -64,6 +64,10 @@ function autoCompleteArea(funcSelect){
 	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect)
 }
 
+function autoCompleteProcedimiento(funcSelect){
+	autoComplete("#procedimientoauto",url + "/listarProcedimiento","#idProcedimiento",funcSelect)
+}
+
 function autoCompleteRecibio(funcSelect){
 	autoComplete("#recibeauto", url + "/listarRecibe",null,funcSelect)
 }
@@ -188,4 +192,47 @@ function limpiarRenglonDetalle(){
 		$(this).val('');
 	});	
 }
+
+function consultarPaquete(){
+	
+	$("#detalle").clearGridData();
+	
+	$.getJSON( url + "/consultarPaquete",{tipo:$("#paqueteq").val()})
+		.done(function( jsonArray ) {
+	        for (var i = 0; i < jsonArray.length; i++) {        	
+	        	$("#detalle").addRowData(jsonArray[i].cveArt, jsonArray[i]);
+	        }
+	})	
+	
+	$("#registra").focus()
+	$(".busqueda").hide()
+	$("#guardar").show()
+}
+
+function guardarTodo(){
+	
+    var frm = $("#formPadre");
+    var dataPadre = JSON.stringify(frm.serializeObject());
+    var dataArrayDetalle = JSON.stringify($("#detalle").getRowData())
+    
+    //alert(dataDetalle)
+    
+	var request = $.ajax({
+		type:'POST',		
+		url:  url +'/guardarTodo',
+		async:false,
+		data:{
+			dataPadre: dataPadre, 
+			dataArrayDetalle: dataArrayDetalle,			
+			idPadre:$('#idPadre').val()
+		},
+		dataType:"json"	        
+	});
+	
+	request.done(function(data) {
+		$('#idPadre').val(data.idPadre)
+		alert("Seleccion Guardada")
+	});
+}
+
 

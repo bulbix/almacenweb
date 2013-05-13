@@ -17,5 +17,7 @@ interface IOperacionController {
 	def uniqueFolio()
 	def buscarArticulo()
 	def listarArticulo()
-	def listarArea()	
+	def listarArea()
+	
+	def checkCierre()	
 }

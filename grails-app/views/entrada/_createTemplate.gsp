@@ -18,10 +18,12 @@
 		
 		<g:if test="${entradaInstance?.estado != 'C'}">
 			<g:if test="${entradaInstance?.id != null}">
-				<li><input type="button" id="actualizar" value="Actualizar" />
-				</li>
-
-				<li><input type="button" id="cancelar" value="Cancelar" /></li>
+				<g:if test="${existeCierre == false}">	
+					<li><input type="button" id="actualizar" value="Actualizar" />
+					</li>
+	
+					<li><input type="button" id="cancelar" value="Cancelar" /></li>
+				</g:if>
 			</g:if>
 		</g:if>
 		
@@ -50,7 +52,16 @@
 		</ul>
 	</g:hasErrors>
 
-	<div id="mensaje"></div>
+
+
+	<g:if test="${existeCierre == true}">	
+		<div id="mensaje" style="font-size:20px;color:red">
+			Cierre existente no se pueden hacer cambios
+		</div>
+	</g:if>
+	
+
+	
 
 
 	<form id="formPadre">
@@ -105,24 +116,17 @@
 		</g:if>
 		
 		<table>
-			<tr>
-				<td><label for="registra">Registra</label> <g:select
-						name="registra" from="${usuariosList}" optionKey="id"
-						optionValue="nombre" value="${entradaInstance?.usuario?.id}" 
-						noSelection="${['':'SELECCIONE REGISTRA']}" /></td>			
+			<tr>						
 				<td><label for="supervisa">Supervisa</label> <g:select
 						name="supervisa" from="${usuariosList}" optionKey="id"
 						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
-						noSelection="${['':'SELECCIONE SUPERVISA']}" /></td>
-			</tr>
-			<tr>
+						noSelection="${['':'SELECCIONE SUPERVISA']}" /></td>			
 				<td><label for="recibe">Recibe</label> <g:select name="recibe"
 						from="${usuariosList}" optionKey="id" optionValue="nombre" 
 						value="${entradaInstance?.recibio?.id}" 
-						noSelection="${['':'SELECCIONE RECIBE']}" /></td>
-			
+						noSelection="${['':'SELECCIONE RECIBE']}" /></td>			
 				<g:if test="${entradaInstance?.almacen == 'F'}">
-					<td><label for="devolucion"> Es Devolucion?</label> <g:checkBox
+					<td><label for="devolucion">Devolucion?</label> <g:checkBox
 						name="devolucion" value="${entradaInstance.devolucion == '1'}" /></td>
 				</g:if>
 				<g:else>
@@ -222,8 +226,10 @@
 		</tbody>
 	</table>
 
-	<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
-	<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
+	<g:if test="${existeCierre == false}">	
+		<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
+		<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
+	</g:if>
 
 	<form id="formDetalle">
 		<div class="list">

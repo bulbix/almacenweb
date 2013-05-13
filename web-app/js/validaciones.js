@@ -1,10 +1,9 @@
-$.validator.addMethod("uniqueFolio", function(value, element) {	
+$.validator.addMethod("uniqueFolio", function(value, element) {		
 	
-	//alert($("#idPadre").val())
 	var result = true
 	
 	if($("#idPadre").val() == ''){
-		result = uniqueFolio(url + "/uniqueFolio", value) 
+		result = checkValue(url + "/uniqueFolio", value) 
 	}
 	
 	return result
@@ -13,7 +12,7 @@ $.validator.addMethod("uniqueFolio", function(value, element) {
 
 $.validator.addMethod("uniqueFolioSalAlma", function(value, element) {		
 	
-	return uniqueFolio( url + "/uniqueFolioSalAlma", value)
+	return checkValue( url + "/uniqueFolioSalAlma", value)
 	
 }, "Folio no existe o utilizado");
 
@@ -22,6 +21,12 @@ $.validator.addMethod("checkExistencia", function(value, element) {
 	return  parseInt(jQuery(element).val()) <= parseInt($("#disponible").val())
 	
 }, "Existencia Insuficiente");
+
+$.validator.addMethod("checkCierre", function(value, element) {		
+	
+	return checkValue( url + "/checkCierre", value)
+	
+}, "Cierre Existente");
 
 $.validator.addMethod("checkInsumo", function(value, element) {
 	
@@ -41,14 +46,14 @@ $.validator.addMethod("checkInsumo", function(value, element) {
 }, "Clave Existente");
 
 
-function uniqueFolio(url, value){
+function checkValue(url, value){
 	
 	var response
     $.ajax({
 	        type: "POST",
 	        url: url,
 	        async:false,
-	        data: "checkFolio="+value,
+	        data: "value="+value,
 	        dataType:"html",
 	     success: function(msg)
 	     {        	 

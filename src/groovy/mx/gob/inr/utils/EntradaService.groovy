@@ -13,15 +13,19 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	protected entityEntrada
 	protected entityEntradaDetalle
+	protected entitySalidaDetalle
 	protected entityArticulo
 	protected entityArea
+	protected entityCierre
 	protected String almacen
 
-	public EntradaService(entityEntrada, entityEntradaDetalle, entityArticulo, entityArea ,almacen){
+	public EntradaService(entityEntrada, entityEntradaDetalle, entitySalidaDetalle, entityArticulo, entityArea, entityCierre, almacen){
 		this.entityEntrada = entityEntrada
 		this.entityEntradaDetalle = entityEntradaDetalle
+		this.entitySalidaDetalle = entitySalidaDetalle
 		this.entityArticulo = entityArticulo
 		this.entityArea = entityArea
+		this.entityCierre = entityCierre
 		this.almacen = almacen
 	}
 
@@ -38,7 +42,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			entrada.idSalAlma = jsonEntrada.idSalAlma as int
 
 		entrada.numeroFactura = jsonEntrada.remision
-		entrada.usuario = Usuario.get(jsonEntrada.registra)
+		entrada.usuario = Usuario.get(6558)
 		entrada.recibio = Usuario.get(jsonEntrada.recibe)
 		entrada.supervisor = Usuario.get(jsonEntrada.supervisa)
 		entrada.presupuesto = null
@@ -108,19 +112,30 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	@Override
 	def actualizar(E entrada, Long idEntradaUpdate){
-
+	
 		def entradaUpdate = entityEntrada.get(idEntradaUpdate)
-
-		if(entradaUpdate.folio != entrada.folio){
+		def mensaje = "Entrada actualizada";
+		
+		if(entrada.fecha.compareTo(entradaUpdate.fecha) > 0){
+			if(existeSalida(idEntradaUpdate)){
+				def formatFecha = entradaUpdate.fecha.format('dd/MM/yyyy')
+				mensaje= "Fecha actualizable <= $formatFecha"
+				entrada.fecha = entradaUpdate.fecha
+			}			
+		}
+		
+		if(entrada.folio != entradaUpdate.folio){
 			if(checkFolio(entrada.folio)){
-				return "Folio ya existe"
+				mensaje = "Folio no actualizable, ya existe"
+				entrada.folio = entradaUpdate.folio
 			}
 		}
 
 		entradaUpdate.properties = entrada.properties
+		
 		entradaUpdate.save([validate:false,flush:true])
 
-		return "Entrada Actualizada"
+		return mensaje
 	}
 
 	@Override
@@ -165,34 +180,71 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	@Override
 	def actualizarDetalle(Long idEntrada, params){
 
+		
+		def clave = params.long('id')
+		def cantidad = params.double('cantidad')
+		def precioEntrada = params.double('precioEntrada') 
+		
 		def detalle = entityEntradaDetalle.createCriteria().get{
 			eq('entrada.id', idEntrada)
-			eq("articulo.id", params.long('id'))
+			eq("articulo.id", clave)
 			maxResults(1)
 		}
 
 		if(detalle){
-			detalle.cantidad = params.double('cantidad') 
-			detalle.precioEntrada = params.double('precioEntrada') 
+			
+			if(precioEntrada == null || precioEntrada < 0.0){
+				return "Precio Invalido"
+			}
+			
+			if(cantidad ==null || cantidad < 0.0){
+				return "Cantidad Invalida"
+			}
+			else{								
+				def salidasDetalle = salidasDetalle(idEntrada, clave)
+
+				if(salidasDetalle){
+					def sumaSurtido = salidasDetalle.sum { it.cantidadSurtida }
+					if(cantidad < sumaSurtido)
+						return "Cantidad utilizada $suma"
+				}
+			}				
+			
+			detalle.existencia += (cantidad - detalle.cantidad)
+			detalle.cantidad = cantidad
+			detalle.precioEntrada = precioEntrada
 			detalle.noLote = params.noLote
 						
 			try{
-				detalle.fechaCaducidad = new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
+				if(params.fechaCaducidad)
+					detalle.fechaCaducidad = new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
 			}
 			catch(Exception e){
+				return "Formato fecha caducidad invalido"
 				detalle.fechaCaducidad = null
 			}
 		}
 
 		detalle.save([validate:false,flush:true])
+		
+		return "success"
 	}
 
 	@Override
 	def borrarDetalle(Long idEntrada, Long clave){
+		
+		def salidaDetalle = salidasDetalle(idEntrada,clave)
+		
+		if(salidaDetalle.size() != 0){
+			return "Clave ya tiene salida"
+		}
+		
 		def detalle = entityEntradaDetalle.createCriteria().list(){
-			eq('entrada.id', idEntrada)
-			eq("articulo.id", clave)
-		}*.delete()
+				eq('entrada.id', idEntrada)
+				eq("articulo.id", clave)
+			}*.delete()	
+		
+		return "success"
 	}
 
 	@Override
@@ -272,6 +324,11 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	def listarArea(String term){
 		autoCompleteService.listarArea(term, entityArea)
 	}
+	
+	@Override
+	def checkCierre(Date fecha){
+		utilService.checkCierre(entityCierre, fecha, almacen)
+	}
 
 	def checkFolioSalAlma(Integer folioSalAlma){
 
@@ -320,5 +377,39 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		detalle
 	}
+	
+	def existeSalida(Long idEntrada){
+		def criteria = entitySalidaDetalle.createCriteria()
+		
+		def result = criteria.get{
+			entradaDetalle{
+				eq('entrada.id', idEntrada)
+				 maxResults(1)				
+			}
+		}
+		
+		if(result)
+			return true
+		else
+			return false	
+	}
+	
+	def salidasDetalle(Long idEntrada, Long clave){
+		
+		def criteria = entitySalidaDetalle.createCriteria()
+		
+		def detalle = criteria.list(){
+			entradaDetalle{
+				eq('entrada.id', idEntrada)
+				eq("articulo.id", clave)
+			}
+		}
+		
+		detalle
+		
+	}
+	
+	
+	
 
 }

@@ -26,4 +26,11 @@ class EntradaDetalleFarmacia extends EntradaDetalle {
 		
 		//id composite: ['entrada','renglonEntrada']
     }
+	
+//	static constraints = {
+//		cantidad nullable:false, min:0.0
+//		precioEntrada nullable:false, min:0.0
+//	}
+	
+	
 }

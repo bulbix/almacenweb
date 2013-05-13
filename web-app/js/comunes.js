@@ -159,8 +159,13 @@ function controlesDetalle(){
 			   //url:'someurl.php',
 			   closeAfterEdit:true,
 			   viewPagerButtons:false,
-			   afterComplete: function(data){
-				   //alert(data)
+			   afterSubmit: function(response,postdata){
+				   console.log(response)
+				   var mensaje = jQuery.parseJSON(response.responseText).mensaje				   
+				   if(mensaje != 'success')
+					   return [false, mensaje, ''];
+				   else
+					   return [true, '', ''];
 			   }
 		});
 	});
@@ -179,9 +184,14 @@ function controlesDetalle(){
 			   //url:'someurl.php',
 			   closeAfterEdit:true,
 			   viewPagerButtons:false,
-			   afterComplete: function(data){
-				   //alert(data)
-			   }
+			   afterSubmit: function (response, postdata) {
+				   console.log(response)
+				   var mensaje = jQuery.parseJSON(response.responseText).mensaje
+				   if(mensaje != 'success')
+					   return [false, mensaje, ''];
+				   else
+					   return [true, '', ''];
+				}
 		});
 	});
 }

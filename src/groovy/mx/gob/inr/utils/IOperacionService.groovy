@@ -43,4 +43,6 @@ interface IOperacionService <E> {
 	
 	def listarArea(String term)
 	
+	def checkCierre(Date fecha)
+	
 }

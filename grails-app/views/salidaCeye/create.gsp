@@ -12,7 +12,7 @@
 			var url = '/almacenWeb/salidaCeye'
 		</script>
 				
-		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance]" />
+		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,existeCierre:existeCierre]" />
 		
 	</body>
 </html>

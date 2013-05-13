@@ -76,7 +76,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		def mFechaCierreAnterior = utilService.fechaDesglosada(fechaCierreAnterior)
 		
 		def cierre = entityCierre.createCriteria().get{
-			sqlRestriction("month(fecha_cierre) = $mFechaCierreAnterior.mes")
+			sqlRestriction("month(fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
 			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
 			eq("articulo",articulo)
 			eq("almacen", almacen)

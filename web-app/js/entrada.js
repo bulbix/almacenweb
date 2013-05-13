@@ -25,13 +25,12 @@ function validar(){
 		ignore: [],
 		
         rules: {
-                fecha: {required:true,validateDate:true,dateToday:true},                
+                fecha: {required:true,validateDate:true,dateToday:true,checkCierre:true},                
                 folio: {required:true, number:true, uniqueFolio:true},
                 folioAlmacen:{number:true, uniqueFolioSalAlma:true},
                 remision: {required: function() {
                     return $('#folioAlmacen').val() == undefined || $('#folioAlmacen').val() == '' ;
-                }},
-                registra:{required:true},
+                }},               
                 supervisa:{required:true},
                 recibe:{required:true},                
                 insumo: {required:true, number:true,checkInsumo:true},
@@ -42,8 +41,7 @@ function validar(){
 				fecha : {required:"Requerido"},
 				folio:{required:"Requerido",number:"Numerico"},
 				//folioAlmacen:{numeric:"Requerido"},
-				remision: {required:"Requerido"},
-				registra:{required:"Requerido"},
+				remision: {required:"Requerido"},				
 				supervisa:{required:"Requerido"},
 				recibe:{required:"Requerido"},
 				insumo :{required:"Requerido", number:"Numerico"},
@@ -77,7 +75,7 @@ function capturar(){
 			 if($("#areaauto").val() != undefined)
 					$("#areaauto").focus()
 				else		
-					$("#registra").focus()		
+					$("#supervisa").focus()		
 		 }
 	});
 	
@@ -100,13 +98,7 @@ function capturar(){
 	
 	area.keypress(function(e){	
 		 if(e.which == 13) {
-			 $("#registra").focus()	
-		 }
-	});
-	
-	$("#registra").keypress(function(e){	
-		 if(e.which == 13) {
-			$("#supervisa").focus()		
+			 $("#supervisa").focus()	
 		 }
 	});
 	
@@ -248,16 +240,14 @@ function controlesHead(){
 	}	
 	
 	$("#guardar").click(function(){	
-		if($("#fecha").valid() && $("#folio").valid() && 
-			$("#folioAlmacen").valid() && $("#registra").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
+		if($("#fecha").valid() && $("#folio").valid() && $("#folioAlmacen").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
 			guardarTodo()
 		}
 	});	
 	
 	$("#actualizar").click(function(){
 		
-		if($("#fecha").valid() && $("#registra").valid() 
-		&& $("#supervisa").valid() && $("#recibe").valid() ){
+		if($("#fecha").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
 			actualizar();
 		}	
 	})

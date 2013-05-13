@@ -35,16 +35,9 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 	
 	
 	
-	def uniqueFolioSalAlma(){
-				
-		def result=true
-				
-		if(params.checkFolio){
-			def folioSalAlma  = params.int('checkFolio')
-			log.info("FolioSalAlma: " + folioSalAlma)
-			result = !entradaFarmaciaService.checkFolioSalAlma(folioSalAlma)
-		}
-		
+	def uniqueFolioSalAlma(){				
+		def folioSalAlma  = params.int('value')			
+		def result = !entradaFarmaciaService.checkFolioSalAlma(folioSalAlma)		
 		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
 	

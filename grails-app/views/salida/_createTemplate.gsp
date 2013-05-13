@@ -17,10 +17,12 @@
 
 		<g:if test="${salidaInstance?.estado != 'C'}">
 			<g:if test="${salidaInstance?.id != null}">
-				<li><input type="button" id="actualizar" value="Actualizar" />
-				</li>
-
-				<li><input type="button" id="cancelar" value="Cancelar" /></li>
+				<g:if test="${existeCierre == false}">					
+					<li><input type="button" id="actualizar" value="Actualizar" />
+					</li>
+	
+					<li><input type="button" id="cancelar" value="Cancelar" /></li>
+				</g:if>
 			</g:if>
 		</g:if>
 
@@ -48,7 +50,11 @@
 		</ul>
 	</g:hasErrors>
 
-	<div id="mensaje"></div>
+	<g:if test="${existeCierre == true}">	
+		<div id="mensaje" style="font-size:20px;color:red">
+			Cierre existente no se pueden hacer cambios
+		</div>
+	</g:if>
 
 	<form id="formPadre">
 
@@ -188,9 +194,11 @@
 
 		</tbody>
 	</table>
-
-	<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
-	<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
+	
+	<g:if test="${existeCierre == false}">
+		<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
+		<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
+	</g:if>
 
 	<form id="formDetalle">
 		<div class="list">

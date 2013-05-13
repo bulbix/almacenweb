@@ -26,7 +26,7 @@ class SalidaFarmaciaService extends SalidaService<SalidaFarmacia> {
 	
 	public SalidaFarmaciaService(){
 		super(SalidaFarmacia,SalidaDetalleFarmacia, EntradaDetalleFarmacia,
-			ArticuloFarmacia, CatAreaFarmacia, "F")						
+			ArticuloFarmacia, CatAreaFarmacia,CierreFarmacia,"F")						
 	}
 	
 	@PostConstruct

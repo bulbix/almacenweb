@@ -45,7 +45,7 @@ function validar(){
 		ignore: [],
 		
         rules: {
-        		fecha: {required:true,validateDate:true,dateToday:true},
+        		fecha: {required:true,validateDate:true,dateToday:true,checkCierre:true},
         		folio: {required:true, uniqueFolio:true},
         		nosala:{number:true},
         		cveArea:{required:true},

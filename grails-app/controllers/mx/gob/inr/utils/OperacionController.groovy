@@ -26,10 +26,14 @@ abstract class OperacionController<A> implements IOperacionController {
 		def almacenInstance = entityAlmacen.newInstance()
 		almacenInstance.fecha = new Date()
 		almacenInstance.folio = servicio.consecutivoFolio()
-		almacenInstance.almacen = almacen	
+		almacenInstance.almacen = almacen
+		
+		boolean existeCierre = false	
 		
 		if(id){
 			almacenInstance = entityAlmacen.get(id)
+			
+			existeCierre = servicio.checkCierre(almacenInstance.fecha)
 			
 			if(almacenInstance instanceof Entrada){
 				if(almacenInstance.idSalAlma)
@@ -47,7 +51,7 @@ abstract class OperacionController<A> implements IOperacionController {
 			usuariosList = servicio.usuarios(servicio.PERFIL_CEYE)
 		}		
 		
-		[usuariosList:usuariosList,almacenInstance: almacenInstance]
+		[usuariosList:usuariosList,almacenInstance: almacenInstance, existeCierre:existeCierre]
 	}
 	
 	@Override
@@ -142,23 +146,24 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 		def idPadre = params.long('idPadre')
 		def clave = params.long('id')
+		def mensaje = ""
 		
 		switch(params.oper){
 			case "edit":
-				servicio.actualizarDetalle(idPadre,params)
+				mensaje = servicio.actualizarDetalle(idPadre,params)
 				break
 			case "del":
-				servicio.borrarDetalle(idPadre,clave)
+				mensaje = servicio.borrarDetalle(idPadre,clave)
 				break
 		}
 		
-		render(contentType: 'text/json') {['responseText': 'weno']}
+		render(contentType: 'text/json') {['mensaje': mensaje]}
 		
 	}
 	
 	@Override
 	def uniqueFolio(){
-		def folio = params.int('checkFolio')		
+		def folio = params.int('value')		
 		def result = !servicio.checkFolio(folio)
 		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
@@ -170,6 +175,20 @@ abstract class OperacionController<A> implements IOperacionController {
 		def articuloJSON = articulo as JSON
 		render articuloJSON
 		
+	}
+	
+	@Override
+	def checkCierre(){
+		Date fecha = null		
+		try{
+			fecha =  new Date().parse("dd/MM/yyyy",params.value)
+		}
+		catch(Exception e){
+			fecha = null
+		}
+		
+		def result = !servicio.checkCierre(fecha)
+		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
 	
 	@Override

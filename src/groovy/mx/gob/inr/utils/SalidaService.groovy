@@ -18,16 +18,18 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	protected entityEntradaDetalle
 	protected entityArticulo
 	protected entityArea
+	protected entityCierre
 	
 	protected String almacen
 	
 	public SalidaService(entitySalida, entitySalidaDetalle,
-		 entityEntradaDetalle, entityArticulo, entityArea, almacen){
+		 entityEntradaDetalle, entityArticulo, entityArea, entityCierre, almacen){
 		this.entitySalida = entitySalida
 		this.entitySalidaDetalle = entitySalidaDetalle	
 		this.entityEntradaDetalle = entityEntradaDetalle
 		this.entityArticulo = entityArticulo
 		this.entityArea = entityArea
+		this.entityCierre = entityCierre
 		this.almacen = almacen		
 	}
 		 
@@ -126,17 +128,16 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
 	 def salidaUpdate = entitySalida.get(idSalidaUpdate);
 	 
-	 if(salidaUpdate.folio != salida.folio){
-		 //Aplicar Validacion
+	 def mensaje = "Salida actualizada"
+	 
+	 if(salida.folio != salidaUpdate.folio ){
 		 if (checkFolio(salida.folio)){
-			 return "Folio ya existe";
+			 mensaje = "Folio no actualizable, ya existe";
+			 salida.folio = salidaUpdate.folio
 		 }
 	 }
 	 
-	 /**Si cambio la fecha de salida
-	  * hay que regresar existencias y vlver a insertar
-	  *
-	  * */
+	 /**Si cambio la fecha de salidahay que regresar existencias y vlver a insertar */
 	 if(salidaUpdate.fecha.compareTo(salida.fecha) != 0){
 		 
 	 }
@@ -188,9 +189,40 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	@Override
 	def actualizarDetalle(Long idSalida,params){	
 		
-		long clave  = params.long('id')
-		borrarDetalle(idSalida, clave)
-		guardarDetalle(clave,params.double('solicitado'),params.double('surtido'), entitySalida.get(idSalida))
+		def clave  = params.long('id')
+		def solicitado = params.double('solicitado')
+		def surtido =params.double('surtido')
+		
+		def detalle = entitySalidaDetalle.createCriteria().list(){
+			eq('salida.id', idSalida)
+			eq("articulo.id", clave)			
+		}
+		
+		def sumaSurtido = detalle.sum { it.cantidadSurtida }
+		
+		def salidaUpdate = entitySalida.get(idSalida)
+		
+		if(solicitado == null || solicitado < 0.0){
+			return "Solicitado Invalido"
+		}
+		
+		if(surtido ==null || surtido < 0.0){
+			return "Surtido Invalido"
+		}	
+		
+		
+		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha, almacen) + 
+		(sumaSurtido - surtido)
+		
+		if(disponible < 0){
+			return "Cantidad Disponible $disponible"
+		}
+		
+		
+		borrarDetalle(idSalida, clave)		
+		def jsonDetalle=[cveArt:clave, solicitado:solicitado,surtido:surtido]		
+		guardarDetalle(jsonDetalle,salidaUpdate,null)
+		return "success"
 		
 	}
 	
@@ -212,6 +244,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			
 			it.delete([flush:true])
 		}
+		
+		return "success"
 		
 	}
 	
@@ -261,9 +295,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		return jsonData
 		
 	}
-		
-	
-		
+			
 	private def regresarExistencias(S salida){
 		
 		def salidasDetalle = entitySalidaDetalle.createCriteria().list(){
@@ -305,6 +337,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			entradaDetalle.noLote = null
 			entradaDetalle.restarExistencia = 0.0		
 
+			
 			entradasAfectadas.add(entradaDetalle);
 		}
 		
@@ -315,6 +348,10 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		def despachado = 0.0;
 		
 		def result = [];
+		
+		if(surtido == 0){
+			return result
+		}
 		
 		for(entradaDetalle in entradas){
 			despachado = entradaDetalle.existencia - surtido;
@@ -372,6 +409,11 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	@Override
 	def listarArea(String term){
 		autoCompleteService.listarArea(term, entityArea)
+	}
+	
+	@Override
+	def checkCierre(Date fecha){
+		utilService.checkCierre(entityCierre, fecha, almacen)
 	}
 	
 	def listarRecibe(String term){

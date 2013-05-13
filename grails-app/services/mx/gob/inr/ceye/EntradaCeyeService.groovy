@@ -2,6 +2,7 @@ package mx.gob.inr.ceye
 import javax.annotation.PostConstruct;
 
 import mx.gob.inr.farmacia.ArticuloFarmacia;
+import mx.gob.inr.farmacia.SalidaDetalleFarmacia;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.EntradaService;
@@ -19,8 +20,8 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	final int PERFIL_CEYE  = 10
 	
 	public EntradaCeyeService(){
-		super(EntradaCeye, EntradaDetalleCeye, ArticuloCeye,
-			 CatAreaCeye,"C")
+		super(EntradaCeye, EntradaDetalleCeye,SalidaDetalleFarmacia, ArticuloCeye,
+			 CatAreaCeye,CierreCeye,"C")
 	}
 	
 	@PostConstruct

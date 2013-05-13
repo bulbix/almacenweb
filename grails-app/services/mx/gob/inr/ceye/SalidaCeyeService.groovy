@@ -17,7 +17,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 	
 	public SalidaCeyeService(){
 		super(SalidaCeye,SalidaDetalleCeye, EntradaDetalleCeye, 
-			ArticuloCeye,CatAreaCeye, "C")						
+			ArticuloCeye,CatAreaCeye,CierreCeye, "C")						
 	}
 	
 	@PostConstruct

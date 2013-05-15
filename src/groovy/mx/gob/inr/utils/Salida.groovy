@@ -13,7 +13,7 @@ abstract class Salida {
 	Usuario entrego
 	String estado = 'A'
 	String almacen
-	CatArea area
+	//CatArea area
 	String noOrden
 	Usuario usuario
 	String ipTerminal

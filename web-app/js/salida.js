@@ -3,8 +3,8 @@ $(document).ready(function() {
 	$("#fecha").focus()
 	
 	autoCompleteArticulo(function(){						 
-		 disponibilidadArticulo($("#insumo").val(),$("#fecha").val());
-		 $("#solicitado").focus()
+		$("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));
+		$("#solicitado").focus()
 	});
 		
 	autoCompleteArea(function(){
@@ -49,6 +49,7 @@ function validar(){
         		folio: {required:true, uniqueFolio:true},
         		nosala:{number:true},
         		cveArea:{required:true},
+        		entrega:{required:true},
         		recibeauto:{required:true},
         		autorizaauto:{required:true},
         		insumo: {required:true,number:true,checkInsumo:true},
@@ -60,6 +61,7 @@ function validar(){
 				folio:{required:"Requerido"},
 				nosala:{number:"Numerico"},
 				cveArea:{required:"Requerido"},
+				entrega:{required:"Requerido"},
 				recibeauto:{required:"Requerido"},
         		autorizaauto:{required:"Requerido"},
 				insumo :{required:"Requerido",number:"Numerico"},
@@ -71,11 +73,19 @@ function validar(){
 
 function capturar(){
 	
-	$("#fecha").keypress(function(e){	
+	var fecha = $("#fecha")
+	
+	fecha.keypress(function(e){	
 		 if(e.which == 13) {
 			$("#folio").focus()		
 		 }
 	});
+	
+	fecha.focusout(function(){
+		
+	})
+	
+	
 	
 	$("#folio").keypress(function(e){	
 		 if(e.which == 13) {
@@ -173,8 +183,6 @@ function capturar(){
 
 function consultarDetalle(){
 	
-	//alert($("#idPadre").val())
-	
 	$("#detalle").jqGrid({
 	    url: url + '/consultarDetalle',
 	    datatype: 'json',
@@ -242,28 +250,42 @@ function consultarDetalle(){
 
 function controlesHead(){
 	
-	if($("#idPadre").val() != ''){
+	if($("#idPadre").val() != ''){		
+		
+		if($("#existeCierre").val()=='true'){
+			$(".botonOperacion").hide()
+		}
+		else{
+			$(".botonOperacion").show()
+		}
+		
+		if($("#estado").val()=='C'){
+			$(".botonOperacion").hide()
+			$("#imprimir").show()
+		}
+		else{
+			$(".botonOperacion").show()
+		}
+		
 		$("#paqueteq").prop('disabled', true)
 	}
+		
 	
 	if($("#paqueteq").val() != undefined && $("#paqueteq").val() !=''){
 		$(".busqueda").hide()
 	}
 	
-	$("#actualizar").click(function(){
-		
-		if( $("#cveArea").valid() && $("#fecha").valid() 
-		    && $("#recibeauto").valid() && $("#autorizaauto").valid() ){
-			actualizar();
-		}		
-			
-	})
-	
 	$("#guardarPaquete").click(function(){	
-		if($("#fecha").valid() && $("#folio").valid() ){
+		if($(".cabecera").valid() && $("#folio").valid()){
 			guardarTodo()
 		}
 	});
+	
+	$("#actualizar").click(function(){		
+		if($(".cabecera").valid()){
+			actualizar();
+		}	
+	})
 	
 	$("#cancelar").click(function(){
 		cancelar()
@@ -277,18 +299,14 @@ function detalleAdd(){
 		 if(e.which == 13 && $("#insumo").valid() ) {
 			$.getJSON(url + "/buscarArticulo",{id:this.value})
 					.done(function( json ) {
-						 $("#artauto").val(json.desArticulo)
-						 $("#desArticulo").val(json.desArticulo)
+						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
-						 $("#costo").val(json.movimientoProm)
-						 $("#costoDisplay").val(json.movimientoProm)
-						 $("#costoDisplay").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })						 
-						 disponibilidadArticulo($("#insumo").val(),$("#fecha").val());	
+						 $("#costo").val(json.movimientoProm)						 
+						 $("#costo").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })						 
+						 $("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));	
 						 $("#solicitado").focus()
 						 
 			})
-		
-			
 		 }
 	});
 	
@@ -303,29 +321,21 @@ function detalleAdd(){
 			 
 			 if($("#formPadre").valid()){			 
 				 var data = [{ cveArt:$("#insumo").val(),
-					 		   desArticulo:$("#desArticulo").val(),
-					 		   unidad:$("#unidad").val(),
-					 		   costo:$("#costo").val(),
-					 		   disponible:$("#disponible").val(),
 					 		   solicitado:$("#solicitado").val(),					 		   
 					 		   surtido:$("#surtido").val()
 					 		}];
 				 
-				 guardar(JSON.stringify(data))			 
-				
+				 guardar(JSON.stringify(data))			
 				 
 				 $("#clavelast").html($("#insumo").val());
-				 $("#deslast").html($("#desArticulo").val());
+				 $("#deslast").html($("#artauto").val());
 				 $("#unidadlast").html($("#unidad").val());
 				 $("#costolast").html($("#costo").val());				
 				 $("#solicitadolast").html($("#solicitado").val());
-				 $("#surtidolast").html($("#surtido").val());			 
-			
-				 
-				 $('#detalle').trigger("reloadGrid");		 
+				 $("#surtidolast").html($("#surtido").val());
+				 $('#disponiblelast').html(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()))
 				 
 				 limpiarRenglonDetalle()
-				 $("#insumo").focus()
 			 }
 		 }
 	});	
@@ -336,17 +346,24 @@ function detalleAdd(){
 
 function disponibilidadArticulo(clave, fecha){
 	
-	 $.ajax({
+	var result = '';
+	
+	 var request = $.ajax({
 	        type: "POST",
 	        url: url + '/disponibilidadArticulo',
 	        async:false,
 	        data: {clave:clave,fecha:fecha},
-	        dataType:"json",
-	     success: function(msg)
-	     {        	 
-	    	 $("#disponible").val(msg.disponible)         
-	     }
+	        dataType:"json"
+	 });
+	 
+	 
+	 request.done(function(msg){
+	    	 //alert(msg.disponible)
+	    	 result = msg.disponible
+	    	 //$("#disponible").val(msg.disponible)         
 	 })
+	 
+	 return result
 }
 
 	

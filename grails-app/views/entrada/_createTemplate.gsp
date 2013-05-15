@@ -14,18 +14,11 @@
 				<g:message code="default.list.label" args="[entityName]" />
 			</g:link></li>
 
-		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>		
-		
-		<g:if test="${entradaInstance?.estado != 'C'}">
-			<g:if test="${entradaInstance?.id != null}">
-				<g:if test="${existeCierre == false}">	
-					<li><input type="button" id="actualizar" value="Actualizar" />
-					</li>
-	
-					<li><input type="button" id="cancelar" value="Cancelar" /></li>
-				</g:if>
-			</g:if>
-		</g:if>
+		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
+									
+		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
+		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
+		<li><input type="button" id="imprimir" value="Imprimir" style="display:none" class="botonOperacion" /></li>
 		
 		
 	</ul>
@@ -60,9 +53,16 @@
 		</div>
 	</g:if>
 	
-
+	<g:if test="${entradaInstance?.estado == 'C'}">	
+		<div id="mensaje" style="font-size:20px;color:red">
+			Folio Cancelado
+		</div>
+	</g:if>
 	
-
+	<input type="hidden" id="existeCierre" value="${existeCierre}" />
+	<input type="hidden" id="estado" value="${entradaInstance?.estado}" />
+	
+	
 
 	<form id="formPadre">
 
@@ -74,7 +74,7 @@
 				
 				<td><label for="fecha">Fecha</label>
 				 <g:textField name="fecha" 
-				 value="${entradaInstance?.fecha?.format('dd/MM/yyy')}" size="8"  />
+				 value="${entradaInstance?.fecha?.format('dd/MM/yyy')}" size="8" class="cabecera"  />
 				</td>
 				
 				<td><label for="folio">Folio</label>
@@ -85,7 +85,7 @@
 					<td>
 						<label for="folioAlmacen">Folio Almacen</label> 
 						<g:textField name="folioAlmacen" value="${entradaInstance?.folioAlmacen}" size="5" />
-						<input type="button" id="guardar" style="display:none" value="Guardar" />
+						<input type="button" id="guardarAlmacen" style="display:none" value="Guardar" />
 					</td>				
 				</g:if>
 				
@@ -120,11 +120,11 @@
 				<td><label for="supervisa">Supervisa</label> <g:select
 						name="supervisa" from="${usuariosList}" optionKey="id"
 						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
-						noSelection="${['':'SELECCIONE SUPERVISA']}" /></td>			
+						noSelection="${['':'SELECCIONE SUPERVISA']}" class="cabecera" /></td>			
 				<td><label for="recibe">Recibe</label> <g:select name="recibe"
 						from="${usuariosList}" optionKey="id" optionValue="nombre" 
 						value="${entradaInstance?.recibio?.id}" 
-						noSelection="${['':'SELECCIONE RECIBE']}" /></td>			
+						noSelection="${['':'SELECCIONE RECIBE']}" class="cabecera" /></td>			
 				<g:if test="${entradaInstance?.almacen == 'F'}">
 					<td><label for="devolucion">Devolucion?</label> <g:checkBox
 						name="devolucion" value="${entradaInstance.devolucion == '1'}" /></td>
@@ -139,8 +139,8 @@
 		<table id="tblBusqueda" class="busqueda">
 			<tr>
 				<td colspan="6"><label for="artauto">Descripción
-						Articulo</label> <g:textField name="artauto" style="width: 700px;" /> <input
-					type="hidden" name="desArticulo" id="desArticulo" /></td>
+						Articulo</label> <g:textField name="artauto" style="width: 700px;" />
+				</td>
 			</tr>
 			<tr>
 				<td><label for="insumo">Clave</label> <g:textField

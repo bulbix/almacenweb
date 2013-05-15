@@ -11,6 +11,8 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 	ArticuloFarmacia articulo
 	EntradaDetalleFarmacia entradaDetalle	
 	
+	static belongsTo = [salida:SalidaFarmacia]
+	
 	static constraints = {
 				
 	}

@@ -108,6 +108,8 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		jsonArrayDetalle.each() {
 			guardarDetalle(it, entrada, renglon++)
 		}
+		
+		return "Entrada Guardada"
 	}
 
 	@Override

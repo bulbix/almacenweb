@@ -9,11 +9,11 @@ import mx.gob.inr.farmacia.SalidaFarmacia;
 
 abstract class SalidaDetalle implements Serializable {
 	
-	Salida salida
+	//Salida salida
 	Integer renglon
-	Entrada entrada
+	//Entrada entrada
 	Integer renglonEntrada
-	Articulo articulo
+	//Articulo articulo
 	Integer cantidadPedida
 	Integer cantidadSurtida
 	Date fechaCaducidad
@@ -21,6 +21,6 @@ abstract class SalidaDetalle implements Serializable {
 	Double precioUnitario
 	String actividad
 	String presupuesto
-	EntradaDetalle entradaDetalle
+	//EntradaDetalle entradaDetalle
 
 }

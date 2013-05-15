@@ -27,7 +27,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 		super.autoCompleteService = this.autoCompleteService	
 	}
 	
-	def consultarPaquete(String tipo){
+	def consultarPaquete(String tipo, Date fecha){
 		
 		def detalle = PaqueteQuirurgicoCeye.createCriteria().list(){
 			eq("tipo", tipo)
@@ -37,9 +37,10 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 			 
 			//def convertido = convertidora(it.articulo.id, it.cantidad)
 			//def precioAlmacen = precioAlmacen(it.articulo.id)
+			def disponible = disponibilidadArticulo(it.articulo.id, fecha, almacen)
 					
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-			costo:it.articulo.movimientoProm,disponible:null,solicitado:it.cantidad,surtido:it.cantidad]				
+			costo:it.articulo.movimientoProm,disponible:disponible,solicitado:it.cantidad,surtido:it.cantidad]				
 		}
 		
 		results

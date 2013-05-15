@@ -44,7 +44,11 @@
 						</g:if>
 						
 						
-						<td>${fieldValue(bean: entradaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>					
+						<td>${fieldValue(bean: entradaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>
+						
+						<g:if test="${entradaInstance.estado == 'C'}" >
+							<td><g:link action="eliminar" id="${entradaInstance.id}">Eliminar</g:link></td>
+						</g:if>					
 											
 					</tr>
 				</g:each>

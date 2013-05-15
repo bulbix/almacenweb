@@ -57,17 +57,23 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salida.nosala = jsonSalida.nosala?jsonSalida.nosala as short:null
 			salida.paqueteq = jsonSalida.paqueteq
 		}
-		
-		
+				
 		return salida
 	}
 	
 	@Override
 	S guardar(S salida){				
-		salida.save([validate:false,flush:true])
+		salida.save([validate:false])
 		return salida		
 	}
 	
+	/***
+	 * 
+	 * @param jsonDetalle
+	 * @param salida
+	 * @param renglon
+	 * @return renglon + 1 
+	 */
 	@Override
 	def guardarDetalle(jsonDetalle, S salida, Integer renglon ){
 		
@@ -75,11 +81,12 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		Double solicitado = jsonDetalle.solicitado as double
 		Double surtido = jsonDetalle.surtido as double
 		
+		
 		def entradas = cargarEntradasDeSalida(clave, salida.fecha, almacen, surtido)
 		
 		entradas.each(){
 			
-			def articulo = entityArticulo.get(jsonDetalle.cveArt)			
+			def articulo = entityArticulo.get(clave)			
 			def salidaDetalle = entitySalidaDetalle.newInstance()
 			
 			salidaDetalle.salida = salida			
@@ -87,7 +94,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			if(!renglon)
 				salidaDetalle.renglon = consecutivoRenglon(salida)
 			else
-				salidaDetalle.renglon = renglon
+				salidaDetalle.renglon = renglon++
 			
 			salidaDetalle.entrada = it.entrada
 			salidaDetalle.renglonEntrada = it.renglon
@@ -101,25 +108,44 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salidaDetalle.actividad = null
 			salidaDetalle.entradaDetalle = entityEntradaDetalle.get (it.id)
 			
-			salidaDetalle.save([validate:false,flush:true])
+			salidaDetalle.save([validate:false])
 			
 			it.existencia -=  it.restarExistencia
-			it.save([validate:false,flush:true])
+			
+			if(it.id)
+				it.save([validate:false])
 		}
+		
+		return renglon
 		
 		
 	}
 	
+	
+	
+	
 	@Override
-	def guardarTodo(S salida, jsonArrayDetalle){
-
-		salida = guardar(salida)
-
-		Integer renglon = 1
-
-		jsonArrayDetalle.each() {
-			guardarDetalle(it, salida, renglon++)
+	def guardarTodo(S salida, jsonArrayDetalle){		
+				
+		for(jsonDetalle in jsonArrayDetalle){			
+			Long clave = jsonDetalle.cveArt as long
+			Double surtido = jsonDetalle.surtido as double
+			def disponible = disponibilidadArticulo(clave,salida.fecha,almacen)
+			
+			if(surtido > disponible){
+				return "Existencia insuficiente clave $clave"
+			}
 		}
+		
+		salida = guardar(salida)
+		
+		Integer renglon = 1
+		
+		jsonArrayDetalle.each() {
+			renglon = guardarDetalle(it, salida, renglon)
+		}
+		
+		return "Salida Guardada"
 		
 	}
 	
@@ -137,15 +163,46 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		 }
 	 }
 	 
-	 /**Si cambio la fecha de salidahay que regresar existencias y vlver a insertar */
-	 if(salidaUpdate.fecha.compareTo(salida.fecha) != 0){
+	 /**Si cambio la fecha de salida, se regresan existencias y vuelve a insertar */
+	 if(salida.fecha.compareTo(salidaUpdate.fecha) < 0){
 		 
+		 def detalleList = entitySalidaDetalle.createCriteria().list(){
+			 projections{
+				 groupProperty("articulo")
+				 sum("cantidadSurtida")
+				 groupProperty("cantidadPedida")
+			 }
+			 
+			 eq("salida.id", idSalidaUpdate)
+			 order('articulo', 'asc')
+		 }		 
+		 
+		 for(detalle in detalleList){
+			 Long clave = detalle[0].id
+			 Double surtido = detalle[1]
+			 
+			 borrarDetalle(idSalidaUpdate, clave)//delete			 	
+			 def disponible = disponibilidadArticulo(clave,salida.fecha,almacen)
+			 
+			 if(surtido > disponible){
+				 def fechaFormat = salida.fecha.format("dd/MM/yyyy")
+				 throw new AlmacenException("A la fecha $fechaFormat la existencia es:$disponible Clave:$clave")//Rollback				 
+			 } 
+		 }		 
+		 
+		 Integer renglon = 1		 
+		 detalleList.each(){
+			 def clave = it[0].id
+			 def jsonDetalle = [cveArt: clave,solicitado:it[2],surtido:it[1]]
+			 //borrarDetalle(idSalidaUpdate, clave)
+			 renglon = guardarDetalle(jsonDetalle, salidaUpdate, renglon)			 
+		 }		 
 	 }
 	 
 	 salidaUpdate.properties = salida.properties;
-	 salidaUpdate.save([validate:false,flush:true])
+	 salidaUpdate.save([validate:false])
 	 
-	 return "Salida Actualizada";
+	 return mensaje;
 		
 	}
 	
@@ -161,7 +218,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		regresarExistencias(salida)
 
 		salida.estado = 'C'
-		salida.save([validate:false,flush:true])
+		salida.save([validate:false])
 	}
 	
 	@Override
@@ -193,12 +250,13 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		def solicitado = params.double('solicitado')
 		def surtido =params.double('surtido')
 		
-		def detalle = entitySalidaDetalle.createCriteria().list(){
+		def sumaSurtido = entitySalidaDetalle.createCriteria().get{			
+			projections{
+				sum("cantidadSurtida")
+			}			
 			eq('salida.id', idSalida)
 			eq("articulo.id", clave)			
 		}
-		
-		def sumaSurtido = detalle.sum { it.cantidadSurtida }
 		
 		def salidaUpdate = entitySalida.get(idSalida)
 		
@@ -211,8 +269,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		}	
 		
 		
-		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha, almacen) + 
-		(sumaSurtido - surtido)
+		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha, almacen) + (sumaSurtido - surtido)
 		
 		if(disponible < 0){
 			return "Cantidad Disponible $disponible"
@@ -239,10 +296,10 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			
 			if(entradaDetalle){
 				entradaDetalle.existencia += it.cantidadSurtida
-				entradaDetalle.save([validate:false,flush:true])
+				entradaDetalle.save([validate:false])
 			}
 			
-			it.delete([flush:true])
+			it.delete([validate:false])
 		}
 		
 		return "success"
@@ -307,7 +364,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			
 			if(entradaDetalle){
 				entradaDetalle.existencia += it.cantidadSurtida
-				entradaDetalle.save([validate:false,flush:true])
+				entradaDetalle.save([validate:false])
 			}
 		}
 		

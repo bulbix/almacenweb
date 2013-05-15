@@ -6,6 +6,10 @@ interface IOperacionController {
 	def create(Integer id)
 	def list(Integer max)
 	
+	
+	def eliminar(Integer id)
+	
+	
 	def guardar()
 	def guardarTodo()
 	def actualizar()

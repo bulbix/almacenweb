@@ -51,8 +51,7 @@ function autoCompleteArticulo(funcSelect){
 		  		$.getJSON(url + "/buscarArticulo",{id:$("#insumo").val()})
 		  		.done(function( json ) {
 		  	     $("#desArticulo").val(json.desArticulo)
-				 $("#unidad").val(json.unidad)
-				 
+				 $("#unidad").val(json.unidad)				 
 				  $("#costo").val(json.movimientoProm)
 				  $("#costo").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })
 				 funcSelect()
@@ -96,11 +95,12 @@ function guardar(dataDetalle){
 	});
 	
 	request.done(function(data) {
-		$('#idPadre').val(data.idPadre)
+		$('#idPadre').val(data.idPadre)		
+		$('#detalle').trigger("reloadGrid");
 		
-		//alert(data.disponible)
-		if(data.disponible != undefined)
-			$('#disponiblelast').html(data.disponible)
+		$('.botonOperacion').show()
+		
+		$("#insumo").focus()
 	});
 }
 
@@ -121,6 +121,7 @@ function actualizar(){
 	});
 
 	request.done(function(data) {
+		$('#detalle').trigger("reloadGrid");
 		alert(data.mensaje)
 	});
 	
@@ -138,7 +139,10 @@ function cancelar(){
 		dataType:"json"	        
 	});
 
-	request.done(function(data) {			
+	request.done(function(data) {
+		$('#detalle').trigger("reloadGrid");
+		$('#actualizar').hide()
+		$('#cancelar').hide()
 		alert(data.mensaje)
 	});	
 }
@@ -152,11 +156,12 @@ function controlesDetalle(){
 		$("#detalle").jqGrid('editGridRow',gr, {
 			   editData:{idPadre:$("#idPadre").val()},
 			   height:300,
+			   width:500,
+			   top: 200,
+			   left:0,
 			   reloadAfterSubmit: true,
 			   editCaption:'Editar Detalle',
 			   bSubmit:'Actualizar',
-			   width:500,
-			   //url:'someurl.php',
 			   closeAfterEdit:true,
 			   viewPagerButtons:false,
 			   afterSubmit: function(response,postdata){
@@ -164,7 +169,7 @@ function controlesDetalle(){
 				   var mensaje = jQuery.parseJSON(response.responseText).mensaje				   
 				   if(mensaje != 'success')
 					   return [false, mensaje, ''];
-				   else
+				   else					   
 					   return [true, '', ''];
 			   }
 		});
@@ -177,11 +182,12 @@ function controlesDetalle(){
 		$("#detalle").jqGrid('delGridRow',gr, {
 			   delData:{idPadre:$("#idPadre").val()},
 			   height:240,
+			   width:500,
+			   top: 200,
+			   left:0,
 			   reloadAfterSubmit: true,
 			   editCaption:'Borrar Detalle',
 			   bSubmit:'Borrar',
-			   width:500,
-			   //url:'someurl.php',
 			   closeAfterEdit:true,
 			   viewPagerButtons:false,
 			   afterSubmit: function (response, postdata) {
@@ -207,14 +213,14 @@ function consultarPaquete(){
 	
 	$("#detalle").clearGridData();
 	
-	$.getJSON( url + "/consultarPaquete",{tipo:$("#paqueteq").val()})
+	$.getJSON( url + "/consultarPaquete",{tipo:$("#paqueteq").val(),fecha:$("#fecha").val()})
 		.done(function( jsonArray ) {
 	        for (var i = 0; i < jsonArray.length; i++) {        	
 	        	$("#detalle").addRowData(jsonArray[i].cveArt, jsonArray[i]);
 	        }
 	})	
 	
-	$("#registra").focus()
+	
 	$(".busqueda").hide()
 	$("#guardar").show()
 }
@@ -241,7 +247,8 @@ function guardarTodo(){
 	
 	request.done(function(data) {
 		$('#idPadre').val(data.idPadre)
-		alert("Seleccion Guardada")
+		$('#detalle').trigger("reloadGrid");
+		alert(data.mensaje)
 	});
 }
 

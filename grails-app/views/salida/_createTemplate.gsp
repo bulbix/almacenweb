@@ -15,19 +15,10 @@
 			</g:link></li>
 		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
 
-		<g:if test="${salidaInstance?.estado != 'C'}">
-			<g:if test="${salidaInstance?.id != null}">
-				<g:if test="${existeCierre == false}">					
-					<li><input type="button" id="actualizar" value="Actualizar" />
-					</li>
-	
-					<li><input type="button" id="cancelar" value="Cancelar" /></li>
-				</g:if>
-			</g:if>
-		</g:if>
-
-		<li><input type="button" id="imprimir" value="Imprimir" /></li>
-
+		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
+		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
+		<li><input type="button" id="imprimir" value="Imprimir" style="display:none" class="botonOperacion" /></li>
+		
 	</ul>
 </div>
 
@@ -55,6 +46,17 @@
 			Cierre existente no se pueden hacer cambios
 		</div>
 	</g:if>
+	
+	
+	<g:if test="${salidaInstance?.estado == 'C'}">	
+		<div id="mensaje" style="font-size:20px;color:red">
+			Folio Cancelado
+		</div>
+	</g:if>
+	
+	
+	<input type="hidden" id="existeCierre" value="${existeCierre}" />
+	<input type="hidden" id="estado" value="${salidaInstance?.estado}" />
 
 	<form id="formPadre">
 
@@ -63,7 +65,7 @@
 		<table>
 			<tr>
 				<td><label for="fechaa">Fecha</label> <g:textField
-						name="fecha"
+						name="fecha" class="cabecera"
 						value="${salidaInstance?.fecha.format('dd/MM/yyy')}"
 						size="9" /></td>
 			
@@ -82,8 +84,8 @@
 
 			<tr>
 				<td colspan="3"><label for="areaauto">Area</label> <g:textField
-						name="areaauto" style="width: 700px;"
-						value="${salidaInstance?.area}" /> <input type="hidden"
+						name="areaauto" style="width: 700px;" 
+						value="${salidaInstance?.area}" /> <input type="hidden" class="cabecera" 
 					name="cveArea" id="cveArea" value="${salidaInstance?.area?.id}" />
 				</td>
 			<tr>
@@ -109,14 +111,15 @@
 			
 			<tr>
 				<td><label for="entrega">Entrega</label> <g:select
-						name="entrega" from="${usuariosList}" optionKey="id"
-						optionValue="nombre" value="${salidaInstance?.entrego?.id}" /></td>
+						name="entrega" from="${usuariosList}" optionKey="id" class="cabecera" 
+						optionValue="nombre" value="${salidaInstance?.entrego?.id}" 
+						noSelection="${['':'SELECCIONE ENTREGA']}" /></td>
 
 				<td><label for="recibe">Recibe</label> <g:textField
-						name="recibeauto" value="${salidaInstance?.recibio}" /></td>
+						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" /></td>
 
 				<td><label for="autoriza">Autoriza</label> <g:textField
-						name="autorizaauto" value="${salidaInstance?.jefeServicio}" /></td>
+						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" /></td>
 			</tr>
 			
 			<g:if test="${salidaInstance?.almacen != 'F'}" >		
@@ -137,8 +140,8 @@
 		<table id="tblBusqueda" class="busqueda">
 			<tr>
 				<td colspan="6"><label for="artauto">Descripción
-						Articulo</label> <g:textField name="artauto" style="width: 700px;" /> <input
-					type="hidden" name="desArticulo" id="desArticulo" /></td>
+						Articulo</label> <g:textField name="artauto" style="width: 700px;" />
+				</td>
 			</tr>
 			<tr>
 				<td><label for="insumo">Clave</label> <g:textField
@@ -146,9 +149,7 @@
 				<td><label for="unidad">Unidad</label> <g:textField
 						name="unidad" readonly="true" size="15" /></td>
 				<td><label for="costo">Costo</label> <g:textField
-						name="costoDisplay" readonly="true" size="5" />
-						<input type="hidden"
-					name="costo" id="costo" />
+						name="costo" readonly="true" size="5" />
 				</td>			
 				<td><label for="disponible">Disponible</label> <g:textField
 						name="disponible" readonly="true" size="3" /></td>

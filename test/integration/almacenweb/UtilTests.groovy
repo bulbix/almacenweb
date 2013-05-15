@@ -1,5 +1,6 @@
 package almacenweb
 
+import  mx.gob.inr.farmacia.*
 import static org.junit.Assert.*
 import mx.gob.inr.utils.UtilService
 import org.junit.*
@@ -17,6 +18,21 @@ class UtilTests {
 		def usuarios = utilService.usuarios(PERFIL_FARMACIA)
 		assertEquals(5, usuarios.size())
 	}
+	
+	@Test
+	void testConsultar() {
+		
+		def all = EntradaFarmacia.findAll()
+		
+		//def list = Entrada.list()
+		//def entrada = Entrada.findByNumeroEntrada(50)
+	   
+		//assertEquals(1,all[0].numeroEntrada)
+	   
+		assertNotNull(all)
+		assertEquals(all.size(), 1)
+	}
+	
 	
 	@Test
 	void testFechaDesglosada(){

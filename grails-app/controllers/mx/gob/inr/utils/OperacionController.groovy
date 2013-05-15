@@ -55,6 +55,13 @@ abstract class OperacionController<A> implements IOperacionController {
 	}
 	
 	@Override
+	def eliminar(Integer id ){
+		def almacenInstance = entityAlmacen.get(id)
+		almacenInstance.delete()
+		redirect(action: "list", params: params)
+	}
+	
+	@Override
 	def list(Integer max){
 		
 		params.max = Math.min(max ?: 10, 100)
@@ -92,9 +99,9 @@ abstract class OperacionController<A> implements IOperacionController {
 		def jsonArrayDetalle = JSON.parse(params.dataArrayDetalle)
 		
 		def almacen = servicio.setJson(jsonPadre, request.getRemoteAddr())
-		servicio.guardarTodo(almacen,jsonArrayDetalle)
+		def mensaje = servicio.guardarTodo(almacen,jsonArrayDetalle)
 		
-		render(contentType: 'text/json') {['idPadre': almacen.id]}
+		render(contentType: 'text/json') {['idPadre': almacen.id,'mensaje':mensaje]}
 		
 	}
 	
@@ -109,7 +116,12 @@ abstract class OperacionController<A> implements IOperacionController {
 		almacen = servicio.setJson(jsonPadre, request.getRemoteAddr())
 		
 		if(idPadre){
-			mensaje = servicio.actualizar(almacen, idPadre)
+			try{
+				mensaje = servicio.actualizar(almacen, idPadre)
+			}
+			catch(AlmacenException e){
+				mensaje = e.message
+			}
 		}
 		
 		render(contentType: 'text/json') {['mensaje': mensaje ]}

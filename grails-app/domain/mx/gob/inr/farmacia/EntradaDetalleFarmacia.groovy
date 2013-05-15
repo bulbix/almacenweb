@@ -4,11 +4,12 @@ import java.io.Serializable;
 import mx.gob.inr.utils.EntradaDetalle
 
 class EntradaDetalleFarmacia extends EntradaDetalle {
-	
-	
-	
+		
 	EntradaFarmacia entrada	
 	ArticuloFarmacia articulo	
+	
+	
+	static belongsTo = [entrada:EntradaFarmacia]
 	
 	static transients = ['restarExistencia']
 

@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="2" hostname="lprado-PC" id="0" name="UtilTests" package="almacenweb" tests="2" time="0.469" timestamp="2013-05-07T14:54:40">
+  <testsuite errors="0" failures="3" hostname="lprado-PC" id="0" name="UtilTests" package="almacenweb" tests="3" time="0.537" timestamp="2013-05-13T22:37:20">
       <properties />
 
-      <testcase classname="almacenweb.UtilTests" name="testUsuarios" time="0.434">
+      <testcase classname="almacenweb.UtilTests" name="testUsuarios" time="0.461">
           <failure message="java.lang.AssertionError: expected:&lt;5&gt; but was:&lt;8&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;5&gt; but was:&lt;8&gt;
-	at almacenweb.UtilTests.testUsuarios(UtilTests.groovy:18)
+	at almacenweb.UtilTests.testUsuarios(UtilTests.groovy:19)
 </failure>
 
       </testcase>
 
-      <testcase classname="almacenweb.UtilTests" name="testFechaDesglosada" time="0.023">
+      <testcase classname="almacenweb.UtilTests" name="testFechaDesglosada" time="0.024">
           <failure message="java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;
-	at almacenweb.UtilTests.testFechaDesglosada(UtilTests.groovy:24)
+	at almacenweb.UtilTests.testFechaDesglosada(UtilTests.groovy:40)
+</failure>
+
+      </testcase>
+
+      <testcase classname="almacenweb.UtilTests" name="testConsultar" time="0.04">
+          <failure message="java.lang.AssertionError: expected:&lt;43&gt; but was:&lt;1&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;43&gt; but was:&lt;1&gt;
+	at almacenweb.UtilTests.testConsultar(UtilTests.groovy:33)
 </failure>
 
       </testcase>
 
       <system-out><![CDATA[--Output from testUsuarios--
-Hibernate: select this_.idusuario as idusuario9_1_, this_.materno as materno9_1_, this_.nombre as nombre9_1_, this_.password as password9_1_, this_.paterno as paterno9_1_, this_.rfc as rfc9_1_, perfiles_a1_.idusuario as idusuario17_0_, perfiles_a1_.idperfil as idperfil17_0_ from usuario this_ inner join usuario_perfil perfiles_a1_ on this_.idusuario=perfiles_a1_.idusuario where (perfiles_a1_.idperfil=?) order by this_.nombre desc
+Hibernate: select this_.idusuario as idusuario12_1_, this_.materno as materno12_1_, this_.nombre as nombre12_1_, this_.password as password12_1_, this_.paterno as paterno12_1_, this_.rfc as rfc12_1_, perfiles_a1_.idusuario as idusuario13_0_, perfiles_a1_.idperfil as idperfil13_0_ from usuario this_ inner join usuario_perfil perfiles_a1_ on this_.idusuario=perfiles_a1_.idusuario where (perfiles_a1_.idperfil=?) order by this_.nombre desc
 --Output from testFechaDesglosada--
+--Output from testConsultar--
+Hibernate: select this_.id_entrada as id1_10_0_, this_.actividad as actividad10_0_, this_.almacen as almacen10_0_, this_.devolucion as devolucion10_0_, this_.estado_entrada as estado5_10_0_, this_.fecha_entrada as fecha6_10_0_, this_.fecha_captura as fecha7_10_0_, this_.numero_entrada as numero8_10_0_, this_.id_sal_alma as id9_10_0_, this_.ip_terminal as ip10_10_0_, this_.numero_factura as numero11_10_0_, this_.presupuesto as presupu12_10_0_, this_.recibio as recibio10_0_, this_.supervisor as supervisor10_0_, this_.id_usuario as id15_10_0_ from entrada this_
 ]]></system-out>
 
       <system-err><![CDATA[--Output from testUsuarios--
 --Output from testFechaDesglosada--
+--Output from testConsultar--
 ]]></system-err>
 
   </testsuite>

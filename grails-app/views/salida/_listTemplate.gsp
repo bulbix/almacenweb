@@ -21,7 +21,7 @@
 					<g:if test="${almacen != 'F'}">
 							<g:sortableColumn property="diagnostico" title="Procedimiento" />
 							<g:sortableColumn property="paqueteq" title="Paquete" />						
-						</g:if>
+					</g:if>
 										
 					<g:sortableColumn property="estado" title="Estado" />					
 					</tr>
@@ -41,7 +41,12 @@
 							<td>${fieldValue(bean: salidaInstance, field: "paqueteq")}</td>						
 						</g:if>
 						
-						<td>${fieldValue(bean: salidaInstance, field: "estado")}</td>
+						<td>${fieldValue(bean: salidaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>
+						
+						<g:if test="${salidaInstance.estado == 'C'}" >
+							<td><g:link action="eliminar" id="${salidaInstance.id}">Eliminar</g:link></td>
+						</g:if>
+						
 					
 					</tr>
 				</g:each>

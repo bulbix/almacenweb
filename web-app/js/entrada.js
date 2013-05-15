@@ -117,7 +117,7 @@ function capturar(){
 	
 	$("#folioAlmacen").focus(function(){
 		$("#detalle").clearGridData();
-		$("#guardar").hide()
+		$("#guardarAlmacen").hide()
 		$(".busqueda").hide()
 	});
 	
@@ -221,6 +221,22 @@ function consultarDetalle(){
 function controlesHead(){
 	
 	if($("#idPadre").val() != ''){
+		
+		if($("#existeCierre").val()=='true'){
+			$(".botonOperacion").hide()
+		}
+		else{
+			$(".botonOperacion").show()
+		}
+		
+		if($("#estado").val()=='C'){
+			$(".botonOperacion").hide()
+			$("#imprimir").show()
+		}
+		else{
+			$(".botonOperacion").show()
+		}
+		
 		$("#paqueteq").prop('disabled', true)
 	}
 	
@@ -239,25 +255,23 @@ function controlesHead(){
 		$("#folioAlmacen").prop('disabled', true);
 	}	
 	
-	$("#guardar").click(function(){	
-		if($("#fecha").valid() && $("#folio").valid() && $("#folioAlmacen").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
-			guardarTodo()
-		}
-	});	
-	
-	$("#actualizar").click(function(){
-		
-		if($("#fecha").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
-			actualizar();
-		}	
-	})
-	
-	$("#guardarPaquete").click(function(){	
-		if($("#fecha").valid() && $("#folio").valid() && $("#remision").valid() 
-				&& $("#registra").valid() && $("#supervisa").valid() && $("#recibe").valid() ){
+	$("#guardarAlmacen").click(function(){	
+		if( $(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
 			guardarTodo()
 		}
 	});
+	
+	$("#guardarPaquete").click(function(){	
+		if($(".cabecera").valid() && $("#folio").valid() && $("#remision").valid()){
+			guardarTodo()
+		}
+	});
+	
+	$("#actualizar").click(function(){		
+		if($(".cabecera").valid()){
+			actualizar();
+		}	
+	})
 	
 	
 	$("#cancelar").click(function(){
@@ -272,8 +286,7 @@ function detalleAdd(){
 		 if(e.which == 13 && $("#insumo").valid() ) {
 			$.getJSON(url + "/buscarArticulo",{id:this.value})
 					.done(function( json ) {
-						 $("#artauto").val(json.desArticulo)
-						 $("#desArticulo").val(json.desArticulo)
+						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
 						 $("#cantidad").focus()
 			})
@@ -339,8 +352,6 @@ function agregar(){
 		 
 		 
 		 var data = [{	cveArt:$("#insumo").val(),
-			 			desArticulo:$("#desArticulo").val(),
-			 			unidad:$("#unidad").val(),
 			 			cantidad:cantidad,
 			 			precioEntrada:$("#precio").val(),
 			 			noLote:$("#noLote").val(),
@@ -349,21 +360,16 @@ function agregar(){
 		 guardar(JSON.stringify(data))
 		 
 		 $("#clavelast").html($("#insumo").val());
-		 $("#deslast").html($("#desArticulo").val());
-		 $("#unidadlast").html($("#unidad").val());
-		 
-		 $("#cantidadlast").html(cantidad);
-		 
+		 $("#deslast").html($("#artauto").val());
+		 $("#unidadlast").html($("#unidad").val());		 
+		 $("#cantidadlast").html(cantidad);		 
 		 $("#preciolast").html($("#precio").val());
 		 $("#lotelast").html($("#noLote").val());
-		 $("#caducidadlast").html($("#fechaCaducidad").val());
-	
-		 
-		 $('#detalle').trigger("reloadGrid");			 
-		 			 
+		 $("#caducidadlast").html($("#fechaCaducidad").val());	 			 
+		
 		 limpiarRenglonDetalle()
 		 $("#folioAlmacen").prop('disabled', true);
-		 $("#insumo").focus()
+		
 	 }
 	
 }
@@ -391,7 +397,7 @@ function consultarDetalleMaterial(){
 	
 	$("#registra").focus()
 	$(".busqueda").hide()
-	$("#guardar").show()
+	$("#guardarAlmacen").show()
 }
 
 

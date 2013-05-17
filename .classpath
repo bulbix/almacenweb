@@ -56,27 +56,27 @@
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/filter-0.2/grails-app/controllers">
+	<classpathentry kind="src" path=".link_to_grails_plugins/filterpane-2.1.5/grails-app/i18n">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/filter-0.2/grails-app/i18n">
+	<classpathentry kind="src" path=".link_to_grails_plugins/filterpane-2.1.5/grails-app/services">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/filter-0.2/grails-app/taglib">
+	<classpathentry kind="src" path=".link_to_grails_plugins/filterpane-2.1.5/grails-app/taglib">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/filter-0.2/src/groovy">
+	<classpathentry kind="src" path=".link_to_grails_plugins/filterpane-2.1.5/grails-app/views">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/filter-0.2/src/java">
+	<classpathentry kind="src" path=".link_to_grails_plugins/filterpane-2.1.5/src/groovy">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>

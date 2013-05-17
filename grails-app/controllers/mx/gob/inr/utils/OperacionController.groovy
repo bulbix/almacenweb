@@ -4,12 +4,16 @@ import grails.converters.JSON
 import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.materiales.*
 
+import mx.gob.inr.farmacia.EntradaFarmacia;
+
 abstract class OperacionController<A> implements IOperacionController {
 
 	public IOperacionService<A> servicio
 	protected entityAlmacen
 	protected String almacen
 	
+	
+	def filterPaneService
 	
 	public OperacionController(entityAlmacen, almacen){
 		this.entityAlmacen = entityAlmacen
@@ -71,6 +75,24 @@ abstract class OperacionController<A> implements IOperacionController {
 		[almacen:almacen, almacenInstanceList: result.lista, almacenInstanceTotal: result.total]
 		
 		
+	}
+	
+	def filter = {
+		if(!params.max) params.max = 10
+		
+		def almacenList = filterPaneService.filter( params, entityAlmacen)
+		
+		if(entityAlmacen.name.contains("EntradaFarmacia")){
+			almacenList.each(){
+				if(it.idSalAlma)
+					it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).folio;
+			}
+		}	
+		
+		render( view:'list',model:[almacen:almacen, almacenInstanceList: almacenList,
+			almacenInstanceTotal: filterPaneService.count( params, entityAlmacen ),
+			filterParams: org.grails.plugin.filterpane.FilterPaneUtils.extractFilterParams(params),
+			params:params ] )
 	}
 	
 	@Override

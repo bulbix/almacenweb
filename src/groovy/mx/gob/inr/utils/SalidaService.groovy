@@ -228,12 +228,15 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	@Override
 	def listar(params){
 		
+		def sortIndex = params.sort ?: 'folio'
+		def sortOrder  = params.order ?: 'desc'
+		
 		def fechas = utilService.fechasAnioActual()
 				
 		def salidaList = entitySalida.createCriteria().list(params){
 			
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)			
-			order("folio","desc")
+			order(sortIndex, sortOrder)
 		}
 		
 		def salidaTotal = entitySalida.createCriteria().get{

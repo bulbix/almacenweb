@@ -10,5 +10,19 @@
 		<g:render template="/entrada/listTemplate" 
 			model="[entradaInstanceList: almacenInstanceList, entradaInstanceTotal: almacenInstanceTotal, almacen:almacen]" />
 		
+		
+	<div class="paginateButtons">
+		    <filterpane:paginate total="${entradaInstanceTotal}" domainBean="mx.gob.inr.ceye.EntradaCeye"/>
+		    <filterpane:filterButton text="Busqueda" appliedText="Cambiar Filtro"/>
+		    <filterpane:isNotFiltered>Lista Completa, No Filtrada!</filterpane:isNotFiltered>
+		    <filterpane:isFiltered>Filtro Aplicado!</filterpane:isFiltered>
+  		</div>	
+		
+			
+	<filterpane:filterPane domain="mx.gob.inr.ceye.EntradaCeye" 
+		associatedProperties="usuario.rfc,area.desArea" 
+		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado"/>
+		
+		
 	</body>
 </html>

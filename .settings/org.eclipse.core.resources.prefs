@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
-encoding//.link_to_grails_plugins/filter-0.2/grails-app/i18n=UTF-8
-encoding//.link_to_grails_plugins/filter-0.2/grails-app/i18n/messages.properties=UTF-8
+encoding//.link_to_grails_plugins/filterpane-2.1.5/grails-app/i18n=UTF-8
+encoding//.link_to_grails_plugins/filterpane-2.1.5/grails-app/i18n/messages-filterpane.properties=UTF-8
+encoding//.link_to_grails_plugins/filterpane-2.1.5/grails-app/i18n/messages-filterpane_de.properties=UTF-8
+encoding//.link_to_grails_plugins/filterpane-2.1.5/grails-app/i18n/messages-filterpane_sv.properties=UTF-8
 encoding//.link_to_grails_plugins/hibernate-2.2.1/grails-app/i18n=UTF-8
 encoding//.link_to_grails_plugins/hibernate-2.2.1/grails-app/i18n/messages.properties=UTF-8
 encoding//.link_to_grails_plugins/jasper-1.6.1/grails-app/i18n=UTF-8

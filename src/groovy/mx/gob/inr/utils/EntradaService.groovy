@@ -156,12 +156,16 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	@Override
 	def listar(params){
+		
+		def sortIndex = params.sort ?: 'folio'
+		def sortOrder  = params.order ?: 'desc'
 
+		
 		def fechas = utilService.fechasAnioActual()
 
 		def entradaList = entityEntrada.createCriteria().list(params){
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			order("folio","desc")
+			order(sortIndex, sortOrder)
 		}
 
 		entradaList.each(){

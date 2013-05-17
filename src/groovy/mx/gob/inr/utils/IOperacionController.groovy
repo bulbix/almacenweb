@@ -23,5 +23,7 @@ interface IOperacionController {
 	def listarArticulo()
 	def listarArea()
 	
-	def checkCierre()	
+	def checkCierre()
+	
+	def reporte()	
 }

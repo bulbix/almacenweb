@@ -43,6 +43,8 @@ interface IOperacionService <E> {
 	
 	def listarArea(String term)
 	
-	def checkCierre(Date fecha)
+	def checkCierre(Date fecha)	
+	
+	def reporte(Long id)
 	
 }

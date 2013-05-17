@@ -9,8 +9,8 @@
 
 	<script type="text/javascript">
 			var url = '/almacenWeb/entradaFarmacia'
-	</script>
-				
+	</script>				
+	
 	<g:render template="/entrada/createTemplate" model="[usuariosList:usuariosList,entradaInstance: almacenInstance,existeCierre:existeCierre]" />
 	
 </body>

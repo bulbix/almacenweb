@@ -331,6 +331,45 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	def checkCierre(Date fecha){
 		utilService.checkCierre(entityCierre, fecha, almacen)
 	}
+	
+	@Override
+	def reporte(Long id){
+		
+		def entityEntradaDetalleName = entityEntradaDetalle.name
+		
+		def area = ""
+		
+		if(almacen != 'F')
+			area = " left join fetch e.area "
+					
+		def query =
+		"""
+			select ed from $entityEntradaDetalleName ed
+			left join fetch ed.entrada e 
+			left join fetch e.recibio 
+			left join fetch e.supervisor
+			left join fetch e.usuario
+			$area
+			left join fetch ed.articulo art 
+			where e.id = $id 
+			order by ed.renglon asc
+		"""	
+		
+		def detalleList = entityEntradaDetalle.executeQuery(query,[])
+				
+		if(almacen == 'F'){		
+			def folioAlmacen = null
+			if(detalleList){				
+				if(detalleList[0].entrada.idSalAlma)
+					folioAlmacen= SalidaMaterial.get(detalleList[0].entrada.idSalAlma).folio;
+			}
+			for(detalle in detalleList){
+				detalle.entrada.folioAlmacen = folioAlmacen				
+			}
+		}
+		
+		return detalleList		
+	}
 
 	def checkFolioSalAlma(Integer folioSalAlma){
 

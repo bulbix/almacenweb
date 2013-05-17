@@ -62,7 +62,7 @@ class AutoCompleteService {
 
 	   def results = alist?.collect {
 		   def display = String.format("(%s) %s",it.clavediag,it.descdiag.trim())
-		   [id:it.clavediag,value:display,label:display]
+		   [id:it.id,value:display,label:display]
 	   }
 
 	   return results

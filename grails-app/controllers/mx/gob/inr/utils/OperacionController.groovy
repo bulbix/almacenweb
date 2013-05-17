@@ -1,6 +1,7 @@
 package mx.gob.inr.utils
 
 import grails.converters.JSON
+import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.materiales.*
 
 abstract class OperacionController<A> implements IOperacionController {
@@ -212,4 +213,12 @@ abstract class OperacionController<A> implements IOperacionController {
 	def listarArea(){
 		render servicio.listarArea(params.term) as JSON
 	}
+	
+	@Override
+	def reporte() {
+		long id=params.long('id')
+		def data = servicio.reporte(id)
+		chain(controller: "jasper", action: "index", model: [data:data], params:params)
+	}
+	
 }

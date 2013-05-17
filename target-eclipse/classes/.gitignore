@@ -1,3 +1,5 @@
+/grails
+/org
 /ApplicationResources$_run_closure1.class
 /ApplicationResources$_run_closure1_closure2.class
 /ApplicationResources.class
@@ -93,10 +95,9 @@
 /UrlMappings.class
 /almacenweb
 /com
-/grails
 /mx
-/org
 /resources$_run_closure1.class
 /resources.class
 /dbdoc
+/jasperDemo
 /templates

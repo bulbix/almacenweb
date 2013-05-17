@@ -248,6 +248,7 @@ function guardarTodo(){
 	request.done(function(data) {
 		$('#idPadre').val(data.idPadre)
 		$('#detalle').trigger("reloadGrid");
+		$('.botonOperacion').show()
 		alert(data.mensaje)
 	});
 }

@@ -3,6 +3,10 @@ package mx.gob.inr.utils
 import java.lang.reflect.Constructor
 import java.util.Date;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import mx.gob.inr.ceye.ArticuloCeye;
+import mx.gob.inr.ceye.CostoPromedioCeye;
 import mx.gob.inr.ceye.SalidaCeye
 import mx.gob.inr.farmacia.SalidaFarmacia;
 
@@ -452,9 +456,18 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
+	@Transactional(readOnly=true)
 	def buscarArticulo(Long id){
 		def articulo = entityArticulo.get(id)
 		articulo.desArticulo = articulo.desArticulo.trim()
+		
+		if(articulo instanceof ArticuloCeye){
+			def costo  = CostoPromedioCeye.createCriteria().get{
+				eq("articulo",articulo) 
+				eq("almacen",almacen)
+			}			
+			articulo.movimientoProm = costo.movimientoProm
+		}	
 		return articulo
 	}
 
@@ -471,6 +484,35 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	@Override
 	def checkCierre(Date fecha){
 		utilService.checkCierre(entityCierre, fecha, almacen)
+	}
+	
+	@Override
+	def reporte(Long id){
+		
+		def entitySalidaDetalleName = entitySalidaDetalle.name
+		
+		def diagnostico = ""
+		
+		if(almacen != 'F')
+			diagnostico = " left join fetch s.diagnostico "
+					
+		def query =
+		"""
+			select sd from $entitySalidaDetalleName sd
+			left join fetch sd.salida s 
+			left join fetch s.entrego 
+			left join fetch s.paciente 
+			left join fetch s.area 
+			$diagnostico
+			left join fetch sd.articulo art 
+			where s.id = $id 
+			order by art asc
+		"""	
+		
+		def detalleList = entitySalidaDetalle.executeQuery(query,[])
+		
+		return detalleList
+		
 	}
 	
 	def listarRecibe(String term){

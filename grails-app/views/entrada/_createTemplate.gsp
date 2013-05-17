@@ -12,19 +12,27 @@
 	<ul>
 		<li><g:link class="list" action="list">
 				<g:message code="default.list.label" args="[entityName]" />
-			</g:link></li>
+			</g:link>
+		</li>
 
-		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
-									
+		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>									
 		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
 		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
-		<li><input type="button" id="imprimir" value="Imprimir" style="display:none" class="botonOperacion" /></li>
-		
-		
 	</ul>
 </div>
 
+<div id="imprimir" style="display:none" class="botonOperacion" >
+		<g:jasperReport jasper="reportValeEntrada" format="PDF,XLSX" delimiter=" " name="ValeEntrada" 
+			controller="${controllerName}" action="reporte">		
+			<input type="hidden" name="id" value="${entradaInstance?.id}" />
+			<input type="hidden" name="almacen" value="${entradaInstance?.almacen}" />
+			<input type="hidden" name="imagePath" value="d:/Desarrollo/Workspaces/MyEclipse/saihweb/public_html/jsp/images/" />
+		</g:jasperReport>
+</div>
+
+
 <div id="create-entrada" class="content scaffold-create" role="main">
+	
 	<h1>
 		<g:message code="default.create.label" args="[entityName]" />
 	</h1>
@@ -204,8 +212,11 @@
 				<td><label>Unidad</label></td>
 				<td><label>Cantidad</label></td>
 				<td><label>Precio U.</label></td>
-				<td><label>Lote</label></td>
-				<td><label>F. Caducidad</label></td>
+				
+				<g:if test="${entradaInstance.almacen == 'F'}">
+					<td><label>Lote</label></td>
+					<td><label>F. Caducidad</label></td>
+				</g:if>
 
 			</tr>
 
@@ -218,8 +229,10 @@
 				<td><label id="unidadlast"></label></td>
 				<td><label id="cantidadlast"></label></td>
 				<td><label id="preciolast"></label></td>
-				<td><label id="lotelast"></label></td>
-				<td><label id="caducidadlast"></label></td>
+				<g:if test="${entradaInstance.almacen == 'F'}">
+					<td><label id="lotelast"></label></td>
+					<td><label id="caducidadlast"></label></td>
+				</g:if>
 
 			</tr>
 

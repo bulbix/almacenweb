@@ -17,9 +17,17 @@
 
 		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
 		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
-		<li><input type="button" id="imprimir" value="Imprimir" style="display:none" class="botonOperacion" /></li>
-		
 	</ul>
+</div>
+
+
+<div id="imprimir" style="display:none" class="botonOperacion" >
+		<g:jasperReport jasper="reportValeSalida" format="PDF,XLSX" delimiter=" " name="ValeSalida" 
+			controller="${controllerName}" action="reporte">		
+			<input type="hidden" name="id" value="${salidaInstance?.id}" />
+			<input type="hidden" name="almacen" value="${salidaInstance?.almacen}" />
+			<input type="hidden" name="imagePath" value="d:/Desarrollo/Workspaces/MyEclipse/saihweb/public_html/jsp/images/" />
+		</g:jasperReport>
 </div>
 
 <div id="create-salida" class="content scaffold-create" role="main">

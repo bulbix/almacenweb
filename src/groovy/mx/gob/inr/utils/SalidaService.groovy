@@ -235,7 +235,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 				
 		def salidaList = entitySalida.createCriteria().list(params){
 			
-			between("fecha",fechas.fechaInicio,fechas.fechaFin)			
+			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+			eq("almacen",almacen)			
 			order(sortIndex, sortOrder)
 		}
 		
@@ -244,6 +245,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 				count()
 			}			
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+			eq("almacen",almacen)
 		}
 		
 		[lista:salidaList, total:salidaTotal]

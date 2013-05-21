@@ -239,7 +239,7 @@
 		</tbody>
 	</table>
 
-	<g:if test="${existeCierre == false}">	
+	<g:if test="${existeCierre == false && entradaInstance?.estado == 'A'  }">	
 		<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
 		<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
 	</g:if>

@@ -157,7 +157,7 @@
 				<td><label for="unidad">Unidad</label> <g:textField
 						name="unidad" readonly="true" size="15" /></td>
 				<td><label for="costo">Costo</label> <g:textField
-						name="costo" readonly="true" size="5" />
+						name="costo" readonly="true" size="8" />
 				</td>			
 				<td><label for="disponible">Disponible</label> <g:textField
 						name="disponible" readonly="true" size="3" /></td>
@@ -204,7 +204,7 @@
 		</tbody>
 	</table>
 	
-	<g:if test="${existeCierre == false}">
+	<g:if test="${existeCierre == false && salidaInstance?.estado == 'A'}">
 		<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
 		<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
 	</g:if>

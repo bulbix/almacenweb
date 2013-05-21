@@ -233,5 +233,94 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			
 		}
 	}
-
+	
+	def checkCierre(Date fecha){
+		utilService.checkCierre(entityCierre, fecha, almacen)
+	}
+	
+	def listar(){
+		
+		def fechas = utilService.fechasAnioActual()
+				
+		def cierreList = entityCierre.createCriteria().list(){			
+			projections{
+				distinct("fechaCierre")
+			}
+			
+			eq("almacen",almacen)
+			between("fechaCierre",fechas.fechaInicio,fechas.fechaFin)
+			order("fechaCierre","asc")
+		}
+		
+		def cierreTotal = entityCierre.createCriteria().get{
+			projections{
+				countDistinct("fechaCierre")
+			}
+			
+			eq("almacen",almacen)
+			between("fechaCierre",fechas.fechaInicio,fechas.fechaFin)
+		}
+		
+		[lista:cierreList, total:cierreTotal]
+	}
+	
+	def checkCierrePosterior(Date fecha){	
+		
+		def fechaDesglosada = utilService.fechaDesglosada(fecha)		
+		
+		def mes = fechaDesglosada.mes
+		def anio  = fechaDesglosada.anio
+		
+		if(mes == 11){
+			mes = 0
+			++anio
+		}
+				
+		for(imes in mes..11){
+			def fechaNext = new Date()
+									
+			fechaNext.set(month:(imes+1),year:anio)
+			if(checkCierre(fechaNext)){
+				return true
+			}
+		}	
+		
+		return false
+		
+	}
+	
+	def eliminar(Date fecha){
+		
+		if(!checkCierrePosterior(fecha)){		
+			def cierreList = entityCierre.createCriteria().list(){
+				eq("fechaCierre", fecha)
+				eq("almacen",almacen)			
+			}*.delete()
+			
+			return true
+		}
+		
+		return false
+	}
+	
+	def reporte(Date fechaCierre){
+		def entityCierreName = entityCierre.name	
+						
+		def query =
+		"""	select c from $entityCierreName c 
+			left join fetch c.articulo art 
+			left join fetch art.partida p  
+			where c.fechaCierre = ? 
+			and c.almacen = ? 
+			and c.existencia > 0 
+			order by art asc
+		"""	
+		
+		def cierreList = entityCierre.executeQuery(query,[fechaCierre,almacen])
+				
+		return cierreList
+		
+	}
+	
+	
 }

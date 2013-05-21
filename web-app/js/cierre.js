@@ -2,11 +2,31 @@ $(document).ready(function() {
 	
 	
 	$("#generar").click( function() {
-		generarCierre();
+		
+		if($("#fechaCierre").valid()){		
+			this.disabled = true
+			generarCierre();
+		}
 	});
 	
+	validar();		
 	progressCierre()	
 });
+
+function validar(){
+	$("#formPadre").validate({
+		
+		ignore: [],
+		
+        rules: {
+        	fechaCierre: {required:true,validateDate:true,dateToday:true,checkCierre:true}  
+        },
+		messages: {
+			fechaCierre : {required:"Requerido"}
+		}
+  });
+}
+
 
 function generarCierre(){
 	
@@ -60,6 +80,7 @@ function progressCierre() {
 		},
 		complete : function() {
 			progressLabel.text("Cierre Finalizado!");
+			$("#generar").prop('disabled', false)
 		}
 	});
 	

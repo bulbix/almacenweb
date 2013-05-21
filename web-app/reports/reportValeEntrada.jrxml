@@ -275,6 +275,14 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 	</columnHeader>
 	<detail>
 		<band height="10">
+			<rectangle>
+				<reportElement uuid="e375e64e-86f6-461b-b9f6-755ce242f8a6" stretchType="RelativeToBandHeight" x="1" y="1" width="571" height="9" backcolor="#FDF8A1">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField pattern="###0" isBlankWhenNull="true">
 				<reportElement uuid="732e3d10-f932-4018-b509-1cc2ba066ff6" x="303" y="0" width="43" height="10"/>
 				<textElement textAlignment="Center">

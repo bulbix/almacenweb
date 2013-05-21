@@ -4,7 +4,7 @@ import mx.gob.inr.farmacia.CierreFarmaciaService;
 
 abstract class CierreController <C extends Cierre>  {
 
-    CierreService cierreService
+    public CierreService cierreService
 	
 	protected entityCierre	
 	protected String almacen
@@ -19,13 +19,16 @@ abstract class CierreController <C extends Cierre>  {
     }
 
     def list(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        [cierreInstanceList: entityCierre.list(params), cierreInstanceTotal: entityCierre.count()]
+		
+		def result = cierreService.listar()		
+		[almacen:almacen, cierreInstanceList: result.lista, cierreInstanceTotal: result.total]
+		
     }
 
     def create() {
 		
-		def cierreInstance = entityCierre.newInstance()		
+		def cierreInstance = entityCierre.newInstance()
+		cierreInstance.fechaCierre = new Date()		
         [cierreInstance: cierreInstance]
     }
 	
@@ -43,4 +46,34 @@ abstract class CierreController <C extends Cierre>  {
 		log.info("VALOR PORCENTAJE " + value)		
 		render(contentType: 'text/json') {['value': value ]}
 	}
+	
+	def checkCierre(){
+		Date fecha = null
+		try{
+			fecha =  new Date().parse("dd/MM/yyyy",params.value)
+		}
+		catch(Exception e){
+			fecha = null
+		}
+		
+		def result = !cierreService.checkCierre(fecha)
+		render text: result, contentType:"text/html", encoding:"UTF-8"
+	}
+	
+	def eliminar(){		
+		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)		
+		def result = cierreService.eliminar(fechaCierre)
+		
+		if(!result)		
+			flash.message = "Hay cierres posteriores"		
+		
+		redirect(action: "list", params: params)
+	}
+	
+	def reporte(){
+		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
+		def data = cierreService.reporte(fechaCierre)
+		chain(controller: "jasper", action: "index", model: [data:data], params:params)		
+	}
+		
 }

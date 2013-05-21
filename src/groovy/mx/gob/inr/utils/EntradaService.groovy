@@ -165,6 +165,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		def entradaList = entityEntrada.createCriteria().list(params){
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+			eq("almacen",almacen)
 			order(sortIndex, sortOrder)
 		}
 
@@ -178,6 +179,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				count()
 			}
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+			eq("almacen",almacen)
 		}
 
 		[lista:entradaList, total:entradaTotal]

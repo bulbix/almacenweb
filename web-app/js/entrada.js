@@ -222,15 +222,14 @@ function controlesHead(){
 	
 	if($("#idPadre").val() != ''){
 		
-		if($("#existeCierre").val()=='true'){
+		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' ){
 			$(".botonOperacion").hide()
-		}
-		else{
-			$(".botonOperacion").show()
-		}
-		
-		if($("#estado").val()=='C'){
-			$(".botonOperacion").hide()
+			$(".busqueda").hide()
+			
+			$("#formPadre :input").each(function(){
+				$(this).prop('disabled', true)
+			});	
+			
 			$("#imprimir").show()
 		}
 		else{

@@ -15,7 +15,7 @@ class CierreCeyeController extends CierreController<CierreCeye> {
 	
 	@PostConstruct
 	public void init(){
-		super.cierreService = cierreCeyeService
+		cierreService = cierreCeyeService
 	}
     
 }

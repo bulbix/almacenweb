@@ -16,7 +16,7 @@
 		    <filterpane:filterButton text="Busqueda" appliedText="Cambiar Filtro"/>
 		    <filterpane:isNotFiltered>Lista Completa, No Filtrada!</filterpane:isNotFiltered>
 		    <filterpane:isFiltered>Filtro Aplicado!</filterpane:isFiltered>
-  		</div>	
+  	</div>	
 		
 			
 	<filterpane:filterPane domain="mx.gob.inr.ceye.EntradaCeye" 

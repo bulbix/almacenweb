@@ -4,7 +4,7 @@ abstract class Cierre implements Serializable {
 
 	Date fechaCierre
 	String almacen
-	Articulo articulo
+	//Articulo articulo
 	Integer existencia
 	Double importe
 }

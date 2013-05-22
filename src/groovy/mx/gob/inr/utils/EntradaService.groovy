@@ -63,7 +63,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	@Override
 	E guardar(E entrada){
-		entrada.save([validate:false,flush:true])
+		entrada.save([validate:false])
 		return entrada
 	}
 
@@ -94,7 +94,9 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			entradaDetalle.fechaCaducidad = null
 		}
 
-		entradaDetalle.save([validate:false,flush:true])
+		entradaDetalle.save([validate:false])
+		
+		this.actualizarCostoPromedio(entradaDetalle)
 
 	}
 
@@ -135,7 +137,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		entradaUpdate.properties = entrada.properties
 		
-		entradaUpdate.save([validate:false,flush:true])
+		entradaUpdate.save([validate:false])
 
 		return mensaje
 	}
@@ -151,6 +153,19 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 	@Override
 	def cancelar(Long idEntrada){
+		
+		def entrada =  entityEntrada.get(idEntrada);
+		
+		def salidasDetalle = salidasDetalle(idEntrada)
+		
+		if(!salidasDetalle){		
+			cancelarCostoPromedio(entrada)
+			entrada.estado = 'C'
+			entrada.save([validate:false])
+			return "Cancelado"
+		}
+		
+		return "Folio tiene salidas asociadas"
 
 	}
 
@@ -233,7 +248,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			}
 		}
 
-		detalle.save([validate:false,flush:true])
+		detalle.save([validate:false])
 		
 		return "success"
 	}
@@ -425,6 +440,116 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		detalle
 	}
 	
+	def disponibilidadArticulo(Long clave, Date fecha, E entradaParam = null){
+				
+		def criteria = entityEntradaDetalle.createCriteria()
+
+		def disponible = criteria.get {
+
+			projections {
+				sum("existencia")
+			}
+
+			entrada {
+				eq("almacen", almacen)
+				eq("estado","A")
+				le("fecha",fecha)
+			}
+
+			articulo {
+				eq("id",clave)
+			}
+			
+			if(entradaParam){
+				eq("entrada",entradaParam)
+			}
+			
+		}
+
+		if(!disponible)
+			return 0
+		else
+			return disponible
+	}
+	
+	
+	def getMovimientoPromedio(Articulo articulo){
+		
+		def movimientoProm = 0.0
+		
+		if(articulo instanceof ArticuloFarmacia){
+			movimientoProm = articulo.movimientoProm
+		}
+		else if(articulo instanceof ArticuloCeye){
+			def costoPromedio  = CostoPromedioCeye.createCriteria().get{
+				eq("articulo",articulo)
+				eq("almacen",almacen)
+			}
+			movimientoProm = costoPromedio.movimientoProm
+		}
+		
+		return movimientoProm	
+	}
+	
+	def setMovimientoPromedio(Articulo articulo, double costo){
+		
+		if(articulo instanceof ArticuloFarmacia){
+			articulo.movimientoProm = costo
+			articulo.save([validate:false])
+		}
+		else if(articulo instanceof ArticuloCeye){
+			def costoPromedio  = CostoPromedioCeye.createCriteria().get{
+				eq("articulo",articulo)
+				eq("almacen",almacen)
+			}
+			costoPromedio.movimientoProm = costo
+			costoPromedio.save([validate:false])
+		}
+		
+	}
+	
+	def actualizarCostoPromedio(entradaDetalle){
+		
+		double costo = 0.0
+			
+		def articulo = entradaDetalle.articulo		
+		def movimientoProm = getMovimientoPromedio(articulo)	
+		
+		def sumExistencia = disponibilidadArticulo(articulo.id, entradaDetalle.entrada.fecha)
+		
+		def denominador = sumExistencia + entradaDetalle.cantidad
+		
+		if(denominador.equals(0.0))
+			denominador = 1.0
+		
+		costo = ((sumExistencia * movimientoProm) + (entradaDetalle.cantidad * entradaDetalle.precioEntrada)) / denominador
+		
+		setMovimientoPromedio(articulo, costo)
+		
+	}
+	
+	def cancelarCostoPromedio(E entrada){
+		
+		def entradasDetalle = entityEntradaDetalle.createCriteria().list(){
+			articulo{}
+			eq("entrada", entrada)
+		}	
+		
+		for(entradaDetalle in entradasDetalle){
+			
+			def sumExistenciaGeneral = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha)
+			def sumExistenciaEntrada = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha, entrada)
+			def movimientoProm = getMovimientoPromedio(entradaDetalle.articulo)
+			
+			double costo = (((sumExistenciaGeneral - sumExistenciaEntrada) * movimientoProm)
+				-(entradaDetalle.cantidad*entradaDetalle.precioEntrada)) / 
+				(sumExistenciaGeneral - sumExistenciaEntrada - entradaDetalle.cantidad)
+			
+			setMovimientoPromedio(entradaDetalle.articulo, costo)			
+		}		
+		
+	}
+	
 	def existeSalida(Long idEntrada){
 		def criteria = entitySalidaDetalle.createCriteria()
 		
@@ -441,14 +566,16 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			return false	
 	}
 	
-	def salidasDetalle(Long idEntrada, Long clave){
+	def salidasDetalle(Long idEntrada, Long clave = null){
 		
 		def criteria = entitySalidaDetalle.createCriteria()
 		
 		def detalle = criteria.list(){
 			entradaDetalle{
 				eq('entrada.id', idEntrada)
-				eq("articulo.id", clave)
+				
+				if(clave)
+					eq("articulo.id", clave)
 			}
 		}
 		

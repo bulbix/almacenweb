@@ -158,11 +158,12 @@ abstract class OperacionController<A> implements IOperacionController {
 		def mensaje = ""
 		
 		if(idPadre){
-			servicio.cancelar(idPadre);
-			mensaje = "Cancelado"
+			mensaje = servicio.cancelar(idPadre);			
 		}
 		else
 			mensaje = "Error"
+			
+		flash.message = mensaje
 			
 		render(contentType: 'text/json') {['mensaje': mensaje ]}
 		

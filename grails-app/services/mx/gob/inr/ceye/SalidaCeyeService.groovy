@@ -37,7 +37,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 			 
 			//def convertido = convertidora(it.articulo.id, it.cantidad)
 			//def precioAlmacen = precioAlmacen(it.articulo.id)
-			def disponible = disponibilidadArticulo(it.articulo.id, fecha, almacen)
+			def disponible = disponibilidadArticulo(it.articulo.id, fecha)
 					
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
 			costo:it.articulo.movimientoProm,disponible:disponible,solicitado:it.cantidad,surtido:it.cantidad]				

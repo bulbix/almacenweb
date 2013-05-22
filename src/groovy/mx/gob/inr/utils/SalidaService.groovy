@@ -186,7 +186,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			 Double surtido = detalle[1]
 			 
 			 borrarDetalle(idSalidaUpdate, clave)//delete			 	
-			 def disponible = disponibilidadArticulo(clave,salida.fecha,almacen)
+			 def disponible = disponibilidadArticulo(clave,salida.fecha)
 			 
 			 if(surtido > disponible){
 				 def fechaFormat = salida.fecha.format("dd/MM/yyyy")
@@ -223,6 +223,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 
 		salida.estado = 'C'
 		salida.save([validate:false])
+		return "Cancelado"
 	}
 	
 	@Override
@@ -278,7 +279,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		}	
 		
 		
-		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha, almacen) + (sumaSurtido - surtido)
+		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha) + (sumaSurtido - surtido)
 		
 		if(disponible < 0){
 			return "Cantidad Disponible $disponible"
@@ -351,7 +352,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			[
 				 cell:[it[0], it[1]?.trim(),
 					 it[2]?.trim(), it[3],
-					  disponibilidadArticulo(it[0], it[6],almacen),
+					  disponibilidadArticulo(it[0], it[6]),
 					  it[4],it[5]], id: it[0]
 			]
 		}
@@ -534,31 +535,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	
-	def disponibilidadArticulo(Long clave, Date fecha, String almacen){
-		
-		def criteria = entityEntradaDetalle.createCriteria()
-
-		def disponible = criteria.get {
-
-			projections {
-				sum("existencia")
-			}
-
-			entrada {
-				eq("almacen", almacen)
-				eq("estado","A")
-				le("fecha",fecha)
-			}
-
-			articulo {
-				eq("id",clave)
-			}
-		}
-
-		if(!disponible)
-			return 0
-		else
-			return disponible
+	def disponibilidadArticulo(Long clave, Date fecha){		
+		return entradaService.disponibilidadArticulo(clave, fecha)
 	}
 	
 }

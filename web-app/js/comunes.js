@@ -141,8 +141,13 @@ function cancelar(){
 
 	request.done(function(data) {
 		$('#detalle').trigger("reloadGrid");
-		$('#actualizar').hide()
-		$('#cancelar').hide()
+		$(".botonOperacion").hide()
+		$(".busqueda").hide()		
+		$("#formPadre :input").each(function(){
+			$(this).prop('disabled', true)
+		});	
+		
+		$("#imprimir").show()
 		alert(data.mensaje)
 	});	
 }

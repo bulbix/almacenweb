@@ -19,7 +19,7 @@ class SalidaController <S extends Salida> extends OperacionController<S> {
 		def clave = params.long('clave');
 		def fecha = new Date().parse("dd/MM/yyyy", params.fecha)
 		
-		def disponible = salidaService.disponibilidadArticulo(clave, fecha, almacen)
+		def disponible = salidaService.disponibilidadArticulo(clave, fecha)
 		
 		log.info(String.format("Disponibilidad %s", disponible))
 		

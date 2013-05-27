@@ -1,9 +1,12 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.services
 
 import java.util.Date;
 
 import mx.gob.inr.farmacia.ArticuloFarmacia;
 import mx.gob.inr.farmacia.CierreFarmacia;
+import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.domain.Articulo;
+import mx.gob.inr.utils.domain.Cierre;
 
 abstract class CierreService <C extends Cierre, A extends Articulo> {
 	
@@ -26,36 +29,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		this.entityArticulo = entityArticulo
 		this.entityCierre = entityCierre
 		this.almacen = almacen
-	}
-	
-	
-	def minClave(){
-		
-		def criteria = entityArticulo.createCriteria();
-		
-		def min = criteria.get {
-			
-			projections{
-				min("id")
-			}
-		}
-		
-		min
-	 }
-	
-	def maxClave(){
-		
-		def criteria = entityArticulo.createCriteria();
-		
-		def max = criteria.get {
-			
-			projections{
-				max("id")
-			}
-		}
-		
-		max
-	}
+	}	
 	
 	def cierreAnterior(Date fechaCierre, A articulo){
 		
@@ -194,8 +168,8 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 	
 	def cerrarPeriodo(Date fechaCierre){
 		
-		int minClave = minClave()
-		int maxClave = maxClave()
+		int minClave = utilService.clave(entityArticulo,"min")
+		int maxClave = utilService.clave(entityArticulo,"max")
 
 		int totalArticulos = (maxClave - minClave);
 		int contadorArticulo = 0;

@@ -1,4 +1,4 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.domain
 
 abstract class Articulo {
 	
@@ -8,7 +8,7 @@ abstract class Articulo {
 	Double movimientoProm
 	
 	String toString(){
-		return id
+		return String.format("(%s) %s", id, desArticulo)
 	}
 
 }

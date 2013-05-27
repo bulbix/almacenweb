@@ -1,7 +1,7 @@
 package mx.gob.inr.farmacia
 
-import mx.gob.inr.utils.Articulo
 import mx.gob.inr.utils.Partida;
+import mx.gob.inr.utils.domain.Articulo;
 
 class ArticuloFarmacia extends Articulo {
 

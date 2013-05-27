@@ -1,6 +1,6 @@
 package mx.gob.inr.farmacia
 
-import mx.gob.inr.utils.CatArea
+import mx.gob.inr.utils.domain.CatArea;
 
 class CatAreaFarmacia extends CatArea {
 	    

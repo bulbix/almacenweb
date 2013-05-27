@@ -9,7 +9,7 @@ import mx.gob.inr.farmacia.EntradaFarmaciaService;
 import mx.gob.inr.farmacia.EntradaFarmacia;
 import mx.gob.inr.materiales.SalidaMaterial;
 import mx.gob.inr.utils.EntradaController
-import mx.gob.inr.utils.IOperacionService
+import mx.gob.inr.utils.services.IOperacionService;
 
 class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
     

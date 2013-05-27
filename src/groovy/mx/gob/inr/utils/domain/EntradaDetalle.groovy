@@ -1,4 +1,4 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.domain
 
 import java.util.Date;
 

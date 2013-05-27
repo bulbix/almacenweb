@@ -1,7 +1,7 @@
 package mx.gob.inr.ceye
 
 import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
-import mx.gob.inr.utils.SalidaDetalle
+import mx.gob.inr.utils.domain.SalidaDetalle;
 
 
 class SalidaDetalleCeye extends SalidaDetalle {

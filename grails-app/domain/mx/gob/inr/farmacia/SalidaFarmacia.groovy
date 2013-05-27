@@ -3,8 +3,8 @@ package mx.gob.inr.farmacia
 import java.util.Date;
 
 import mx.gob.inr.utils.Paciente;
-import mx.gob.inr.utils.Salida
 import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.utils.domain.Salida;
 
 class SalidaFarmacia extends Salida  {	
 	

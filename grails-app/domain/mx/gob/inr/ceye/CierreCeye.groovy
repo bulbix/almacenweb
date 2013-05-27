@@ -1,6 +1,6 @@
 package mx.gob.inr.ceye
 
-import mx.gob.inr.utils.Cierre
+import mx.gob.inr.utils.domain.Cierre;
 
 class CierreCeye extends Cierre {
 

@@ -25,8 +25,7 @@
 		<g:jasperReport jasper="reportValeSalida" format="PDF,XLSX" delimiter=" " name="ValeSalida" 
 			controller="${controllerName}" action="reporte">		
 			<input type="hidden" name="id" value="${salidaInstance?.id}" />
-			<input type="hidden" name="almacen" value="${salidaInstance?.almacen}" />
-			<input type="hidden" name="imagePath" value="d:/Desarrollo/Workspaces/MyEclipse/saihweb/public_html/jsp/images/" />
+			<input type="hidden" name="almacen" value="${salidaInstance?.almacen}" />			
 		</g:jasperReport>
 </div>
 

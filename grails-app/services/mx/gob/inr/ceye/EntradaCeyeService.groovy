@@ -5,7 +5,7 @@ import mx.gob.inr.farmacia.ArticuloFarmacia;
 import mx.gob.inr.farmacia.SalidaDetalleFarmacia;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.UtilService;
-import mx.gob.inr.utils.EntradaService;
+import mx.gob.inr.utils.services.EntradaService;
 import mx.gob.inr.materiales.ArticuloMaterial;
 
 class EntradaCeyeService extends EntradaService<EntradaCeye> {

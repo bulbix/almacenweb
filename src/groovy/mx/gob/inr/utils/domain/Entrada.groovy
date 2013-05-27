@@ -1,6 +1,8 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.domain
 
 import java.util.Date;
+
+import mx.gob.inr.utils.Usuario;
 
 abstract class Entrada {
 	

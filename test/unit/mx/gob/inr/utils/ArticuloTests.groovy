@@ -3,6 +3,8 @@ package mx.gob.inr.utils
 
 
 import grails.test.mixin.*
+import mx.gob.inr.utils.domain.Articulo;
+
 import org.junit.*
 
 /**

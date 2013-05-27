@@ -1,7 +1,7 @@
 package mx.gob.inr.ceye
 
 import mx.gob.inr.utils.Cie09
-import mx.gob.inr.utils.Salida
+import mx.gob.inr.utils.domain.Salida;
 
 class SalidaCeye extends Salida {
 

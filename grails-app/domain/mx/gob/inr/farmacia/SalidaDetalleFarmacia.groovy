@@ -2,7 +2,8 @@ package mx.gob.inr.farmacia
 
 import java.io.Serializable;
 import java.util.Date;
-import mx.gob.inr.utils.SalidaDetalle
+
+import mx.gob.inr.utils.domain.SalidaDetalle;
 
 class SalidaDetalleFarmacia extends SalidaDetalle {
 	

@@ -2,6 +2,9 @@ package mx.gob.inr.utils
 
 import javax.annotation.PostConstruct;
 
+import mx.gob.inr.utils.domain.Salida;
+import mx.gob.inr.utils.services.SalidaService;
+
 import grails.converters.JSON
 
 class SalidaController <S extends Salida> extends OperacionController<S> {

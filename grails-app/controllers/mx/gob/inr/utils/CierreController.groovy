@@ -1,6 +1,8 @@
 package mx.gob.inr.utils
 
 import mx.gob.inr.farmacia.CierreFarmaciaService;
+import mx.gob.inr.utils.domain.Cierre;
+import mx.gob.inr.utils.services.CierreService;
 
 abstract class CierreController <C extends Cierre>  {
 
@@ -71,6 +73,8 @@ abstract class CierreController <C extends Cierre>  {
 	}
 	
 	def reporte(){
+		
+		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
 		def data = cierreService.reporte(fechaCierre)
 		chain(controller: "jasper", action: "index", model: [data:data], params:params)		

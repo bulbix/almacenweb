@@ -3,8 +3,8 @@ package mx.gob.inr.ceye
 import javax.annotation.PostConstruct;
 import mx.gob.inr.farmacia.EntradaFarmaciaService;
 import mx.gob.inr.utils.AutoCompleteService;
-import mx.gob.inr.utils.SalidaService
 import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.services.SalidaService;
 
 
 class SalidaCeyeService extends SalidaService<SalidaCeye> {

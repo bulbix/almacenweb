@@ -1,6 +1,6 @@
 package mx.gob.inr.ceye
 
-import mx.gob.inr.utils.CatArea
+import mx.gob.inr.utils.domain.CatArea;
 
 class CatAreaCeye extends CatArea {
 

@@ -1,7 +1,7 @@
 package mx.gob.inr.farmacia
 
-import mx.gob.inr.utils.Entrada
 import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaFarmacia extends Entrada {	
 	

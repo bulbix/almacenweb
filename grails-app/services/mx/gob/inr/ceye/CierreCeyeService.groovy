@@ -3,8 +3,8 @@ import javax.annotation.PostConstruct;
 
 import mx.gob.inr.farmacia.ArticuloFarmacia;
 import mx.gob.inr.farmacia.CierreFarmacia;
-import mx.gob.inr.utils.CierreService;
 import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.services.CierreService;
 
 
 

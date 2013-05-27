@@ -34,8 +34,7 @@
 								<g:jasperReport jasper="reportCierre" format="PDF,XLSX" delimiter=" " name="ReporteCierre" 
 									controller="${controllerName}" action="reporte">		
 								<input type="hidden" name="fechaCierre" value="${fechaCierre?.format('dd/MM/yyy')}" />
-								<input type="hidden" name="almacen" value="${almacen}" />
-								<input type="hidden" name="imagePath" value="d:/Desarrollo/Workspaces/MyEclipse/saihweb/public_html/jsp/images/" />
+								<input type="hidden" name="almacen" value="${almacen}" />								
 								</g:jasperReport>
 							
 							</td>

@@ -2,9 +2,9 @@ package mx.gob.inr.farmacia
 
 import javax.annotation.PostConstruct;
 
-import mx.gob.inr.utils.CierreService
 import mx.gob.inr.utils.ConcentradoraCierre
 import mx.gob.inr.utils.UtilService
+import mx.gob.inr.utils.services.CierreService;
 
 class CierreFarmaciaService extends CierreService<CierreFarmacia,ArticuloFarmacia> {
 	

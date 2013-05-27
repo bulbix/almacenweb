@@ -3,16 +3,16 @@ package mx.gob.inr.utils
 import grails.converters.JSON
 import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.materiales.*
-
+import mx.gob.inr.utils.domain.Entrada;
+import mx.gob.inr.utils.services.IOperacionService
 import mx.gob.inr.farmacia.EntradaFarmacia;
+import mx.gob.inr.util.services.*;
 
 abstract class OperacionController<A> implements IOperacionController {
 
 	public IOperacionService<A> servicio
 	protected entityAlmacen
 	protected String almacen
-	
-	
 	def filterPaneService
 	
 	public OperacionController(entityAlmacen, almacen){
@@ -239,7 +239,10 @@ abstract class OperacionController<A> implements IOperacionController {
 	
 	@Override
 	def reporte() {
-		long id=params.long('id')
+		
+		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
+		
+		long id=params.long('id')		
 		def data = servicio.reporte(id)
 		chain(controller: "jasper", action: "index", model: [data:data], params:params)
 	}

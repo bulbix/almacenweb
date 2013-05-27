@@ -1,4 +1,4 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.services
 
 import java.lang.reflect.Constructor
 import java.util.Date;
@@ -9,6 +9,13 @@ import mx.gob.inr.ceye.ArticuloCeye;
 import mx.gob.inr.ceye.CostoPromedioCeye;
 import mx.gob.inr.ceye.SalidaCeye
 import mx.gob.inr.farmacia.SalidaFarmacia;
+import mx.gob.inr.utils.AlmacenException;
+import mx.gob.inr.utils.AutoCompleteService;
+import mx.gob.inr.utils.Cie09;
+import mx.gob.inr.utils.Paciente;
+import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.domain.Salida;
 
 abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	

@@ -1,8 +1,13 @@
-package mx.gob.inr.utils
+package mx.gob.inr.utils.services
 
 import grails.converters.JSON
 import java.util.Date;
 import mx.gob.inr.materiales.*
+import mx.gob.inr.utils.AutoCompleteService;
+import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.domain.Articulo;
+import mx.gob.inr.utils.domain.Entrada;
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.ceye.*
 

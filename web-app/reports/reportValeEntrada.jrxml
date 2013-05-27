@@ -3,8 +3,8 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="imagePath" class="java.lang.String"/>
 	<parameter name="almacen" class="java.lang.String"/>
+	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -26,8 +26,8 @@
 	<field name="renglon" class="java.lang.Integer">
 		<fieldDescription><![CDATA[renglon]]></fieldDescription>
 	</field>
-	<field name="entrada" class="mx.gob.inr.utils.Entrada"/>
-	<field name="articulo" class="mx.gob.inr.utils.Articulo"/>
+	<field name="entrada" class="mx.gob.inr.utils.domain.Entrada"/>
+	<field name="articulo" class="mx.gob.inr.utils.domain.Articulo"/>
 	<variable name="importe" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{cantidad} * $F{precioEntrada}]]></variableExpression>
 	</variable>
@@ -85,7 +85,7 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 			</staticText>
 			<image>
 				<reportElement uuid="9e935751-dd19-4c11-96ee-3d7b705a7843" x="18" y="13" width="76" height="70"/>
-				<imageExpression><![CDATA[$P{imagePath} + "inr_gray.jpg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{IMAGE_DIR} + "logotipo.jpg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement uuid="79029f9d-d138-45a1-9d55-151d685ea18c" x="0" y="100" width="59" height="13"/>

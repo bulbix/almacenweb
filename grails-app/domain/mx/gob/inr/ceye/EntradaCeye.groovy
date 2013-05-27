@@ -1,6 +1,6 @@
 package mx.gob.inr.ceye
 
-import mx.gob.inr.utils.Entrada
+import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaCeye extends Entrada {
 

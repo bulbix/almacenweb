@@ -8,9 +8,9 @@ import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.materiales.SalidaDetalleMaterial;
 import mx.gob.inr.materiales.SalidaMaterial;
 import mx.gob.inr.utils.AutoCompleteService;
-import mx.gob.inr.utils.EntradaService
 import mx.gob.inr.utils.Usuario;
 import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.services.EntradaService;
 
 class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 

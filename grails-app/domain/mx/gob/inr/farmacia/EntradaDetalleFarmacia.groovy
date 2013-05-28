@@ -25,6 +25,7 @@ class EntradaDetalleFarmacia extends EntradaDetalle {
 		id column:'id_entradadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_identradadetallefarmacia']
 		
+		importe formula: "cantidad * precio_entrada"
 		
 		//id composite: ['entrada','renglonEntrada']
     }

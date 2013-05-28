@@ -16,4 +16,8 @@ class ReporteFarmaciaController extends ReporteController {
 		reporteService = reporteFarmaciaService
 	}
 	
+	def reporteCaducidad(){
+		cargarParams()
+	}
+	
 }

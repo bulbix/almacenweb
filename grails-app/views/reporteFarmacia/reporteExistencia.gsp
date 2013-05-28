@@ -9,6 +9,7 @@
 
 	<g:render template="/reporte/reporteTemplate" 
 	model="[reportName:'reporteExistencia',
+		   methodName:'reporteExistencia',
 		   reportDisplay:'ReporteExistencia',
 		   fechaInicial:fechaInicial,
 		   fechaFinal:fechaFinal,

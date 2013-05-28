@@ -240,6 +240,7 @@ abstract class OperacionController<A> implements IOperacionController {
 	@Override
 	def reporte() {
 		
+		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 		
 		long id=params.long('id')		

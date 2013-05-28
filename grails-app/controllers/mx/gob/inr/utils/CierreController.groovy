@@ -73,7 +73,7 @@ abstract class CierreController <C extends Cierre>  {
 	}
 	
 	def reporte(){
-		
+		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
 		def data = cierreService.reporte(fechaCierre)

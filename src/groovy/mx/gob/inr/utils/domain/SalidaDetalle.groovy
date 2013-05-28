@@ -22,5 +22,7 @@ abstract class SalidaDetalle implements Serializable {
 	String actividad
 	String presupuesto
 	//EntradaDetalle entradaDetalle
+	
+	Double importe
 
 }

@@ -9,6 +9,7 @@
 
 	<g:render template="/reporte/reporteTemplate" 
 	model="[reportName:'reporteKardex',
+		   methodName:'reporteKardex',
 		   reportDisplay:'ReporteKardex',
 		   fechaInicial:fechaInicial,
 		   fechaFinal:fechaFinal,

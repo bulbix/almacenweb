@@ -3,13 +3,13 @@
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="fechaInicial" class="java.util.Date"/>
-	<parameter name="fechaFinal" class="java.util.Date"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="fechaInicial" class="java.lang.String"/>
+	<parameter name="fechaFinal" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -21,12 +21,6 @@
 	<field name="precio" class="java.math.BigDecimal"/>
 	<field name="importe" class="java.math.BigDecimal"/>
 	<field name="tipo" class="java.lang.String"/>
-	<variable name="almacen" class="java.lang.String">
-		<variableExpression><![CDATA[$P{almacen}.equals("F")?"FARMACIA":
-$P{almacen}.equals("C")?"CEYE":
-$P{almacen}.equals("S")?"SUBCEYE":
-$P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
-	</variable>
 	<variable name="existencia" class="java.math.BigDecimal" resetType="Group" resetGroup="articulo" calculation="Sum">
 		<variableExpression><![CDATA[$F{tipo}.trim().equals("ENTRADA") == true ? $F{cantidad}:
 $F{tipo}.trim().equals("SALIDA") == true ? $F{cantidad} * -1:
@@ -174,73 +168,25 @@ $F{tipo}.trim().equals("CIERRE") == true ? $F{importe}: 0]]></variableExpression
 	</title>
 	<pageHeader>
 		<band height="115" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="b09e3ad4-d47c-48e6-b0bd-f663351c9ec5" x="137" y="10" width="335" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[INSTITUTO NACIONAL DE REHABILITACIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="055a0284-8e26-404f-9c6a-e32b2338665a" stretchType="RelativeToBandHeight" x="137" y="44" width="377" height="29"/>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SUBDIRECCION DE COMPRAS Y SUMINISTROS DEPARTAMENTO DE ALMACENES Y CONTROL DE INVENTARIOS]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement uuid="fb6b47c9-110d-409d-9a04-1046b15988bf" x="472" y="100" width="99" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="e3f621a6-59cf-4f43-8a7a-388def881001" x="413" y="100" width="59" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Fecha Creación:]]></text>
-			</staticText>
-			<image>
-				<reportElement uuid="e9f04d14-ddbf-4935-ae13-e5cef9981696" x="18" y="13" width="76" height="70"/>
-				<imageExpression><![CDATA[$P{IMAGE_DIR} + "logotipo.jpg"]]></imageExpression>
-			</image>
-			<textField>
-				<reportElement uuid="0b48ade3-646f-4ef8-816c-2d4295d17997" x="0" y="100" width="80" height="13"/>
-				<textElement textAlignment="Right">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="cce51c36-8353-4e9b-86cb-d72ade4adf11" x="80" y="100" width="40" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="553c1db6-2360-474e-9ab3-7a37486c0c88" x="324" y="83" width="142" height="17"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[KARDEX]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="96b3ea87-df75-4f66-8930-ed7c8223e704" x="153" y="83" width="69" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[SERVICIO DE ]]></text>
-			</staticText>
-			<textField evaluationTime="Report">
-				<reportElement uuid="ceb0be33-7af5-4f30-8938-ff1616edcca4" x="222" y="83" width="75" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{almacen}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="2" y="0" width="570" height="110"/>
+				<subreportParameter name="fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['KARDEX']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</pageHeader>
 	<detail>

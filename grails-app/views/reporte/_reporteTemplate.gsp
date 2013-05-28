@@ -27,24 +27,26 @@
 				</tr>
 			</g:if>
 			
-			<tr>
-				<td>
-					<label for="claveInicial">Clave Inicial</label>
-					<g:textField name="claveInicial" value="${claveInicial}" size="5" />
-				</td>
-				<td>
-					<label for="claveFinal">Clave Final</label> 
-					<g:textField name="claveFinal" value="${claveFinal}" size="5" />
-				</td>
-			</tr>
-			
-			<tr>
-				<td colspan="2">
-					<label for="partida">Partida</label>
-					<g:select name="partida" from="${partidaList}" optionKey="partida"
-					optionValue="desPart" noSelection="${['':'SELECCIONE PARTIDA']}" />			
-				</td>			
-			</tr>
+			<g:if test="${reportName != 'reportePartida'}">
+				<tr>
+					<td>
+						<label for="claveInicial">Clave Inicial</label>
+						<g:textField name="claveInicial" value="${claveInicial}" size="5" />
+					</td>
+					<td>
+						<label for="claveFinal">Clave Final</label> 
+						<g:textField name="claveFinal" value="${claveFinal}" size="5" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td colspan="2">
+						<label for="partida">Partida</label>
+						<g:select name="partida" from="${partidaList}" optionKey="partida"
+						optionValue="desPart" noSelection="${['':'SELECCIONE PARTIDA']}" />			
+					</td>			
+				</tr>				
+			</g:if>		
 			
 			
 			<g:if test="${reportName == 'reporteConsumo'}">
@@ -59,9 +61,9 @@
 			
 							
 		</table>
-	
-		<input type="hidden" name="reportName" value="${reportName}" />
+				
 		<input type="hidden" name="almacen" value="${almacen}" />
+		<input type="hidden" name="methodName" value="${methodName}" />
 	
 	</g:jasperReport>	
 </div>

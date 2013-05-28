@@ -15,5 +15,7 @@ abstract class EntradaDetalle implements Serializable {
 	Date fechaCaducidad
 	String noLote
 	Double restarExistencia
+	
+	Double importe
 
 }

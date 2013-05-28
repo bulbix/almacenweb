@@ -5,6 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -26,12 +29,6 @@
 	</variable>
 	<variable name="sumaTotal" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$V{importe}]]></variableExpression>
-	</variable>
-	<variable name="almacen" class="java.lang.String">
-		<variableExpression><![CDATA[$P{almacen}.equals("F")?"FARMACIA":
-$P{almacen}.equals("C")?"CEYE":
-$P{almacen}.equals("S")?"SUBCEYE":
-$P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 	</variable>
 	<group name="partida">
 		<groupExpression><![CDATA[$F{articulo}.getProperty("partida").getProperty("id")]]></groupExpression>
@@ -61,82 +58,20 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="97" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="76928bc9-186a-4d1b-a140-8dbc12434325" x="137" y="10" width="335" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[INSTITUTO NACIONAL DE REHABILITACIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="030f478b-58cf-4fb5-a80c-ae33dddca39e" stretchType="RelativeToBandHeight" x="94" y="30" width="477" height="29"/>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SUBDIRECCION DE COMPRAS Y SUMINISTROS DEPARTAMENTO DE ALMACENES Y CONTROL DE INVENTARIOS]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement uuid="ef7350fd-b3aa-4f00-91ae-fa197bd8b20e" x="472" y="83" width="99" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="90ebf6cf-fbc7-4e1d-90fd-3b3e7779dc25" x="428" y="83" width="44" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Fecha:]]></text>
-			</staticText>
-			<image>
-				<reportElement uuid="ee75220f-2e98-4893-8477-864420aa8594" x="18" y="13" width="76" height="70"/>
-				<imageExpression><![CDATA[$P{IMAGE_DIR} + "logotipo.jpg"]]></imageExpression>
-			</image>
-			<textField>
-				<reportElement uuid="b2177f80-d958-403a-820f-9367ed5740a7" x="0" y="83" width="80" height="13"/>
-				<textElement textAlignment="Right">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="f0041d82-807a-4759-ba62-e051523247db" x="80" y="83" width="40" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="e2379114-150c-4d04-90b3-516e38fb2ea7" x="151" y="59" width="69" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[SERVICIO DE ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="e11f49f0-7a5d-4886-92e5-198035f18475" x="322" y="59" width="96" height="17"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[CIERRE AL]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
-				<reportElement uuid="08757c35-0c8a-466b-a3ae-5749cb1eb907" mode="Transparent" x="418" y="59" width="100" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{fechaCierre}]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="ceb0be33-7af5-4f30-8938-ff1616edcca4" x="220" y="59" width="75" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{almacen}]]></textFieldExpression>
-			</textField>
+		<band height="112" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="1" y="0" width="570" height="110"/>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['CIERRE AL ' + $F{fechaCierre}.format('dd/MM/yyyy')]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</pageHeader>
 	<columnHeader>

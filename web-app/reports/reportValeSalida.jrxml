@@ -5,6 +5,9 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -24,12 +27,6 @@
 	</variable>
 	<variable name="total" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$V{importe}]]></variableExpression>
-	</variable>
-	<variable name="almacen" class="java.lang.String">
-		<variableExpression><![CDATA[$P{almacen}.equals("F")?"FARMACIA":
-$P{almacen}.equals("C")?"CEYE":
-$P{almacen}.equals("S")?"SUBCEYE":
-$P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 	</variable>
 	<variable name="cantidadSurtida" class="java.lang.Integer" resetType="Group" resetGroup="clave" calculation="Sum">
 		<variableExpression><![CDATA[$F{cantidadSurtida}]]></variableExpression>
@@ -109,31 +106,6 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 	<pageHeader>
 		<band height="150" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="98dd6d70-f00d-4bd6-a0ea-f414c4160de2" x="137" y="10" width="335" height="20"/>
-				<textElement textAlignment="Center">
-					<font size="13" isBold="true"/>
-				</textElement>
-				<text><![CDATA[INSTITUTO NACIONAL DE REHABILITACIÓN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="61791667-386d-43f0-bf7a-14a693e81c2c" stretchType="RelativeToBandHeight" x="94" y="44" width="477" height="29"/>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SUBDIRECCION DE COMPRAS Y SUMINISTROS DEPARTAMENTO DE ALMACENES Y CONTROL DE INVENTARIOS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="ea03d821-7704-461e-9071-ff76dc354f3c" x="413" y="111" width="59" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Fecha Creación:]]></text>
-			</staticText>
-			<image>
-				<reportElement uuid="08c06018-b2ce-47ed-8aca-acfc2d3610b8" x="18" y="13" width="76" height="70"/>
-				<imageExpression><![CDATA[$P{IMAGE_DIR} + "logotipo.jpg"]]></imageExpression>
-			</image>
-			<staticText>
 				<reportElement uuid="28db7cde-8a38-4b77-bcc1-b7cce2b81067" x="150" y="111" width="40" height="13"/>
 				<textElement>
 					<font size="6"/>
@@ -146,20 +118,6 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 					<font size="6"/>
 				</textElement>
 				<text><![CDATA[Folio:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="8a72a928-e8f0-4c61-9468-76d778560255" x="181" y="83" width="69" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[SERVICIO DE ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="b61223d8-4469-4f60-bdc9-5cb9050e3bd7" x="352" y="83" width="111" height="17"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[VALE DE SALIDA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="d03717ae-41d3-40f2-92a4-1faabf5d006e" x="0" y="124" width="51" height="13"/>
@@ -216,27 +174,6 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[""+$F{salida}.getProperty("folio")]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement uuid="6badd7bd-c4f5-470e-8c75-e7a4f68d0fcc" x="472" y="111" width="81" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="79029f9d-d138-45a1-9d55-151d685ea18c" x="0" y="111" width="59" height="13"/>
-				<textElement textAlignment="Right">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="d85ce2d5-2e1d-4a5e-864a-6367a4990eac" x="59" y="111" width="40" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="cad5e351-b582-424b-8400-e7fefee591fb" x="51" y="124" width="239" height="13"/>
 				<textElement>
@@ -278,13 +215,19 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{salida}.getProperty("paqueteq")]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="ceb0be33-7af5-4f30-8938-ff1616edcca4" x="250" y="83" width="75" height="17"/>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{almacen}]]></textFieldExpression>
-			</textField>
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="2" y="1" width="570" height="110"/>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['VALE DE SALIDA']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</pageHeader>
 	<columnHeader>

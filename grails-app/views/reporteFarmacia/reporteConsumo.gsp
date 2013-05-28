@@ -8,7 +8,8 @@
 <body>
 
 	<g:render template="/reporte/reporteTemplate" 
-	model="[reportName:'reporteConsumo',
+	model="[reportName:'reporteMes',
+			methodName:'reporteConsumo',
 		   reportDisplay:'ReporteConsumo',
 		   fechaInicial:fechaInicial,
 		   fechaFinal:fechaFinal,

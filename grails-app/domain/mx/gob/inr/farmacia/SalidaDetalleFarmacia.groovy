@@ -29,5 +29,7 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 		entrada column:'id_entrada'		
 		id column:'id_salidadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_idsalidadetallefarmacia']
+		
+		importe formula: "cantidad_surtida * precio_unitario"
 	}    
 }

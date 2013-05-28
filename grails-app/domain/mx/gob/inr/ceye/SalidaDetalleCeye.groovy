@@ -28,5 +28,7 @@ class SalidaDetalleCeye extends SalidaDetalle {
 		entradaDetalle column:'id_entradadetalle'
 		id column:'id_salidadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_idsalidadetalleceye']
+		
+		importe formula: "cantidad_surtida * precio_unitario"
 	}    
 }

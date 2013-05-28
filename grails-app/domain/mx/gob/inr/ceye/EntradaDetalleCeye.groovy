@@ -22,5 +22,7 @@ class EntradaDetalleCeye extends EntradaDetalle {
 		table 'entrada_detalle_ceye'
 		id column:'id_entradadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_identradadetalleceye']
+		
+		importe formula: "cantidad * precio_entrada"
     }
 }

@@ -52,23 +52,40 @@ class ReporteController {
 		cargarParams()
 	}
 	
+	def reporteProporcionado(){
+		cargarParams()
+	}
+	
+	def reporteEntrada(){
+		cargarParams()
+	}
+	
+	def reportePartidaSalida(){
+		cargarParams()
+	}
+	
+	def reportePartidaEntrada(){
+		cargarParams()
+	}
+	
 	
 	def reporte() {
 		
-		def methodName = params.reportName		
+		def methodName = params.methodName		
 		
-		try{			
-			//params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
+		//try{			
 			
-			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"		
+			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
+			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"			
+					
 			def data = reporteService."$methodName"(params) //Llamada dinamica del metodo 			
 			chain(controller: "jasper", action: "index", model: [data:data], params:params)
-		}
+		/*}
 		catch(Exception e){
 			flash.message= 'Revise sus parametros'
 			redirect(action:methodName,params:params)
 			return		
-		}
+		}*/
 	}
 	
 	

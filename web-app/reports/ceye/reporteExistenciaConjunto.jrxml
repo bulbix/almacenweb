@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportExistenciaConjunto" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f684bdc5-7586-4f9e-bf4c-db7fa384514f">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="claveInicial" class="java.lang.String">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="claveFinal" class="java.lang.String">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="partida" class="java.lang.String">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="insumosValue" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[($P{claveInicial} == '' ?
+    "" : " AND cve_art BETWEEN " + $P{claveInicial} +" AND "
+    + $P{claveFinal} )]]></defaultValueExpression>
+	</parameter>
+	<parameter name="partidaValue" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[($P{partida} == '' ?
+     "" : " AND partida = '" + $P{partida} +"'")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ordenacion" class="java.lang.String"/>
+	<parameter name="fechaInicial" class="java.lang.String"/>
+	<parameter name="fechaFinal" class="java.lang.String"/>
+	<parameter name="fechaCierre" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="almacen" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+    cve_art,
+    unidad,
+    substr(des_articulo,1,50) as des_articulo,
+    (NVL(
+    (
+        SELECT
+            SUM(ed.cantidad)
+        FROM
+            entrada_ceye e,
+            entrada_detalle_ceye ed
+        WHERE
+            e.id_entrada = ed.id_entrada
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
+        AND ed.cve_art = artExt.cve_art
+        AND e.estado_entrada='A'
+        AND e.almacen = 'C'
+        GROUP BY
+            ed.cve_art
+    )
+    ,0)+
+     NVL(
+    (
+        SELECT
+            cc.existencia
+        FROM
+            cierre_ceye cc
+        WHERE
+            fecha_cierre = $P{fechaCierre}
+        AND cc.cve_art = artExt.cve_art
+        AND almacen = 'C'
+    )
+    ,0)) as entradaceye,
+ NVL(
+    (
+        SELECT
+            SUM(sd.cantidad_surtida)
+        FROM
+            salida_ceye s,
+            salida_detalle_ceye sd
+        WHERE
+            s.id_salida = sd.id_salida
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
+        AND sd.cve_art = artExt.cve_art
+        AND s.estado_salida = 'A'
+        AND s.almacen = 'C'
+        GROUP BY
+            sd.cve_art
+    )
+    ,0) as salidaceye,
+(NVL(
+    (
+        SELECT
+            SUM(ed.cantidad)
+        FROM
+            entrada_ceye e,
+            entrada_detalle_ceye ed
+        WHERE
+            e.id_entrada = ed.id_entrada
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
+        AND ed.cve_art = artExt.cve_art
+        AND e.estado_entrada='A'
+        AND e.almacen = 'S'
+        GROUP BY
+            ed.cve_art
+    )
+    ,0)+
+     NVL(
+    (
+        SELECT
+            cc.existencia
+        FROM
+            cierre_ceye cc
+        WHERE
+            fecha_cierre = $P{fechaCierre}
+        AND cc.cve_art = artExt.cve_art
+        AND almacen = 'S'
+    )
+    ,0)) as entradasubceye,
+ NVL(
+    (
+        SELECT
+            SUM(sd.cantidad_surtida)
+        FROM
+            salida_ceye s,
+            salida_detalle_ceye sd
+        WHERE
+            s.id_salida = sd.id_salida
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
+        AND sd.cve_art = artExt.cve_art
+        AND s.estado_salida = 'A'
+        AND s.almacen = 'S'
+        GROUP BY
+            sd.cve_art
+    )
+    ,0) as salidasubceye,
+(NVL(
+    (
+        SELECT
+            SUM(ed.cantidad)
+        FROM
+            entrada_ceye e,
+            entrada_detalle_ceye ed
+        WHERE
+            e.id_entrada = ed.id_entrada
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
+        AND ed.cve_art = artExt.cve_art
+        AND e.estado_entrada='A'
+        AND e.almacen = 'Q'
+        GROUP BY
+            ed.cve_art
+    )
+    ,0)+
+     NVL(
+    (
+        SELECT
+            cc.existencia
+        FROM
+            cierre_ceye cc
+        WHERE
+            fecha_cierre = $P{fechaCierre}
+        AND cc.cve_art = artExt.cve_art
+        AND almacen = 'Q'
+    )
+    ,0)) as entradaceniaq,
+NVL(
+    (
+        SELECT
+            SUM(sd.cantidad_surtida)
+        FROM
+            salida_ceye s,
+            salida_detalle_ceye sd
+        WHERE
+            s.id_salida = sd.id_salida
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
+        AND sd.cve_art = artExt.cve_art
+        AND s.estado_salida = 'A'
+        AND s.almacen = 'Q'
+        GROUP BY
+            sd.cve_art
+    )
+    ,0) as salidaceniaq
+FROM
+    articulo_ceye artExt
+WHERE
+    1 = 1 $P!{insumosValue} $P!{partidaValue}
+ORDER BY artExt.cve_art]]>
+	</queryString>
+	<field name="cve_art" class="java.lang.Integer"/>
+	<field name="unidad" class="java.lang.String"/>
+	<field name="des_articulo" class="java.lang.String"/>
+	<field name="entradaceye" class="java.math.BigDecimal"/>
+	<field name="salidaceye" class="java.math.BigDecimal"/>
+	<field name="entradasubceye" class="java.math.BigDecimal"/>
+	<field name="salidasubceye" class="java.math.BigDecimal"/>
+	<field name="entradaceniaq" class="java.math.BigDecimal"/>
+	<field name="salidaceniaq" class="java.math.BigDecimal"/>
+	<variable name="totalEntrada" class="java.lang.Integer" resetType="Column">
+		<variableExpression><![CDATA[$F{entradaceye}+$F{entradasubceye}+$F{entradaceniaq}]]></variableExpression>
+	</variable>
+	<variable name="totalSalida" class="java.lang.Integer" resetType="Column">
+		<variableExpression><![CDATA[$F{salidaceye}+$F{salidasubceye}+$F{salidaceniaq}]]></variableExpression>
+	</variable>
+	<variable name="existenciaSubceye" class="java.lang.Integer" resetType="Column">
+		<variableExpression><![CDATA[$F{entradasubceye}-$F{salidasubceye}]]></variableExpression>
+	</variable>
+	<variable name="existenciaCeye" class="java.lang.Integer" resetType="Column">
+		<variableExpression><![CDATA[$F{entradaceye}-$F{salidaceye}]]></variableExpression>
+	</variable>
+	<variable name="existenciaCeniaq" class="java.lang.Integer" resetType="Column">
+		<variableExpression><![CDATA[$F{entradaceniaq}-$F{salidaceniaq}]]></variableExpression>
+	</variable>
+	<variable name="totalExistencia" class="java.lang.Integer">
+		<variableExpression><![CDATA[$V{existenciaCeye} + $V{existenciaSubceye} + $V{existenciaCeniaq}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="115" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="752" height="110"/>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['REPORTE EXISTENCIA CONJUNTO']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9caf0f20-9e58-421d-a39a-818d20d07075" mode="Opaque" x="205" y="1" width="39" height="20" backcolor="#999999"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[U. MEDIDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="39ea82ef-73e6-4b1b-95ec-7e0f5093c138" mode="Opaque" x="0" y="0" width="42" height="21" backcolor="#999999"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLAVE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="86fff7be-fffb-430c-9189-b65e98965d2e" mode="Opaque" x="48" y="1" width="149" height="20" backcolor="#999999"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9fde5e3a-d25f-439b-8cd8-7b3fb9cab79e" mode="Opaque" x="255" y="1" width="137" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ENTRADAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59aceb9e-06bb-4d4c-b6f9-24241456d8dd" mode="Opaque" x="288" y="11" width="34" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBCEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aee79837-ab6b-48c7-bf00-973cedf9636c" mode="Opaque" x="322" y="11" width="34" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2cc1008a-44f9-4b32-b134-3005f41296b8" mode="Opaque" x="356" y="11" width="36" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bc00eb5e-c108-4f2f-b4a4-fd8a2cf1baf6" mode="Opaque" x="471" y="11" width="34" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fa900ef3-cc54-4c57-ae50-d367d88ef3ce" mode="Opaque" x="403" y="1" width="137" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SALIDAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="74d3a4c5-fd24-4634-bdcb-694a9aa55682" mode="Opaque" x="436" y="11" width="35" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBCEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d9bc9fc3-ac68-464f-aa9b-ee88f1dfe08e" mode="Opaque" x="505" y="11" width="35" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9ae16a4a-e2cc-4add-84d5-94cd83c11029" mode="Opaque" x="696" y="11" width="56" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c5f5e3a2-f715-4cd8-af5d-08b86b2bcb02" mode="Opaque" x="552" y="1" width="200" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[EXISTENCIA REAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d7b53cfb-8a88-4819-8760-3e71dcf44f0b" mode="Opaque" x="648" y="11" width="48" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dad905e9-e0a9-463e-9da1-4986355b9893" mode="Opaque" x="600" y="11" width="48" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUBCEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d720bcb-4747-4224-ae90-e76f111045b3" mode="Opaque" x="255" y="11" width="33" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CENIAQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="63d6b0aa-e171-453a-96c6-f584f556b99a" mode="Opaque" x="403" y="11" width="34" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CENIAQ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6d7180ab-9d1b-4ffa-8ceb-14a08bb24d87" mode="Opaque" x="552" y="11" width="48" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CENIAQ]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{totalEntrada} != 0 || $V{totalSalida} != 0]]></printWhenExpression>
+			<rectangle>
+				<reportElement uuid="bf451bf0-dd8e-48a7-b688-d7ce3bb52b3a" stretchType="RelativeToBandHeight" x="0" y="1" width="752" height="9" backcolor="#FDF8A1">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="828cac1e-1c83-4f66-97c3-970736c0dabc" x="49" y="0" width="147" height="10"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_articulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1134a048-4eff-4506-b305-26e2415809ac" x="205" y="0" width="39" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="93c37f93-5550-4a91-9d7b-79ccc86ebd3d" x="323" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entradaceye}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="c083e421-0856-4369-9631-28475291be18" x="289" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entradasubceye}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="881edc08-41fa-44ff-9b7b-dad5034e68dc" x="472" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salidaceye}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="c1005691-ccfb-485b-afc7-549baec8330d" x="438" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salidasubceye}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="8ba7ba3b-7614-4672-9890-83f90221897d" x="358" y="0" width="34" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalEntrada}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="95c4f4cf-d6fb-4ca0-a1ae-5cf5f4fe7afe" x="506" y="0" width="34" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalSalida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="a52f416e-3b6e-4f6f-af59-388ec2882723" x="600" y="0" width="48" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{existenciaSubceye}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="ee311d94-e80d-4d6d-bf02-9a5f92b92d13" x="648" y="0" width="48" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{existenciaCeye}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="79daee0c-57fa-4d48-a26e-4390f09a3404" x="0" y="0" width="42" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cve_art}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="4f8d90ba-1b9e-4d1d-9557-5b63d3e454d2" x="255" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{entradaceniaq}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="f930e77b-e0b5-4199-9be9-6c251e9bde6a" x="403" y="0" width="33" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{salidaceniaq}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="cdd32457-7dd7-465e-a2bb-231ed065be81" x="552" y="0" width="48" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{existenciaCeniaq}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="7ab6d0bb-b680-4a45-a749-9992efe2336f" x="696" y="0" width="56" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalExistencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

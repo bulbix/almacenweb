@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteConvertidora" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="11b62e53-710d-49ab-9e23-4a1349d90a41">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="almacen" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+   articulo_ceye.cve_art,
+   articulo.des_articulo,
+   convertidora_ceye.unidad_alma,
+   convertidora_ceye.cantidad_alma,
+   convertidora_ceye.unidad_ceye,
+   convertidora_ceye.cantidad_ceye,
+   (partidas_ceye.partida || '/' || partidas_ceye.des_part ) as partida
+FROM
+   articulo_ceye
+INNER JOIN
+   articulo
+ON
+    (
+       articulo_ceye.cve_art =articulo.cve_art)
+LEFT JOIN
+   convertidora_ceye
+ON
+    (
+       articulo_ceye.cve_art =convertidora_ceye.cve_art)
+INNER JOIN
+   partidas_ceye on (partidas_ceye.partida = articulo_ceye.partida)]]>
+	</queryString>
+	<field name="cve_art" class="java.lang.Integer"/>
+	<field name="des_articulo" class="java.lang.String"/>
+	<field name="unidad_alma" class="java.lang.String"/>
+	<field name="cantidad_alma" class="java.math.BigDecimal"/>
+	<field name="unidad_ceye" class="java.lang.String"/>
+	<field name="cantidad_ceye" class="java.math.BigDecimal"/>
+	<field name="partida" class="java.lang.String"/>
+	<variable name="cociente" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{cantidad_alma}/$F{cantidad_ceye}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="115" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="570" height="110"/>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['REPORTE CONVERTIDORA']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="9a78a896-aec8-4f55-90c4-c783cffd8923" mode="Opaque" x="2" y="3" width="36" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CLAVE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="39edb5e4-6fef-4dcc-bda1-11d7242041c1" mode="Opaque" x="45" y="3" width="213" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION LARGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b5ea3e88-0402-4101-a8f1-f20e176b0821" mode="Opaque" x="261" y="3" width="71" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNIDAD ALMACEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="806fa5e5-ba02-4727-8f98-31540f52b9a4" mode="Opaque" x="333" y="3" width="77" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD ALMACEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf194255-a116-4807-bee7-72d1ee2e4c0e" mode="Opaque" x="413" y="3" width="52" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNIDAD CEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a80d1a83-fb16-4a16-a508-7a6c97882c0c" mode="Opaque" x="468" y="3" width="56" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CANTIDAD CEYE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a97c1174-d8c7-4f26-b483-650d42cbd1a8" mode="Opaque" x="527" y="3" width="44" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COCIENTE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="79152182-a4db-447e-9151-2426ebebc7b7" stretchType="RelativeToBandHeight" x="2" y="0" width="571" height="15" backcolor="#FDF8A1">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement uuid="815a21d6-274e-4489-bb28-ec0da97a6fdc" x="2" y="3" width="36" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cve_art}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f07bda47-3eab-4359-a055-f14fe0df8d23" x="45" y="3" width="213" height="9"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_articulo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b97af987-84b0-4d1d-9c45-b19969377fa5" x="261" y="3" width="71" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad_alma}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fcf3cdde-bbf3-40a9-a306-84c6191b7675" x="333" y="3" width="77" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_alma}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8e9e90d4-08a2-44bc-9fce-c214ae8e0448" x="413" y="3" width="52" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unidad_ceye}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b403c9a5-7f31-4b21-a332-f1cafc22181a" x="468" y="3" width="56" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_ceye}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="65a3782f-90b6-4568-9c96-2a3665302b91" x="526" y="3" width="44" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{cociente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

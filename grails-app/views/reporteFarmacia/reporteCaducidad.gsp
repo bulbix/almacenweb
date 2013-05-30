@@ -8,7 +8,7 @@
 <body>
 
 	<g:render template="/reporte/reporteTemplate" 
-	model="[reportName:'reporteCaducidad',
+	model="[reportName:'farmacia/reporteCaducidad',
 			methodName:'reporteCaducidad',
 		   reportDisplay:'ReporteCaducidad',
 		   fechaInicial:fechaInicial,

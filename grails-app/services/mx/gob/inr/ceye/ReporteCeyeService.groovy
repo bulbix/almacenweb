@@ -25,4 +25,23 @@ class ReporteCeyeService extends ReporteService {
 		super.utilService =  utilService
 	}
 	
+	public reporteConvertidora(params){
+		def reporteList = []
+		reporteList		
+	}
+	
+	public reporteExistenciaConjunto(params){
+		
+		
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
+		
+		params.fechaCierre = utilService.obtenerFechaCierre(fechaInicial).format('yyyy-MM-dd')
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
+		
+		def reporteList = []
+		reporteList
+	}
+	
 }

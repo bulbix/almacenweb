@@ -15,4 +15,12 @@ class ReporteCeyeController extends ReporteController {
 	def init(){
 		reporteService = reporteCeyeService
 	}
+	
+	def reporteConvertidora(){
+		[almacen:almacen]
+	}
+	
+	def reporteExistenciaConjunto(){
+		cargarParams()
+	}
 }

@@ -23,6 +23,17 @@ class ReporteFarmaciaService extends ReporteService{
 		super.utilService =  utilService
 	}
 	
+	def reporteDetalladoSalida(params){
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)	
+		
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
+		
+		def reporteList = []
+		reporteList
+	}
+	
 	def reporteCaducidad(params){	
 		
 		def claveInicial = params.long('claveInicial')

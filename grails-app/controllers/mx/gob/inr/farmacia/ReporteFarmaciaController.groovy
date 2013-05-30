@@ -20,4 +20,8 @@ class ReporteFarmaciaController extends ReporteController {
 		cargarParams()
 	}
 	
+	def reporteDetalladoSalida(){
+		cargarParams()
+	}
+	
 }

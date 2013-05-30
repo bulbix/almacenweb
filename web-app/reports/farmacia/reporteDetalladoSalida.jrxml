@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportDetalladoSalida" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="87c06de6-759e-4b58-9a95-62c96db6968f">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="34"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fechaInicial" class="java.lang.String"/>
+	<parameter name="fechaFinal" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="almacen" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT	S.fecha_salida as fechasalida,
+    		S.numero_salida as folio,
+			CA.des_area as descadestino,
+	       	A.cve_art,
+	        A.des_articulo,
+	        SD.cantidad_pedida,
+	        SD.cantidad_surtida,
+	        SD.precio_unitario,
+	        (SD.cantidad_surtida * SD.precio_unitario) as importe,
+	        (SELECT ED.fecha_caducidad FROM entrada_detalle ED WHERE ED.id_entrada = SD.id_entrada
+                AND ED.renglon_entrada = SD.renglon_entrada ) as fecha_caducidad,
+	        (SELECT E.numero_entrada FROM entrada E WHERE E.id_entrada = SD.id_entrada ) as numero_entrada
+	FROM salida S, salida_detalle SD ,articulo A, cat_area CA
+	WHERE S.id_salida = SD.id_salida
+	AND   A.cve_art = SD.cve_art
+	AND   CA.cve_area = S.cve_area
+	AND S.fecha_salida BETWEEN $P{fechaInicial} AND $P{fechaFinal}
+	ORDER BY S.fecha_salida ASC, S.numero_salida DESC, SD.renglon_salida ASC]]>
+	</queryString>
+	<field name="fechasalida" class="java.sql.Date"/>
+	<field name="folio" class="java.lang.Integer"/>
+	<field name="descadestino" class="java.lang.String"/>
+	<field name="cve_art" class="java.lang.Integer"/>
+	<field name="des_articulo" class="java.lang.String"/>
+	<field name="cantidad_pedida" class="java.lang.Integer"/>
+	<field name="cantidad_surtida" class="java.lang.Integer"/>
+	<field name="precio_unitario" class="java.math.BigDecimal"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<field name="fecha_caducidad" class="java.sql.Date"/>
+	<field name="numero_entrada" class="java.lang.Integer"/>
+	<variable name="importe" class="java.lang.String"/>
+	<group name="FechaFolioArea">
+		<groupExpression><![CDATA[$F{folio}]]></groupExpression>
+		<groupHeader>
+			<band height="10">
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="b81b8185-6b41-44c6-99ab-a88955c68529" x="0" y="0" width="48" height="10"/>
+					<textElement textAlignment="Center">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{fechasalida}]]></textFieldExpression>
+				</textField>
+				<textField pattern="###0">
+					<reportElement uuid="0201f3f1-3199-473e-91b7-990f859243c0" x="50" y="0" width="25" height="10"/>
+					<textElement textAlignment="Center">
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{folio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="d578395e-bf3e-42c1-a1a5-a4efccfd61e8" x="79" y="0" width="87" height="10"/>
+					<textElement>
+						<font size="6" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{descadestino}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="112" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="752" height="110"/>
+				<subreportParameter name="fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['REPORTE DETALLADO SALIDA']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="fe7aefe0-88f0-45d7-8493-11b75b59df35" mode="Opaque" x="0" y="0" width="48" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Salida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5ecbdd5-e68a-4c2d-b8e0-808b6c7240d8" mode="Opaque" x="50" y="0" width="25" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Folio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a74799e8-010f-4787-ab49-c86adc221b5e" mode="Opaque" x="78" y="0" width="88" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Area Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ad3c1800-795a-4870-a464-2b26ba90fe74" mode="Opaque" x="168" y="0" width="24" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clave]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a4c293e2-4a83-47f8-aa8e-126a31703db9" mode="Opaque" x="323" y="0" width="33" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad Solicitada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4196a0ff-e795-48ca-a48a-347ffdbfa72d" mode="Opaque" x="359" y="0" width="32" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad Surtida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28bfbfdf-f600-4c3a-a80c-5b2833208c58" mode="Opaque" x="395" y="0" width="45" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Costo Promedio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5615be3c-295b-4b1e-a19c-d0df328f7568" mode="Opaque" x="443" y="0" width="41" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="11ebcc1b-4a3e-48fc-a806-c86b1f5262f1" mode="Opaque" x="487" y="0" width="41" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caducidad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e317c7fb-e315-45a9-b65a-7ed8796881b8" mode="Opaque" x="531" y="0" width="41" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num Entrada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="111a32de-20d5-4ecd-b8ce-70f04d5253cb" mode="Opaque" x="194" y="0" width="127" height="18" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="02a3b177-5cfb-44b3-b6f9-1fb64f695a33" stretchType="RelativeToBandHeight" x="1" y="0" width="571" height="11" backcolor="#FDF8A1">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="###0">
+				<reportElement uuid="fc8a2f51-46b5-421a-a2a6-e5e14d54b0bc" x="323" y="0" width="31" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_pedida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="0cdd04df-8f33-49c1-b9e2-58c432eac548" x="359" y="0" width="32" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cantidad_surtida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.0000">
+				<reportElement uuid="0ef24bc9-0f4b-4082-a758-a5db8c26de2b" x="395" y="0" width="45" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precio_unitario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.0000">
+				<reportElement uuid="892295a3-13e1-4870-9b11-117b356011f5" x="443" y="0" width="41" height="10"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="c5e3b1bd-bb60-4d5a-bc39-49a87f104df9" x="169" y="0" width="22" height="11"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cve_art}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="67b326f1-f132-4009-a230-6dedb5f6f5d1" x="488" y="0" width="41" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_caducidad}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ce17ca1f-1793-4fba-b10d-50871701eea2" x="530" y="0" width="41" height="10"/>
+				<textElement textAlignment="Center">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_entrada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="aba7b3f5-99ae-4721-8700-790b2b2da82e" x="197" y="0" width="124" height="11"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_articulo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

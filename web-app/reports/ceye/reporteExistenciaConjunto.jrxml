@@ -215,6 +215,12 @@ ORDER BY artExt.cve_art]]>
 		<band height="115" splitType="Stretch">
 			<subreport>
 				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="752" height="110"/>
+				<subreportParameter name="fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="reporteName">
 					<subreportParameterExpression><![CDATA['REPORTE EXISTENCIA CONJUNTO']]></subreportParameterExpression>
 				</subreportParameter>

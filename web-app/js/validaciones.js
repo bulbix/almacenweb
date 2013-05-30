@@ -28,6 +28,14 @@ $.validator.addMethod("checkCierre", function(value, element) {
 	
 }, "Cierre Existente");
 
+
+$.validator.addMethod("checkInventario", function(value, element) {		
+	
+	return checkValue( url + "/checkInventario", value)
+	
+}, "Inventario Existente");
+
+
 $.validator.addMethod("checkInsumo", function(value, element) {
 	
 	var gridData = jQuery("#detalle").getRowData();

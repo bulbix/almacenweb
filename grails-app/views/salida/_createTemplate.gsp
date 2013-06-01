@@ -73,7 +73,7 @@
 			<tr>
 				<td><label for="fechaa">Fecha</label> <g:textField
 						name="fecha" class="cabecera"
-						value="${salidaInstance?.fecha.format('dd/MM/yyy')}"
+						value="${salidaInstance?.fecha.format('dd/MM/yyyy')}"
 						size="9" /></td>
 			
 				<td><label for="folio">Folio</label> <g:textField

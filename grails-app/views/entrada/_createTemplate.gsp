@@ -81,7 +81,7 @@
 				
 				<td><label for="fecha">Fecha</label>
 				 <g:textField name="fecha" 
-				 value="${entradaInstance?.fecha?.format('dd/MM/yyy')}" size="8" class="cabecera"  />
+				 value="${entradaInstance?.fecha?.format('dd/MM/yyyy')}" size="8" class="cabecera"  />
 				</td>
 				
 				<td><label for="folio">Folio</label>

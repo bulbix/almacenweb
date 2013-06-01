@@ -43,7 +43,13 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.22'
+		compile ('cglib:cglib-nodep:2.2')
     }
+	
+	grails.war.resources = { stagingDir, args ->
+		println "Removing export jars from WEB-INF/lib/"
+		delete(file: "${stagingDir}/WEB-INF/lib/cglib-2.2.jar")
+	}
 
     plugins {
         runtime ":hibernate:$grailsVersion"
@@ -56,6 +62,8 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.5"
 
         build ":tomcat:$grailsVersion"
+		
+		build ':jbossas:1.0'
 
         runtime ":database-migration:1.3.2"
 

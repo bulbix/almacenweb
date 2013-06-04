@@ -36,15 +36,23 @@
 	
 		<table>
 			<tr>
-			<td>
-				<img src="${resource(dir: 'images', file: 'logotipo.jpg')}" alt="INR"/>
-			</td>
-			<td>
-				<h3><g:message code="main.title.application"/></h3>
-			</td>
-			<td>
-				<img src="${resource(dir: 'images', file: 'logoINR2013.png')}" alt="INR"/>
-			</td>
+				<td>
+					<img src="${resource(dir: 'images', file: 'logotipo.jpg')}" alt="INR"/>
+				</td>
+				<td>
+					<h3><g:message code="main.title.application"/></h3>
+				</td>
+				<td>
+					<img src="${resource(dir: 'images', file: 'logoINR2013.png')}" alt="INR"/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<sec:ifLoggedIn>	
+						<h3>Logueado como: <sec:username/></h3>
+						<a href="${createLink(controller:'logout',action: 'index')}">Cerrar Sesion</a>	
+					</sec:ifLoggedIn>			
+				</td>
 			</tr>
 		
 		</table>

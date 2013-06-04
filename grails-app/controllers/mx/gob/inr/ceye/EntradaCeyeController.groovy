@@ -3,9 +3,10 @@ package mx.gob.inr.ceye
 import grails.converters.JSON
 import javax.annotation.PostConstruct;
 import mx.gob.inr.farmacia.EntradaFarmaciaService;
-
 import mx.gob.inr.utils.EntradaController;
+import grails.plugins.springsecurity.Secured;
 
+@Secured(['ROLE_CEYE'])
 class EntradaCeyeController extends EntradaController<EntradaCeye> {
 
 	EntradaCeyeService entradaCeyeService	

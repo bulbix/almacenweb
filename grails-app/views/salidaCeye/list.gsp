@@ -21,7 +21,7 @@
 		
 			
 		<filterpane:filterPane domain="mx.gob.inr.ceye.SalidaCeye" 
-		associatedProperties="usuario.rfc,area.desArea,diagnostico.descdiag" 
+		associatedProperties="usuario.username,area.desArea,diagnostico.descdiag" 
 		filterProperties="folio,fecha,usuario,area,diagnostico,paqueteq,estado"/>
 	</body>
 </html>

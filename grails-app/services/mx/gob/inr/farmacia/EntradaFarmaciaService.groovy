@@ -1,5 +1,7 @@
 package mx.gob.inr.farmacia
 
+import grails.plugins.springsecurity.SpringSecurityService;
+
 import javax.annotation.PostConstruct;
 import org.springframework.transaction.annotation.Transactional;
 import mx.gob.inr.farmacia.ArticuloFarmacia;
@@ -8,7 +10,6 @@ import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.materiales.SalidaDetalleMaterial;
 import mx.gob.inr.materiales.SalidaMaterial;
 import mx.gob.inr.utils.AutoCompleteService;
-import mx.gob.inr.utils.Usuario;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.services.EntradaService;
 
@@ -16,7 +17,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 
 	static transactional = true		
 	UtilService utilService	
-	AutoCompleteService autoCompleteService	
+	AutoCompleteService autoCompleteService
 	
 	public EntradaFarmaciaService(){
 		super(EntradaFarmacia, EntradaDetalleFarmacia,SalidaDetalleFarmacia,
@@ -26,7 +27,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 	@PostConstruct
 	public void init(){
 		super.utilService = this.utilService
-		super.autoCompleteService = this.autoCompleteService		
+		super.autoCompleteService = this.autoCompleteService				
 	}
 	
 	

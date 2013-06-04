@@ -1,10 +1,11 @@
 package mx.gob.inr.utils.services
 
 import grails.converters.JSON
+import grails.plugins.springsecurity.SpringSecurityService
 import java.util.Date;
 import mx.gob.inr.materiales.*
 import mx.gob.inr.utils.AutoCompleteService;
-import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.seguridad.Usuario;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Entrada;
@@ -14,7 +15,7 @@ import mx.gob.inr.ceye.*
 abstract class EntradaService<E extends Entrada> implements IOperacionService<E> {
 
 	public UtilService utilService
-	public AutoCompleteService autoCompleteService
+	public AutoCompleteService autoCompleteService	
 
 	protected entityEntrada
 	protected entityEntradaDetalle
@@ -35,7 +36,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	E setJson(jsonEntrada,  String ip){
+	E setJson(jsonEntrada,  String ip, Usuario usuarioRegistro){
 
 		def entrada = entityEntrada.newInstance()
 		entrada.almacen = almacen
@@ -47,7 +48,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			entrada.idSalAlma = jsonEntrada.idSalAlma as int
 
 		entrada.numeroFactura = jsonEntrada.remision
-		entrada.usuario = Usuario.get(6558)
+		entrada.usuario = usuarioRegistro
 		entrada.recibio = Usuario.get(jsonEntrada.recibe)
 		entrada.supervisor = Usuario.get(jsonEntrada.supervisa)
 		entrada.presupuesto = null
@@ -332,7 +333,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 	
 	@Override
-	def usuarios(Integer idPerfil){
+	def usuarios(Long idPerfil){
 		return utilService.usuarios(idPerfil)
 	}
 

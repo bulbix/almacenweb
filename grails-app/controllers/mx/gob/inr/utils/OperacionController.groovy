@@ -7,6 +7,8 @@ import mx.gob.inr.utils.domain.Entrada;
 import mx.gob.inr.utils.services.IOperacionService
 import mx.gob.inr.farmacia.EntradaFarmacia;
 import mx.gob.inr.util.services.*;
+import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService;
 
 abstract class OperacionController<A> implements IOperacionController {
 
@@ -14,6 +16,7 @@ abstract class OperacionController<A> implements IOperacionController {
 	protected entityAlmacen
 	protected String almacen
 	def filterPaneService
+	SpringSecurityService springSecurityService
 	
 	public OperacionController(entityAlmacen, almacen){
 		this.entityAlmacen = entityAlmacen
@@ -21,6 +24,7 @@ abstract class OperacionController<A> implements IOperacionController {
 	}
 	
 	@Override
+	
     def index(){
 		redirect(action: "list", params: params)	
 	}
@@ -56,7 +60,10 @@ abstract class OperacionController<A> implements IOperacionController {
 			usuariosList = servicio.usuarios(servicio.PERFIL_CEYE)
 		}		
 		
-		[usuariosList:usuariosList,almacenInstance: almacenInstance, existeCierre:existeCierre]
+		def isDueno = almacenInstance.usuario == springSecurityService.currentUser
+		
+		[usuariosList:usuariosList,almacenInstance: almacenInstance,
+		existeCierre:existeCierre, isDueno:isDueno]
 	}
 	
 	@Override
@@ -66,7 +73,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		redirect(action: "list", params: params)
 	}
 	
-	@Override
+	@Override	
 	def list(Integer max){
 		
 		params.max = Math.min(max ?: 10, 100)
@@ -98,21 +105,21 @@ abstract class OperacionController<A> implements IOperacionController {
 	@Override
 	def guardar(){
 		
-		A almacen
+		A entityAlmacen
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def jsonDetalle = JSON.parse(params.dataDetalle)
 		def idPadre = params.int('idPadre')
 		
 		if(!idPadre){//Centinela
-			almacen = servicio.setJson(jsonPadre, request.getRemoteAddr())
-			almacen =  servicio.guardar(almacen);
-			servicio.guardarDetalle(jsonDetalle[0], almacen, null)
+			entityAlmacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
+			entityAlmacen =  servicio.guardar(entityAlmacen);
+			servicio.guardarDetalle(jsonDetalle[0], entityAlmacen, null)
 		}
 		else{
-			almacen = entityAlmacen.get(idPadre)
-			servicio.guardarDetalle(jsonDetalle[0],almacen,null)
+			entityAlmacen = entityAlmacen.get(idPadre)
+			servicio.guardarDetalle(jsonDetalle[0],entityAlmacen,null)
 		}		
-		render(contentType: 'text/json') {['idPadre': almacen.id]}
+		render(contentType: 'text/json') {['idPadre': entityAlmacen.id]}
 		
 	}
 	
@@ -121,7 +128,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def jsonArrayDetalle = JSON.parse(params.dataArrayDetalle)
 		
-		def almacen = servicio.setJson(jsonPadre, request.getRemoteAddr())
+		def almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
 		def mensaje = servicio.guardarTodo(almacen,jsonArrayDetalle)
 		
 		render(contentType: 'text/json') {['idPadre': almacen.id,'mensaje':mensaje]}
@@ -136,7 +143,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def idPadre = params.int('idPadre')
 		
-		almacen = servicio.setJson(jsonPadre, request.getRemoteAddr())
+		almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
 		
 		if(idPadre){
 			try{

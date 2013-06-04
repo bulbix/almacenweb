@@ -10,8 +10,6 @@ import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
 import mx.gob.inr.farmacia.SalidaFarmacia;
 import mx.gob.inr.farmacia.SalidaDetalleFarmacia;
 import mx.gob.inr.utils.AutoCompleteService;
-import mx.gob.inr.utils.Paciente;
-import mx.gob.inr.utils.Usuario;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.domain.Salida;
 import mx.gob.inr.utils.services.SalidaService;

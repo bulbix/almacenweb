@@ -20,7 +20,7 @@
 		
 			
 	<filterpane:filterPane domain="mx.gob.inr.ceye.EntradaCeye" 
-		associatedProperties="usuario.rfc,area.desArea" 
+		associatedProperties="usuario.username,area.desArea" 
 		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado"/>
 		
 		

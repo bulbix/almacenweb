@@ -19,7 +19,7 @@
 		
 			
 		<filterpane:filterPane domain="mx.gob.inr.farmacia.EntradaFarmacia" 
-		associatedProperties="usuario.rfc" 
+		associatedProperties="usuario.username" 
 		filterProperties="folio,fecha,numeroFactura,usuario,estado"/>
 	</body>
 </html>

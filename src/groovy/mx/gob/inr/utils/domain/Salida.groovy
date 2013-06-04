@@ -4,7 +4,7 @@ import java.util.Date;
 
 import mx.gob.inr.farmacia.CatAreaFarmacia;
 import mx.gob.inr.utils.Paciente;
-import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.seguridad.Usuario;
 
 abstract class Salida {
 

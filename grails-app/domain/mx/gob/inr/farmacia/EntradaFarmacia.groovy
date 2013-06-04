@@ -1,6 +1,5 @@
 package mx.gob.inr.farmacia
 
-import mx.gob.inr.utils.Usuario;
 import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaFarmacia extends Entrada {	
@@ -24,6 +23,8 @@ class EntradaFarmacia extends Entrada {
         id generator:'sequence' ,params:[sequence:'sq_identradafarmacia']
         table 'entrada'        
         version false
+		
+		usuario updateable: false
     }    
 
     static constraints = {		

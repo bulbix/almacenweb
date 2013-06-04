@@ -25,6 +25,9 @@ class EntradaCeye extends Entrada {
 		id generator:'sequence' ,params:[sequence:'sq_identradaceye']
 		table 'entrada_ceye'
 		version false
+		
+		usuario updateable: false
+		
 	}
 	
     static constraints = {

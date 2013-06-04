@@ -1,4 +1,6 @@
 package mx.gob.inr.ceye
+import grails.plugins.springsecurity.SpringSecurityService;
+
 import javax.annotation.PostConstruct;
 
 import mx.gob.inr.farmacia.ArticuloFarmacia;
@@ -13,7 +15,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	static transactional = true
 	
 	UtilService utilService
-	AutoCompleteService autoCompleteService
+	AutoCompleteService autoCompleteService	
 	
 	final int AREA_FARMACIA = 6220
 	final int PERFIL_FARMACIA = 8
@@ -27,7 +29,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	@PostConstruct
 	public void init(){
 		super.utilService = this.utilService
-		super.autoCompleteService = this.autoCompleteService
+		super.autoCompleteService = this.autoCompleteService		
 	}
 	
 	def convertidora(Long cveArt,Integer cantidad){	

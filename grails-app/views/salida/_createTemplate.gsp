@@ -15,8 +15,10 @@
 			</g:link></li>
 		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
 
-		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
-		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
+		<g:if test="${entradaInstance?.usuario == usuarioLogueado}">
+			<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
+			<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>
+		</g:if>
 	</ul>
 </div>
 
@@ -62,6 +64,7 @@
 	</g:if>
 	
 	
+	<input type="hidden" id="isDueno" value="${isDueno}" />
 	<input type="hidden" id="existeCierre" value="${existeCierre}" />
 	<input type="hidden" id="estado" value="${salidaInstance?.estado}" />
 

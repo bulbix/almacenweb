@@ -3,7 +3,6 @@ package mx.gob.inr.farmacia
 import java.util.Date;
 
 import mx.gob.inr.utils.Paciente;
-import mx.gob.inr.utils.Usuario;
 import mx.gob.inr.utils.domain.Salida;
 
 class SalidaFarmacia extends Salida  {	
@@ -30,6 +29,9 @@ class SalidaFarmacia extends Salida  {
 		area column:'cve_area'
 		id generator:'sequence' ,params:[sequence:'sq_idsalidafarmacia']
 		version false
+		
+		
+		usuario updateable: false
 	}
 	
 	

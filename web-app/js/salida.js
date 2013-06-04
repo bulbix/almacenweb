@@ -252,7 +252,7 @@ function controlesHead(){
 	
 	if($("#idPadre").val() != ''){		
 		
-		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' ){
+		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' || $("#isDueno").val()=='false' ){
 			$(".botonOperacion").hide()
 			$(".busqueda").hide()
 			

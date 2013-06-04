@@ -22,7 +22,7 @@
 		
 			
 		<filterpane:filterPane domain="mx.gob.inr.farmacia.SalidaFarmacia" 
-		associatedProperties="usuario.rfc,area.desArea" 
+		associatedProperties="usuario.username,area.desArea" 
 		filterProperties="folio,fecha,usuario,area,estado"/>
 	</body>
 </html>

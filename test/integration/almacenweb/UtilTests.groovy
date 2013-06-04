@@ -1,5 +1,6 @@
 package almacenweb
 
+import grails.plugins.springsecurity.SpringSecurityService
 import  mx.gob.inr.farmacia.*
 import static org.junit.Assert.*
 import mx.gob.inr.utils.UtilService
@@ -10,7 +11,17 @@ class UtilTests {
 	static transactional = false
 	final int PERFIL_FARMACIA = 8
 	
+	
+	SpringSecurityService springSecurityService
 	UtilService utilService
+	
+	@Test
+	void encodePassword(){
+		String password = 'e'
+		assertEquals(springSecurityService.encodePassword(password),"huevos")
+	}
+	
+	
 	
 	@Test
 	void testUsuarios(){

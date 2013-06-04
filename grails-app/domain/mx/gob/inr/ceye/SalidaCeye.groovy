@@ -31,5 +31,7 @@ class SalidaCeye extends Salida {
 		area column:'cve_area'
 		id generator:'sequence' ,params:[sequence:'sq_idsalidaceye']
 		version false
+		
+		usuario updateable: false
 	}
 }

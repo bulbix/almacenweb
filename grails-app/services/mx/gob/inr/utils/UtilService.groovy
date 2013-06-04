@@ -1,8 +1,7 @@
 package mx.gob.inr.utils
 
 import java.util.Date;
-
-import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.seguridad.*;
 
 class UtilService {	
 	
@@ -32,14 +31,16 @@ class UtilService {
 	}
    
    
-   def usuarios(idPerfil){
-	   def usuariosList = Usuario.createCriteria().list() {
-		   perfiles{
-			   eq('idPerfil',idPerfil)
-		   }
-		   order('nombre', 'desc')
-	   }
+   def usuarios(Long idPerfil){
 	   
+	   //def perfil = Perfil.get(idPerfil)
+	   log.info("Perfil solicitado $idPerfil")	   
+	   def usuariosList = UsuarioPerfil.find 'from UsuarioPerfil where perfil.id=:perfilId',[perfilId: idPerfil]
+	   
+	   usuariosList = usuariosList.collect(){
+		   it.usuario
+	   }	
+	      	  
 	   usuariosList
    }  
    

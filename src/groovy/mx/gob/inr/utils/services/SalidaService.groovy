@@ -13,7 +13,7 @@ import mx.gob.inr.utils.AlmacenException;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.Cie09;
 import mx.gob.inr.utils.Paciente;
-import mx.gob.inr.utils.Usuario;
+import mx.gob.inr.seguridad.Usuario;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.domain.Salida;
 
@@ -45,7 +45,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 		 
     @Override
-	S setJson(jsonSalida, String ip){		
+	S setJson(jsonSalida, String ip, Usuario usuarioRegistro){		
 		
 		def salida = entitySalida.newInstance()
 		salida.almacen = almacen
@@ -58,7 +58,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		salida.entrego = Usuario.get(jsonSalida.entrega)
 		salida.area = entityArea.get(jsonSalida.cveArea)
 		salida.noOrden = null
-		salida.usuario = Usuario.get(6558)
+		salida.usuario = usuarioRegistro
 		salida.paciente = Paciente.get(jsonSalida.idPaciente)
 		
 		if(salida instanceof SalidaFarmacia){			
@@ -464,7 +464,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def usuarios(Integer idPerfil){
+	def usuarios(Long idPerfil){
 		return utilService.usuarios(idPerfil)		
 	}
 	

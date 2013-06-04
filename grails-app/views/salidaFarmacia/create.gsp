@@ -12,6 +12,7 @@
 			var url = '/almacenWeb/salidaFarmacia'
 		</script>
 				
-		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,existeCierre:existeCierre]" />		
+		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,
+		existeCierre:existeCierre,isDueno:isDueno]" />		
 	</body>
 </html>

@@ -1,13 +1,15 @@
 package mx.gob.inr.utils.services
 
+import mx.gob.inr.seguridad.Usuario
+
 interface IOperacionService <E> {
 	
 	
-	int PERFIL_FARMACIA = 8
-	int PERFIL_CEYE  = 10
+	long PERFIL_FARMACIA = 8
+	long PERFIL_CEYE  = 10
 	short AREA_FARMACIA = 6220
 	
-	E setJson(json, String ip)
+	E setJson(json, String ip, Usuario usuarioRegistro)
 	
 	E guardar( E entity)
 	
@@ -35,7 +37,7 @@ interface IOperacionService <E> {
 	
 	def consecutivoFolio()
 
-	def usuarios(Integer idPerfil)
+	def usuarios(Long idPerfil)
 	
 	def buscarArticulo(Long clave)
 	

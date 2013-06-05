@@ -16,8 +16,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 	static transactional = true	
 	
 	public SalidaCeyeService(){
-		super(SalidaCeye,SalidaDetalleCeye, EntradaDetalleCeye, 
-			ArticuloCeye,CatAreaCeye,CierreCeye, "C")						
+		super(SalidaCeye,SalidaDetalleCeye, EntradaDetalleCeye,ArticuloCeye,CatAreaCeye,CierreCeye)						
 	}
 	
 	@PostConstruct

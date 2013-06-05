@@ -21,8 +21,13 @@ abstract class Entrada {
 	String ipTerminal		
 	Integer folioAlmacen
 	
+	boolean dueno
+		
+	
 	String toString(){
 		return folio
 	}
+	
+	
 
 }

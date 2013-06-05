@@ -1,12 +1,27 @@
+<filterpane:includes />
 <a href="#list-entrada" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+			<ul>				
+				<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
+					<li>
+						<g:link class="create" action="create">
+						<g:message code="default.new.label" args="[entityName]" />
+						</g:link>
+					</li>
+				</sec:noAccess>
+				
+				<li><a class="home" href="${createLink(action: 'list')}">
+				<g:message code="default.refresh.label"/></a>
+				</li>
 			</ul>
 		</div>
 		<div id="list-entrada" class="content scaffold-list" role="main">
-			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
+			<h1>
+			
+			<g:almacenDescripcion code="default.list.entrada.label" almacen="${almacen}"/>
+			
+			
+			</h1>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -46,7 +61,7 @@
 						
 						<td>${fieldValue(bean: entradaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>
 						
-						<g:if test="${entradaInstance.estado == 'C'}" >
+						<g:if test="${entradaInstance?.estado == 'C' && entradaInstance?.dueno}" >
 							<td><g:link action="eliminar" id="${entradaInstance.id}">Eliminar</g:link></td>
 						</g:if>					
 											

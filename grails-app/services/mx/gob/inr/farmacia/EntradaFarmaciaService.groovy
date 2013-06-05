@@ -20,8 +20,8 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 	AutoCompleteService autoCompleteService
 	
 	public EntradaFarmaciaService(){
-		super(EntradaFarmacia, EntradaDetalleFarmacia,SalidaDetalleFarmacia,
-			ArticuloFarmacia, CatAreaFarmacia,CierreFarmacia, "F")
+		super(EntradaFarmacia, EntradaDetalleFarmacia,SalidaDetalleFarmacia, 
+			ArticuloFarmacia, CatAreaFarmacia,CierreFarmacia)
 	}
 	
 	@PostConstruct

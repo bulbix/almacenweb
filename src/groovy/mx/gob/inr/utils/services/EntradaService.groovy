@@ -22,21 +22,19 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	protected entitySalidaDetalle
 	protected entityArticulo
 	protected entityArea
-	protected entityCierre
-	protected String almacen
+	protected entityCierre	
 
-	public EntradaService(entityEntrada, entityEntradaDetalle, entitySalidaDetalle, entityArticulo, entityArea, entityCierre, almacen){
+	public EntradaService(entityEntrada, entityEntradaDetalle, entitySalidaDetalle, entityArticulo, entityArea, entityCierre){
 		this.entityEntrada = entityEntrada
 		this.entityEntradaDetalle = entityEntradaDetalle
 		this.entitySalidaDetalle = entitySalidaDetalle
 		this.entityArticulo = entityArticulo
 		this.entityArea = entityArea
 		this.entityCierre = entityCierre
-		this.almacen = almacen
 	}
 
 	@Override
-	E setJson(jsonEntrada,  String ip, Usuario usuarioRegistro){
+	E setJson(jsonEntrada,  String ip, Usuario usuarioRegistro, String almacen){
 
 		def entrada = entityEntrada.newInstance()
 		entrada.almacen = almacen
@@ -74,7 +72,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def guardarDetalle(jsonDetalle, E entrada, Integer renglon){
+	def guardarDetalle(jsonDetalle, E entrada, Integer renglon,String almacen){
 
 		def articulo = entityArticulo.get(jsonDetalle.cveArt)
 
@@ -102,26 +100,26 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		entradaDetalle.save([validate:false])
 		
-		this.actualizarCostoPromedio(entradaDetalle)
+		this.actualizarCostoPromedio(entradaDetalle,almacen)
 
 	}
 
 	@Override
-	def guardarTodo(E entrada, jsonArrayDetalle){
+	def guardarTodo(E entrada, jsonArrayDetalle, String almacen){
 		
 		entrada = guardar(entrada)
 
 		Integer renglon = 1
 
 		jsonArrayDetalle.each() {
-			guardarDetalle(it, entrada, renglon++)
+			guardarDetalle(it, entrada, renglon++,almacen)
 		}
 		
 		return "Entrada Guardada"
 	}
 
 	@Override
-	def actualizar(E entrada, Long idEntradaUpdate){
+	def actualizar(E entrada, Long idEntradaUpdate,String almacen=null){
 	
 		def entradaUpdate = entityEntrada.get(idEntradaUpdate)
 		def mensaje = "Entrada actualizada";
@@ -158,14 +156,14 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def cancelar(Long idEntrada){
+	def cancelar(Long idEntrada,String almacen){
 		
 		def entrada =  entityEntrada.get(idEntrada);
 		
 		def salidasDetalle = salidasDetalle(idEntrada)
 		
 		if(!salidasDetalle){		
-			cancelarCostoPromedio(entrada)
+			cancelarCostoPromedio(entrada,almacen)
 			entrada.estado = 'C'
 			entrada.save([validate:false])
 			return "Cancelado"
@@ -176,7 +174,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def listar(params){
+	def listar(params, Usuario usuarioLogueado){
 		
 		def sortIndex = params.sort ?: 'folio'
 		def sortOrder  = params.order ?: 'desc'
@@ -186,13 +184,15 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		def entradaList = entityEntrada.createCriteria().list(params){
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			eq("almacen",almacen)
+			eq("almacen",params.almacen)
 			order(sortIndex, sortOrder)
 		}
 
 		entradaList.each(){
 			if(it.idSalAlma)
 				it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).folio;
+			
+			it.dueno = usuarioLogueado == it.usuario
 		}
 
 		def entradaTotal = entityEntrada.createCriteria().get{
@@ -200,14 +200,14 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				count()
 			}
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			eq("almacen",almacen)
+			eq("almacen",params.almacen)
 		}
 
 		[lista:entradaList, total:entradaTotal]
 	}
 
 	@Override
-	def actualizarDetalle(Long idEntrada, params){
+	def actualizarDetalle(Long idEntrada, params,String almacen=null){
 
 		
 		def clave = params.long('id')
@@ -321,14 +321,14 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def checkFolio(Integer folio){
+	def checkFolio(Integer folio, String almacen){
 
 		utilService.checkFolio(entityEntrada, folio,almacen)
 
 	}
 
 	@Override
-	def consecutivoFolio(){
+	def consecutivoFolio(String almacen){
 		utilService.consecutivoFolio(entityEntrada, almacen)
 	}
 	
@@ -338,7 +338,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def buscarArticulo(Long id){
+	def buscarArticulo(Long id,String almacen=null){
 		def articulo = entityArticulo.get(id)
 		articulo.desArticulo = articulo.desArticulo.trim()
 		return articulo
@@ -355,12 +355,12 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 	
 	@Override
-	def checkCierre(Date fecha){
+	def checkCierre(Date fecha, String almacen){
 		utilService.checkCierre(entityCierre, fecha, almacen)
 	}
 	
 	@Override
-	def reporte(Long id){
+	def reporte(Long id, String almacen){
 		
 		def entityEntradaDetalleName = entityEntradaDetalle.name
 		
@@ -446,7 +446,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		detalle
 	}
 	
-	def disponibilidadArticulo(Long clave, Date fecha, E entradaParam = null){
+	def disponibilidadArticulo(Long clave, Date fecha,String almacen, E entradaParam = null){
 				
 		def criteria = entityEntradaDetalle.createCriteria()
 
@@ -477,9 +477,8 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		else
 			return disponible
 	}
-	
-	
-	def getMovimientoPromedio(Articulo articulo){
+		
+	def getMovimientoPromedio(Articulo articulo,String almacen){
 		
 		def movimientoProm = 0.0
 		
@@ -497,7 +496,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		return movimientoProm	
 	}
 	
-	def setMovimientoPromedio(Articulo articulo, double costo){
+	def setMovimientoPromedio(Articulo articulo, double costo, String almacen){
 		
 		if(articulo instanceof ArticuloFarmacia){
 			articulo.movimientoProm = costo
@@ -514,14 +513,14 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 	}
 	
-	def actualizarCostoPromedio(entradaDetalle){
+	def actualizarCostoPromedio(entradaDetalle, String almacen){
 		
 		double costo = 0.0
 			
 		def articulo = entradaDetalle.articulo		
-		def movimientoProm = getMovimientoPromedio(articulo)	
+		def movimientoProm = getMovimientoPromedio(articulo,almacen)	
 		
-		def sumExistencia = disponibilidadArticulo(articulo.id, entradaDetalle.entrada.fecha)
+		def sumExistencia = disponibilidadArticulo(articulo.id, entradaDetalle.entrada.fecha,almacen)
 		
 		def denominador = sumExistencia + entradaDetalle.cantidad
 		
@@ -530,11 +529,11 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 		costo = ((sumExistencia * movimientoProm) + (entradaDetalle.cantidad * entradaDetalle.precioEntrada)) / denominador
 		
-		setMovimientoPromedio(articulo, costo)
+		setMovimientoPromedio(articulo, costo, almacen)
 		
 	}
 	
-	def cancelarCostoPromedio(E entrada){
+	def cancelarCostoPromedio(E entrada, String almacen){
 		
 		def entradasDetalle = entityEntradaDetalle.createCriteria().list(){
 			articulo{}
@@ -543,15 +542,15 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 		for(entradaDetalle in entradasDetalle){
 			
-			def sumExistenciaGeneral = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha)
-			def sumExistenciaEntrada = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha, entrada)
-			def movimientoProm = getMovimientoPromedio(entradaDetalle.articulo)
+			def sumExistenciaGeneral = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha,almacen)
+			def sumExistenciaEntrada = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha,almacen, entrada)
+			def movimientoProm = getMovimientoPromedio(entradaDetalle.articulo,almacen)
 			
 			double costo = (((sumExistenciaGeneral - sumExistenciaEntrada) * movimientoProm)
 				-(entradaDetalle.cantidad*entradaDetalle.precioEntrada)) / 
 				(sumExistenciaGeneral - sumExistenciaEntrada - entradaDetalle.cantidad)
 			
-			setMovimientoPromedio(entradaDetalle.articulo, costo)			
+			setMovimientoPromedio(entradaDetalle.articulo, costo,almacen)			
 		}		
 		
 	}

@@ -18,7 +18,7 @@ class SalidaFarmaciaController extends SalidaController<SalidaFarmacia> {
 	SalidaFarmaciaService salidaFarmaciaService
 	
 	public SalidaFarmaciaController(){
-		super(SalidaFarmacia, 'F')
+		super(SalidaFarmacia)
 	}
 	
 	@PostConstruct

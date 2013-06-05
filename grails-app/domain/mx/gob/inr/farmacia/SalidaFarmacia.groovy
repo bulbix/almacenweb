@@ -11,6 +11,9 @@ class SalidaFarmacia extends Salida  {
 	
 	static hasMany = [salidasDetalle:SalidaDetalleFarmacia]
 	
+	
+	static transients = ['dueno']
+	
 	static constraints = {
 	
 	}

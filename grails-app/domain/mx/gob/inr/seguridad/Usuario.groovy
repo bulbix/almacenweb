@@ -12,7 +12,7 @@ class Usuario {
 	boolean accountLocked = false
 	boolean passwordExpired = false
 
-	String nombre
+	String nombre	
 	
 	static constraints = {		
 		username blank: false, unique: true
@@ -23,7 +23,7 @@ class Usuario {
 		id column:'idusuario'		
 		username column:'rfc'
 		password column: '`passwordc`'
-		
+		//enabled column:'enabled`'
 		version false
 	}
 

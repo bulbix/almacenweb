@@ -23,8 +23,7 @@ class SalidaFarmaciaService extends SalidaService<SalidaFarmacia> {
 	static transactional = true	
 	
 	public SalidaFarmaciaService(){
-		super(SalidaFarmacia,SalidaDetalleFarmacia, EntradaDetalleFarmacia,
-			ArticuloFarmacia, CatAreaFarmacia,CierreFarmacia,"F")						
+		super(SalidaFarmacia,SalidaDetalleFarmacia, EntradaDetalleFarmacia, ArticuloFarmacia, CatAreaFarmacia,CierreFarmacia)						
 	}
 	
 	@PostConstruct

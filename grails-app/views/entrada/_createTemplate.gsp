@@ -14,11 +14,12 @@
 				<g:message code="default.list.label" args="[entityName]" />
 			</g:link>
 		</li>
-
-		<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
-				
-		<li><input type="button" id="actualizar" value="Actualizar" style="display:none" class="botonOperacion" /></li>	
-		<li><input type="button" id="cancelar" value="Cancelar" style="display:none" class="botonOperacion" /></li>		
+		
+		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
+			<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
+			<li><a href="#" id="actualizar" style="display:none" class="edit botonOperacion">Actualizar</a></li>	
+			<li><a href="#" id="cancelar" style="display:none" class="delete botonOperacion">Cancelar</a></li>
+		</sec:noAccess>
 		
 	</ul>
 </div>
@@ -35,7 +36,7 @@
 <div id="create-entrada" class="content scaffold-create" role="main">
 	
 	<h1>
-		<g:message code="default.create.label" args="[entityName]" />
+		<g:almacenDescripcion code="default.create.entrada.label" almacen="${entradaInstance?.almacen}"/>		
 	</h1>
 
 	<g:if test="${flash.message}">

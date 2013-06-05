@@ -9,23 +9,23 @@ interface IOperacionService <E> {
 	long PERFIL_CEYE  = 10
 	short AREA_FARMACIA = 6220
 	
-	E setJson(json, String ip, Usuario usuarioRegistro)
+	E setJson(json, String ip, Usuario usuarioRegistro,String almacen)
 	
 	E guardar( E entity)
 	
-	def guardarDetalle(jsonDetalle, E entity, Integer renglon)
+	def guardarDetalle(jsonDetalle, E entity, Integer renglon,String almacen)
 	
-	def guardarTodo(E entity, jsonArrayDetalle)
+	def guardarTodo(E entity, jsonArrayDetalle,String almacen)
 	
-	def actualizar(E entity, Long idUpdate)
+	def actualizar(E entity, Long idUpdate,String almacen)
 	
 	def consultar(Long id)
 	
-	def cancelar(Long id)
+	def cancelar(Long id, String almacen)
 		
-	def listar(params) 
+	def listar(params, Usuario usuarioLogueado) 
 	
-	def actualizarDetalle(Long id, jsonDetalle)
+	def actualizarDetalle(Long id, jsonDetalle, String almacen)
 	
 	def borrarDetalle(Long id, Long clave)
 	
@@ -33,20 +33,20 @@ interface IOperacionService <E> {
 	
 	def consecutivoRenglon(E entity)
 	
-	def checkFolio(Integer folio)
+	def checkFolio(Integer folio,String almacen)
 	
-	def consecutivoFolio()
+	def consecutivoFolio(String almacen)
 
 	def usuarios(Long idPerfil)
 	
-	def buscarArticulo(Long clave)
+	def buscarArticulo(Long clave,String almacen)
 	
 	def listarArticulo(String term)
 	
 	def listarArea(String term)
 	
-	def checkCierre(Date fecha)	
+	def checkCierre(Date fecha, String almacen)	
 	
-	def reporte(Long id)
+	def reporte(Long id, String almacen)
 	
 }

@@ -11,8 +11,8 @@ class SalidaController <S extends Salida> extends OperacionController<S> {
 
 	public SalidaService salidaService	
 	
-	public SalidaController(entitySalida, almacen){
-		super(entitySalida,almacen)		
+	public SalidaController(entitySalida){
+		super(entitySalida)		
 	}
 	
 	////////////METODOS PROPIOS////////////////////////////////
@@ -22,7 +22,7 @@ class SalidaController <S extends Salida> extends OperacionController<S> {
 		def clave = params.long('clave');
 		def fecha = new Date().parse("dd/MM/yyyy", params.fecha)
 		
-		def disponible = salidaService.disponibilidadArticulo(clave, fecha)
+		def disponible = salidaService.disponibilidadArticulo(clave, fecha,session.almacen)
 		
 		log.info(String.format("Disponibilidad %s", disponible))
 		
@@ -44,9 +44,5 @@ class SalidaController <S extends Salida> extends OperacionController<S> {
 	def listarAutoriza(){
 		render salidaService.listarAutoriza(params.term) as JSON
 	}
-	
-	
-	
-	
 	
 }

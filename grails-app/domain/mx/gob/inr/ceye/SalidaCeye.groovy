@@ -12,6 +12,8 @@ class SalidaCeye extends Salida {
 	
 	static hasMany = [salidasDetalle:SalidaDetalleCeye]
 	
+	static transients = ['dueno']
+	
 	static constraints = {
 	
 	}
@@ -33,5 +35,7 @@ class SalidaCeye extends Salida {
 		version false
 		
 		usuario updateable: false
+		paqueteq updateable:false
+		//fechaCaptura updateable:false
 	}
 }

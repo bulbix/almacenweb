@@ -33,10 +33,11 @@
 					value="${cierreInstance?.fechaCierre?.format('dd/MM/yyy')}" /></td>
 		</tr>
 
+		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
 		<tr>
-			<td><input type="button" id="generar" name="generar"
-				value="Generar Cierre" /></td>
+			<td><input type="button" id="generar" name="generar" value="Generar Cierre" /></td>
 		</tr>
+		</sec:noAccess>
 
 	</table>
 </form>

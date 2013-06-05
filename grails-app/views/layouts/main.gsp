@@ -49,7 +49,7 @@
 			<tr>
 				<td colspan="3">
 					<sec:ifLoggedIn>	
-						<h3>Logueado como: <sec:username/></h3>
+						<h3><sec:username/></h3>
 						<a href="${createLink(controller:'logout',action: 'index')}">Cerrar Sesion</a>	
 					</sec:ifLoggedIn>			
 				</td>

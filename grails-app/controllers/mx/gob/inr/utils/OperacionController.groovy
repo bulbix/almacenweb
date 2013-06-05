@@ -14,17 +14,15 @@ abstract class OperacionController<A> implements IOperacionController {
 
 	public IOperacionService<A> servicio
 	protected entityAlmacen
-	protected String almacen
+		
 	def filterPaneService
 	SpringSecurityService springSecurityService
 	
-	public OperacionController(entityAlmacen, almacen){
-		this.entityAlmacen = entityAlmacen
-		this.almacen = almacen
+	public OperacionController(entityAlmacen){
+		this.entityAlmacen = entityAlmacen		
 	}
 	
-	@Override
-	
+	@Override	
     def index(){
 		redirect(action: "list", params: params)	
 	}
@@ -32,17 +30,23 @@ abstract class OperacionController<A> implements IOperacionController {
 	
 	@Override
 	def create(Integer id){
+		
+		if(params.almacen){
+			session.almacen = params.almacen
+		}	
+		
+		
 		def almacenInstance = entityAlmacen.newInstance()
 		almacenInstance.fecha = new Date()
-		almacenInstance.folio = servicio.consecutivoFolio()
-		almacenInstance.almacen = almacen
+		almacenInstance.folio = servicio.consecutivoFolio(session.almacen)
+		almacenInstance.almacen = session.almacen
 		
 		boolean existeCierre = false	
 		
 		if(id){
 			almacenInstance = entityAlmacen.get(id)
 			
-			existeCierre = servicio.checkCierre(almacenInstance.fecha)
+			existeCierre = servicio.checkCierre(almacenInstance.fecha,session.almacen)
 			
 			if(almacenInstance instanceof Entrada){
 				if(almacenInstance.idSalAlma)
@@ -53,7 +57,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 		def usuariosList = null
 		
-		if(almacen == 'F'){
+		if(session.almacen == 'F'){
 			usuariosList = servicio.usuarios(servicio.PERFIL_FARMACIA)
 		}
 		else{
@@ -62,8 +66,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 		def isDueno = almacenInstance.usuario == springSecurityService.currentUser
 		
-		[usuariosList:usuariosList,almacenInstance: almacenInstance,
-		existeCierre:existeCierre, isDueno:isDueno]
+		[usuariosList:usuariosList,almacenInstance: almacenInstance,existeCierre:existeCierre, isDueno:isDueno]
 	}
 	
 	@Override
@@ -74,12 +77,17 @@ abstract class OperacionController<A> implements IOperacionController {
 	}
 	
 	@Override	
-	def list(Integer max){
+	def list(Integer max){	
 		
+		if(params.almacen){
+			session.almacen = params.almacen
+		}	
+		
+		params.almacen = session.almacen
 		params.max = Math.min(max ?: 10, 100)
-		def result = servicio.listar(params)
+		def result = servicio.listar(params,springSecurityService.currentUser)		
 		
-		[almacen:almacen, almacenInstanceList: result.lista, almacenInstanceTotal: result.total]
+		[almacen:session.almacen, almacenInstanceList: result.lista, almacenInstanceTotal: result.total]
 		
 		
 	}
@@ -96,7 +104,7 @@ abstract class OperacionController<A> implements IOperacionController {
 			}
 		}	
 		
-		render( view:'list',model:[almacen:almacen, almacenInstanceList: almacenList,
+		render( view:'list',model:[almacen:session.almacen, almacenInstanceList: almacenList,
 			almacenInstanceTotal: filterPaneService.count( params, entityAlmacen ),
 			filterParams: org.grails.plugin.filterpane.FilterPaneUtils.extractFilterParams(params),
 			params:params ] )
@@ -105,21 +113,21 @@ abstract class OperacionController<A> implements IOperacionController {
 	@Override
 	def guardar(){
 		
-		A entityAlmacen
+		A entity
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def jsonDetalle = JSON.parse(params.dataDetalle)
 		def idPadre = params.int('idPadre')
 		
 		if(!idPadre){//Centinela
-			entityAlmacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
-			entityAlmacen =  servicio.guardar(entityAlmacen);
-			servicio.guardarDetalle(jsonDetalle[0], entityAlmacen, null)
+			entity = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser,session.almacen)
+			entity =  servicio.guardar(entity);
+			servicio.guardarDetalle(jsonDetalle[0], entity, null,session.almacen)
 		}
 		else{
-			entityAlmacen = entityAlmacen.get(idPadre)
-			servicio.guardarDetalle(jsonDetalle[0],entityAlmacen,null)
+			entity = entityAlmacen.get(idPadre)
+			servicio.guardarDetalle(jsonDetalle[0],entity,null,session.almacen)
 		}		
-		render(contentType: 'text/json') {['idPadre': entityAlmacen.id]}
+		render(contentType: 'text/json') {['idPadre': entity.id]}
 		
 	}
 	
@@ -128,8 +136,8 @@ abstract class OperacionController<A> implements IOperacionController {
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def jsonArrayDetalle = JSON.parse(params.dataArrayDetalle)
 		
-		def almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
-		def mensaje = servicio.guardarTodo(almacen,jsonArrayDetalle)
+		def almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser,session.almacen)
+		def mensaje = servicio.guardarTodo(almacen,jsonArrayDetalle,session.almacen)
 		
 		render(contentType: 'text/json') {['idPadre': almacen.id,'mensaje':mensaje]}
 		
@@ -143,11 +151,11 @@ abstract class OperacionController<A> implements IOperacionController {
 		def jsonPadre = JSON.parse(params.dataPadre)
 		def idPadre = params.int('idPadre')
 		
-		almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser)
+		almacen = servicio.setJson(jsonPadre, request.getRemoteAddr(), springSecurityService.currentUser,session.almacen)
 		
 		if(idPadre){
 			try{
-				mensaje = servicio.actualizar(almacen, idPadre)
+				mensaje = servicio.actualizar(almacen, idPadre,session.almacen)
 			}
 			catch(AlmacenException e){
 				mensaje = e.message
@@ -165,7 +173,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		def mensaje = ""
 		
 		if(idPadre){
-			mensaje = servicio.cancelar(idPadre);			
+			mensaje = servicio.cancelar(idPadre, session.almacen);			
 		}
 		else
 			mensaje = "Error"
@@ -193,7 +201,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 		switch(params.oper){
 			case "edit":
-				mensaje = servicio.actualizarDetalle(idPadre,params)
+				mensaje = servicio.actualizarDetalle(idPadre,params,session.almacen)
 				break
 			case "del":
 				mensaje = servicio.borrarDetalle(idPadre,clave)
@@ -207,14 +215,14 @@ abstract class OperacionController<A> implements IOperacionController {
 	@Override
 	def uniqueFolio(){
 		def folio = params.int('value')		
-		def result = !servicio.checkFolio(folio)
+		def result = !servicio.checkFolio(folio,session.almacen)
 		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
 	
 	@Override
 	def buscarArticulo(){
 		def clave = params.long('id')
-		def articulo = servicio.buscarArticulo(clave)
+		def articulo = servicio.buscarArticulo(clave,session.almacen)
 		def articuloJSON = articulo as JSON
 		render articuloJSON
 		
@@ -230,7 +238,7 @@ abstract class OperacionController<A> implements IOperacionController {
 			fecha = null
 		}
 		
-		def result = !servicio.checkCierre(fecha)
+		def result = !servicio.checkCierre(fecha,session.almacen)
 		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
 	
@@ -251,7 +259,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 		
 		long id=params.long('id')		
-		def data = servicio.reporte(id)
+		def data = servicio.reporte(id,session.almacen)
 		chain(controller: "jasper", action: "index", model: [data:data], params:params)
 	}
 	

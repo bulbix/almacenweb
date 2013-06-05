@@ -16,11 +16,11 @@ class EntradaFarmaciaController extends EntradaController<EntradaFarmacia> {
 	EntradaFarmaciaService entradaFarmaciaService	
 	
 	public EntradaFarmaciaController(){
-		super(EntradaFarmacia,'F')
+		super(EntradaFarmacia)
 	}
 	
 	@PostConstruct
-	public void init(){
+	public void init(){		
 		servicio = entradaFarmaciaService		
 	}
 	

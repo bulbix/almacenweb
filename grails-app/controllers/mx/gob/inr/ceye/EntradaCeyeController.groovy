@@ -12,11 +12,11 @@ class EntradaCeyeController extends EntradaController<EntradaCeye> {
 	EntradaCeyeService entradaCeyeService	
 	
 	public EntradaCeyeController(){
-		super(EntradaCeye, 'C')
+		super(EntradaCeye)
 	}
 	
 	@PostConstruct
-	public void init(){
+	public void init(){		
 		servicio = entradaCeyeService
 	}
 	

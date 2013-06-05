@@ -33,14 +33,9 @@ class UtilService {
    
    def usuarios(Long idPerfil){
 	   
-	   //def perfil = Perfil.get(idPerfil)
-	   log.info("Perfil solicitado $idPerfil")	   
-	   def usuariosList = UsuarioPerfil.find 'from UsuarioPerfil where perfil.id=:perfilId',[perfilId: idPerfil]
-	   
-	   usuariosList = usuariosList.collect(){
-		   it.usuario
-	   }	
-	      	  
+	   def perfil = Perfil.get(idPerfil)
+	   def usuariosList = UsuarioPerfil.findAllByPerfil(perfil).collect { it.usuario } as Set
+
 	   usuariosList
    }  
    
@@ -191,6 +186,26 @@ class UtilService {
 	   
 	   return result
 	   
+   }
+   
+   String getAlmacenDescripcion(String almacen){
+	   String result = ""
+	   switch(almacen){
+		   case 'F':
+			   result= 'FARMACIA'
+			   break
+		   case 'C':
+			   result= 'CEYE'
+			   break
+		   case 'S':
+			   result = 'SUBCEYE'
+			   break
+		   case 'Q':
+			   result = 'CENIAQ CEYE'
+			   break
+	   }
+	   
+	   return result
    }
    
 }

@@ -31,21 +31,18 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	protected entityArea
 	protected entityCierre
 	
-	protected String almacen
-	
 	public SalidaService(entitySalida, entitySalidaDetalle,
-		 entityEntradaDetalle, entityArticulo, entityArea, entityCierre, almacen){
+		 entityEntradaDetalle, entityArticulo, entityArea, entityCierre){
 		this.entitySalida = entitySalida
 		this.entitySalidaDetalle = entitySalidaDetalle	
 		this.entityEntradaDetalle = entityEntradaDetalle
 		this.entityArticulo = entityArticulo
 		this.entityArea = entityArea
-		this.entityCierre = entityCierre
-		this.almacen = almacen		
+		this.entityCierre = entityCierre				
 	}
 		 
     @Override
-	S setJson(jsonSalida, String ip, Usuario usuarioRegistro){		
+	S setJson(jsonSalida, String ip, Usuario usuarioRegistro,String almacen){		
 		
 		def salida = entitySalida.newInstance()
 		salida.almacen = almacen
@@ -86,7 +83,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	 * @return renglon + 1 
 	 */
 	@Override
-	def guardarDetalle(jsonDetalle, S salida, Integer renglon ){
+	def guardarDetalle(jsonDetalle, S salida, Integer renglon,String almacen ){
 		
 		Long clave = jsonDetalle.cveArt as long 
 		Double solicitado = jsonDetalle.solicitado as double
@@ -133,10 +130,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	
-	
-	
 	@Override
-	def guardarTodo(S salida, jsonArrayDetalle){		
+	def guardarTodo(S salida, jsonArrayDetalle,String almacen){		
 				
 		for(jsonDetalle in jsonArrayDetalle){			
 			Long clave = jsonDetalle.cveArt as long
@@ -161,7 +156,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def String actualizar(S salida, Long idSalidaUpdate){		
+	def String actualizar(S salida, Long idSalidaUpdate,String almacen){		
 	
 	 def salidaUpdate = entitySalida.get(idSalidaUpdate);
 	 
@@ -193,7 +188,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			 Double surtido = detalle[1]
 			 
 			 borrarDetalle(idSalidaUpdate, clave)//delete			 	
-			 def disponible = disponibilidadArticulo(clave,salida.fecha)
+			 def disponible = disponibilidadArticulo(clave,salida.fecha,almacen)
 			 
 			 if(surtido > disponible){
 				 def fechaFormat = salida.fecha.format("dd/MM/yyyy")
@@ -223,7 +218,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}	
 	
 	@Override
-	def cancelar(Long idSalida){
+	def cancelar(Long idSalida, String almacen){
 		
 		def salida =  entitySalida.get(idSalida);
 		regresarExistencias(salida)
@@ -234,7 +229,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def listar(params){
+	def listar(params, Usuario usuarioLogueado){
 		
 		def sortIndex = params.sort ?: 'folio'
 		def sortOrder  = params.order ?: 'desc'
@@ -244,8 +239,11 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		def salidaList = entitySalida.createCriteria().list(params){
 			
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			eq("almacen",almacen)			
+			eq("almacen",params.almacen)			
 			order(sortIndex, sortOrder)
+		}.each(){
+		
+			it.dueno = usuarioLogueado == it.usuario
 		}
 		
 		def salidaTotal = entitySalida.createCriteria().get{
@@ -253,7 +251,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 				count()
 			}			
 			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			eq("almacen",almacen)
+			eq("almacen",params.almacen)
 		}
 		
 		[lista:salidaList, total:salidaTotal]
@@ -261,7 +259,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def actualizarDetalle(Long idSalida,params){	
+	def actualizarDetalle(Long idSalida,params, String almacen){	
 		
 		def clave  = params.long('id')
 		def solicitado = params.double('solicitado')
@@ -286,7 +284,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		}	
 		
 		
-		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha) + (sumaSurtido - surtido)
+		def disponible = disponibilidadArticulo(clave, salidaUpdate.fecha,almacen) + (sumaSurtido - surtido)
 		
 		if(disponible < 0){
 			return "Cantidad Disponible $disponible"
@@ -341,7 +339,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			select sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
 			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fecha
 			from $entitySalidaDetalleName sd 			
-			where sd.salida.id = $idSalida and sd.salida.almacen = '$almacen' 
+			where sd.salida.id = $idSalida  
 			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
 			sd.cantidadPedida,sd.salida.fecha 
 			order by sd.articulo.id
@@ -359,7 +357,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			[
 				 cell:[it[0], it[1]?.trim(),
 					 it[2]?.trim(), it[3],
-					  disponibilidadArticulo(it[0], it[6]),
+					  disponibilidadArticulo(it[0], it[6],params.almacen),
 					  it[4],it[5]], id: it[0]
 			]
 		}
@@ -454,12 +452,12 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def checkFolio(Integer folio){		
+	def checkFolio(Integer folio,String almacen){		
 		utilService.checkFolio(entitySalida, folio,almacen)		
 	}
 	
 	@Override
-	def consecutivoFolio(){
+	def consecutivoFolio(String almacen){
 		utilService.consecutivoFolio(entitySalida,almacen)
 	}
 	
@@ -470,7 +468,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
 	@Override
 	@Transactional(readOnly=true)
-	def buscarArticulo(Long id){
+	def buscarArticulo(Long id, String almacen){
 		def articulo = entityArticulo.get(id)
 		articulo.desArticulo = articulo.desArticulo.trim()
 		
@@ -495,12 +493,12 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
-	def checkCierre(Date fecha){
+	def checkCierre(Date fecha, String almacen){
 		utilService.checkCierre(entityCierre, fecha, almacen)
 	}
 	
 	@Override
-	def reporte(Long id){
+	def reporte(Long id,String almacen){
 		
 		def entitySalidaDetalleName = entitySalidaDetalle.name
 		
@@ -542,8 +540,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	
-	def disponibilidadArticulo(Long clave, Date fecha){		
-		return entradaService.disponibilidadArticulo(clave, fecha)
+	def disponibilidadArticulo(Long clave, Date fecha,String almacen){		
+		return entradaService.disponibilidadArticulo(clave, fecha, almacen)
 	}
 	
 }

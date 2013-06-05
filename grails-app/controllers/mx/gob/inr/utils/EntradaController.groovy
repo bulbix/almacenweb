@@ -8,8 +8,8 @@ import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaController <E extends Entrada> extends OperacionController<E> {
 		
-	public EntradaController(entityEntrada,almacen){
-		super(entityEntrada,almacen)
+	public EntradaController(entityEntrada){
+		super(entityEntrada)
 					
 	}
 		

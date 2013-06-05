@@ -8,6 +8,11 @@
 			</div>
 	</g:if>
 	
+	
+	<h1>
+		<g:almacenDescripcion code="default.reporte.label" almacen="${almacen}"/>		
+	</h1>
+	
 	<g:jasperReport jasper="${reportName}" format="PDF,XLSX" delimiter=" " name=" ${reportDisplay}" 
 		controller="${controllerName}" action="reporte" id="reportForm">	
 		<table>

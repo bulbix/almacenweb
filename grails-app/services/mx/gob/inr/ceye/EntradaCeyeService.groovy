@@ -22,8 +22,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	final int PERFIL_CEYE  = 10
 	
 	public EntradaCeyeService(){
-		super(EntradaCeye, EntradaDetalleCeye,SalidaDetalleFarmacia, ArticuloCeye,
-			 CatAreaCeye,CierreCeye,"C")
+		super(EntradaCeye, EntradaDetalleCeye,SalidaDetalleFarmacia, ArticuloCeye, CatAreaCeye,CierreCeye)
 	}
 	
 	@PostConstruct

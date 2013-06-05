@@ -21,4 +21,6 @@ abstract class Salida {
 	String ipTerminal
 	Date fechaCaptura = new Date()
 	Paciente paciente
+	
+	boolean dueno
 }

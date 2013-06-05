@@ -13,7 +13,7 @@ class SalidaCeyeController extends SalidaController<SalidaCeye> {
 	SalidaCeyeService salidaCeyeService
 	
 	public SalidaCeyeController(){
-		super(SalidaCeye,'C')
+		super(SalidaCeye)
 	}
 	
 	@PostConstruct

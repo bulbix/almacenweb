@@ -189,23 +189,9 @@ class UtilService {
    }
    
    String getAlmacenDescripcion(String almacen){
-	   String result = ""
-	   switch(almacen){
-		   case 'F':
-			   result= 'FARMACIA'
-			   break
-		   case 'C':
-			   result= 'CEYE'
-			   break
-		   case 'S':
-			   result = 'SUBCEYE'
-			   break
-		   case 'Q':
-			   result = 'CENIAQ CEYE'
-			   break
-	   }
 	   
-	   return result
+	   def almacenMap = [F:'FARMACIA',C:'CEYE',S:'SUBCEYE',Q:'CENIAQ CEYE']	   
+	   almacenMap[almacen]
    }
    
 }

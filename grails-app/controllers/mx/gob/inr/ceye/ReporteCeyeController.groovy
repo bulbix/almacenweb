@@ -9,7 +9,7 @@ class ReporteCeyeController extends ReporteController {
 	def reporteCeyeService
 	
     public ReporteCeyeController(){
-		super(ArticuloCeye,"C")
+		super(ArticuloCeye)
 	}
 	
 	@PostConstruct

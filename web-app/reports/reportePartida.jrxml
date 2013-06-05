@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportePartida" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="215"/>
+	<property name="ireport.x" value="139"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -126,28 +126,28 @@
 				</textElement>
 				<textFieldExpression><![CDATA[""+$F{partida}.getProperty("desPart")]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000">
+			<textField pattern="$ #,##0.0000">
 				<reportElement uuid="99ec5b7f-e0a0-40a1-bd03-7558cfcb4683" x="257" y="0" width="71" height="10"/>
 				<textElement textAlignment="Right">
 					<font size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{federal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000">
+			<textField pattern="$ #,##0.0000">
 				<reportElement uuid="99d9bb76-c165-4854-b78d-51fc04472213" x="339" y="0" width="71" height="10"/>
 				<textElement textAlignment="Right">
 					<font size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cuota}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000">
+			<textField pattern="$ #,##0.0000">
 				<reportElement uuid="1ff2cf9c-68d0-40f3-ab5d-515a75a905a5" x="416" y="0" width="71" height="10"/>
 				<textElement textAlignment="Right">
 					<font size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{otro}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="false">
 				<reportElement uuid="9f88fa4a-2610-4bc6-a982-099ef1959cbf" mode="Transparent" x="497" y="0" width="71" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -165,7 +165,7 @@
 	</lastPageFooter>
 	<summary>
 		<band height="15">
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="false">
 				<reportElement uuid="67b12bbd-6381-4d1f-9c13-0b0330419721" mode="Transparent" x="257" y="1" width="71" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -173,7 +173,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumFederal}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="false">
 				<reportElement uuid="e24486b7-e8fd-451b-a013-89e7c2ccc516" mode="Transparent" x="339" y="1" width="71" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -181,7 +181,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumCuota}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="false">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="false">
 				<reportElement uuid="5b295c12-ab53-4473-a319-263995c40696" mode="Transparent" x="416" y="0" width="71" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -189,7 +189,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumOtro}]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report" pattern="¤ #,##0.0000" isBlankWhenNull="false">
+			<textField evaluationTime="Report" pattern="$ #,##0.0000" isBlankWhenNull="false">
 				<reportElement uuid="467bbd11-673b-47d1-8b8d-5bafb591f502" mode="Transparent" x="497" y="0" width="71" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

@@ -176,7 +176,8 @@ abstract class ReporteService {
 		
 		def salidaDetalleList = entitySalidaDetalle.createCriteria().list(){
 			
-			projections{			
+			projections{
+				groupProperty("salida")			
 				groupProperty("articulo")
 				groupProperty("cantidadPedida")//Hay error
 				sum("cantidadSurtida")

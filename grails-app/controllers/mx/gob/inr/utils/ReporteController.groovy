@@ -7,13 +7,11 @@ class ReporteController {
 	
 	def utilService
 	def reporteService
-	
-	protected String almacen
+		
 	protected entityArticulo
 	
-	public ReporteController(entityArticulo,almacen){
-		this.entityArticulo = entityArticulo
-		this.almacen = almacen
+	public ReporteController(entityArticulo){
+		this.entityArticulo = entityArticulo		
 	}
 	
 	def index() {
@@ -29,7 +27,7 @@ class ReporteController {
 		
 		def areaList
 		
-		if(almacen == 'F')
+		if(session.almacen == 'F')
 			areaList = CatAreaFarmacia.listOrderByDesArea()
 		else
 			areaList = CatAreaCeye.listOrderByDesArea()
@@ -37,7 +35,7 @@ class ReporteController {
 		
 		[fechaInicial:fechaInicial,fechaFinal:fechaFinal,
 		 claveInicial:claveInicial,claveFinal:claveFinal,
-		 partidaList:partidaList,areaList:areaList, almacen:almacen]	
+		 partidaList:partidaList,areaList:areaList, almacen:session.almacen]	
 	}
 	
 	def reporteKardex(){

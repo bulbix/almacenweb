@@ -10,7 +10,7 @@ class ReporteFarmaciaController extends ReporteController {
 	def reporteFarmaciaService
 	
 	public ReporteFarmaciaController(){
-		super(ArticuloFarmacia,"F")
+		super(ArticuloFarmacia)
 	}
 	
 	@PostConstruct

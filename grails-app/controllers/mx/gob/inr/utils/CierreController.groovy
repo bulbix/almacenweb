@@ -6,14 +6,12 @@ import mx.gob.inr.utils.services.CierreService;
 
 abstract class CierreController <C extends Cierre>  {
 
-    public CierreService cierreService
-	
+    public CierreService cierreService	
 	protected entityCierre	
-	protected String almacen
 	
-	public CierreController(entityCierre, almacen){
-		this.entityCierre = entityCierre		
-		this.almacen = almacen
+	
+	public CierreController(entityCierre){
+		this.entityCierre = entityCierre
 	}   
 
     def index() {
@@ -22,8 +20,12 @@ abstract class CierreController <C extends Cierre>  {
 
     def list(Integer max) {
 		
-		def result = cierreService.listar()		
-		[almacen:almacen, cierreInstanceList: result.lista, cierreInstanceTotal: result.total]
+		if(params.almacen){
+			session.almacen = params.almacen
+		}	
+		
+		def result = cierreService.listar(session.almacen)		
+		[almacen:session.almacen, cierreInstanceList: result.lista, cierreInstanceTotal: result.total]
 		
     }
 
@@ -31,12 +33,12 @@ abstract class CierreController <C extends Cierre>  {
 		
 		def cierreInstance = entityCierre.newInstance()
 		cierreInstance.fechaCierre = new Date()		
-        [cierreInstance: cierreInstance]
+        [almacen:session.almacen,cierreInstance: cierreInstance]
     }
 	
 	def generarCierrre(){
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
-		cierreService.cerrarPeriodo(fechaCierre);
+		cierreService.cerrarPeriodo(fechaCierre,session.almacen);
 		
 		log.info("Value Progress " + cierreService.valueProgress)
 		render(contentType: 'text/json') {['status': 'ok']}
@@ -58,13 +60,13 @@ abstract class CierreController <C extends Cierre>  {
 			fecha = null
 		}
 		
-		def result = !cierreService.checkCierre(fecha)
+		def result = !cierreService.checkCierre(fecha,session.almacen)
 		render text: result, contentType:"text/html", encoding:"UTF-8"
 	}
 	
 	def eliminar(){		
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)		
-		def result = cierreService.eliminar(fechaCierre)
+		def result = cierreService.eliminar(fechaCierre,session.almacen)
 		
 		if(!result)		
 			flash.message = "Hay cierres posteriores"		
@@ -76,7 +78,7 @@ abstract class CierreController <C extends Cierre>  {
 		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
-		def data = cierreService.reporte(fechaCierre)
+		def data = cierreService.reporte(fechaCierre,session.almacen)
 		chain(controller: "jasper", action: "index", model: [data:data], params:params)		
 	}
 		

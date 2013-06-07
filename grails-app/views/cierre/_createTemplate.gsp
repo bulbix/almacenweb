@@ -25,19 +25,24 @@
 	</ul>
 </div>
 
+<h1>
+	<g:almacenDescripcion code="default.create.cierre.label" almacen="${almacen}"/>		
+</h1>
+
 <form id="formPadre">
 	<table>
 		<tr>
 			<td><label for="fechaCierre">Fecha Cierre</label> <g:textField
 					name="fechaCierre" size="8"
-					value="${cierreInstance?.fechaCierre?.format('dd/MM/yyy')}" /></td>
-		</tr>
+					value="${cierreInstance?.fechaCierre?.format('dd/MM/yyy')}" />
+			</td>
+		
 
-		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
-		<tr>
-			<td><input type="button" id="generar" name="generar" value="Generar Cierre" /></td>
+			<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
+				<td><input type="button" id="generar" name="generar" value="Generar Cierre" /></td>		
+			</sec:noAccess>
+	
 		</tr>
-		</sec:noAccess>
 
 	</table>
 </form>

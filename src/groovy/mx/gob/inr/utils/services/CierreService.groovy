@@ -16,22 +16,21 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 	protected entitySalida
 	protected entitySalidaDetalle
 	protected entityArticulo
-	protected entityCierre	
-	protected String almacen	
+	protected entityCierre
+		
 	
 	public int valueProgress = 0
 	
 	
-	public CierreService(entityEntrada, entitySalida, entitySalidaDetalle, entityArticulo ,entityCierre, almacen){
+	public CierreService(entityEntrada, entitySalida, entitySalidaDetalle, entityArticulo ,entityCierre){
 		this.entityEntrada  = entityEntrada
 		this.entitySalida = entitySalida
 		this.entitySalidaDetalle = entitySalidaDetalle
 		this.entityArticulo = entityArticulo
-		this.entityCierre = entityCierre
-		this.almacen = almacen
+		this.entityCierre = entityCierre		
 	}	
 	
-	def cierreAnterior(Date fechaCierre, A articulo){
+	def cierreAnterior(Date fechaCierre, A articulo, String almacen){
 		
 		def mFechaCierre = utilService.fechaDesglosada(fechaCierre)
 		def fechaCierreAnterior = new Date()
@@ -59,7 +58,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		return cierre
 	}
 	
-	def concentrarEntradaSalida(Date fechaCierre, A articulo){
+	def concentrarEntradaSalida(Date fechaCierre, A articulo,String almacen){
 	
 		def mFechaCierre  = utilService.fechaDesglosada(fechaCierre)
 		
@@ -98,7 +97,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		return listaConcentradora
 	}
 	
-	def calcularAjusteCierre(listaConcentradora, Date fechaCierre, C cierreAnterior, A articulo){
+	def calcularAjusteCierre(listaConcentradora, Date fechaCierre, C cierreAnterior, A articulo,String almacen){
 		
 		Long sumaExistAnt = 0;
 		Long sumaSalidaAnt = 0;
@@ -144,7 +143,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 					
 					salidaDetalle.precioUnitario = nuevoCostoPromedio
 					
-					salidaDetalle.save()
+					salidaDetalle.save([flush:true])
 					
 					break;
 					
@@ -156,7 +155,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		def cierre = entityCierre.newInstance()
 		
 		cierre.fechaCierre = fechaCierre
-		cierre.almacen = this.almacen
+		cierre.almacen = almacen
 		cierre.articulo = articulo
 		cierre.existencia = nuevaExistencia
 		cierre.importe = nuevoCostoPromedio
@@ -166,7 +165,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		
 	}
 	
-	def cerrarPeriodo(Date fechaCierre){
+	def cerrarPeriodo(Date fechaCierre, String almacen){
 		
 		int minClave = utilService.clave(entityArticulo,"min")
 		int maxClave = utilService.clave(entityArticulo,"max")
@@ -180,8 +179,8 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			
 			if(articulo){
 			
-				def listaConcentradora = concentrarEntradaSalida(fechaCierre, articulo)
-				def cierreAnterior  = cierreAnterior(fechaCierre, articulo)
+				def listaConcentradora = concentrarEntradaSalida(fechaCierre, articulo, almacen)
+				def cierreAnterior  = cierreAnterior(fechaCierre, articulo,almacen)
 				
 				if(!cierreAnterior){
 					
@@ -191,13 +190,13 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 				}
 				
 							
-				def cierreNuevo = calcularAjusteCierre(listaConcentradora,fechaCierre, cierreAnterior, articulo)
+				def cierreNuevo = calcularAjusteCierre(listaConcentradora,fechaCierre, cierreAnterior, articulo,almacen)
 				
-				cierreNuevo.save()
+				cierreNuevo.save([flush:true])
 				
 				articulo.movimientoProm = 	cierreNuevo.importe
 				
-				articulo.save()
+				articulo.save([flush:true])
 			}
 			
 			//Calculamos el porcentaje
@@ -208,11 +207,11 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		}
 	}
 	
-	def checkCierre(Date fecha){
+	def checkCierre(Date fecha,String almacen){
 		utilService.checkCierre(entityCierre, fecha, almacen)
 	}
 	
-	def listar(){
+	def listar(String almacen){
 		
 		def fechas = utilService.fechasAnioActual()
 				
@@ -238,7 +237,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		[lista:cierreList, total:cierreTotal]
 	}
 	
-	def checkCierrePosterior(Date fecha){	
+	def checkCierrePosterior(Date fecha, String almacen){	
 		
 		def fechaDesglosada = utilService.fechaDesglosada(fecha)		
 		
@@ -254,7 +253,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			def fechaNext = new Date()
 									
 			fechaNext.set(month:(imes+1),year:anio)
-			if(checkCierre(fechaNext)){
+			if(checkCierre(fechaNext,almacen)){
 				return true
 			}
 		}	
@@ -263,21 +262,19 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		
 	}
 	
-	def eliminar(Date fecha){
+	def eliminar(Date fecha,String almacen){
 		
-		if(!checkCierrePosterior(fecha)){		
-			def cierreList = entityCierre.createCriteria().list(){
-				eq("fechaCierre", fecha)
-				eq("almacen",almacen)			
-			}*.delete()
-			
+		def entityCierreName = entityCierre.name
+		
+		if(!checkCierrePosterior(fecha,almacen)){
+			entityCierre.executeUpdate("delete $entityCierreName c where c.fechaCierre = ? and almacen = ?", [fecha,almacen])
 			return true
 		}
 		
 		return false
 	}
 	
-	def reporte(Date fechaCierre){
+	def reporte(Date fechaCierre, String almacen){
 		def entityCierreName = entityCierre.name	
 						
 		def query =

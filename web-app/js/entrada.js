@@ -166,7 +166,7 @@ function consultarDetalle(){
 	      {name:'desArticulo', index:'desArticulo', width:500,editable:false},	      
 	      {name:'unidad', index:'unidad', width:100,editable:false,align:'center'},
 	      {name:'cantidad', index:'cantidad', width:50,editable:true,align:'center'},
-	      {name:'precioEntrada', index:'precioEntrada', width:50,editable:true,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
+	      {name:'precioEntrada', index:'precioEntrada', width:70,editable:true,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
 	      {name:'noLote', index:'noLote', width:100,editable:true},
 	      {name:'fechaCaducidad', index:'fechaCaducidad', width:100,editable:true,sorttype:'date',align:'center'}
 	    ],

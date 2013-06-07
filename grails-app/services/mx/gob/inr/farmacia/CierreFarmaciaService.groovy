@@ -13,7 +13,7 @@ class CierreFarmaciaService extends CierreService<CierreFarmacia,ArticuloFarmaci
 	
 	
 	public CierreFarmaciaService(){
-		super(EntradaFarmacia,SalidaFarmacia,SalidaDetalleFarmacia,ArticuloFarmacia,CierreFarmacia,"F")
+		super(EntradaFarmacia,SalidaFarmacia,SalidaDetalleFarmacia,ArticuloFarmacia,CierreFarmacia)
 	}
 	
 	@PostConstruct

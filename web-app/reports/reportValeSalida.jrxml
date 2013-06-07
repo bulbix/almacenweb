@@ -62,11 +62,11 @@
 					<textElement textAlignment="Left">
 						<font size="6"/>
 					</textElement>
-					<textFieldExpression><![CDATA[""+$F{articulo}.getProperty("unidad")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{articulo}.getProperty("unidad")]]></textFieldExpression>
 				</textField>
-				<textField pattern="###0">
+				<textField pattern="#,##0">
 					<reportElement uuid="1c806b77-a6df-4d32-a904-2f7044cd9dca" x="290" y="0" width="63" height="10"/>
-					<textElement textAlignment="Center">
+					<textElement textAlignment="Right">
 						<font size="6"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{cantidadPedida}]]></textFieldExpression>
@@ -78,9 +78,9 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Group" evaluationGroup="clave" pattern="###0" isBlankWhenNull="false">
+				<textField evaluationTime="Group" evaluationGroup="clave" pattern="#,##0" isBlankWhenNull="false">
 					<reportElement uuid="d90b332d-2dff-4ebf-baa3-9f0f9834ba77" mode="Transparent" x="363" y="0" width="62" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
-					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
 					</textElement>
@@ -228,6 +228,20 @@
 				</subreportParameter>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement uuid="a53137bc-1bb9-4e26-9094-b8b17dc70eb8" x="452" y="111" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="e9704b05-853d-4c10-b41f-39c631892bb0" x="532" y="111" width="40" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

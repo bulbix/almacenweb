@@ -126,10 +126,10 @@
 						noSelection="${['':'SELECCIONE ENTREGA']}" /></td>
 
 				<td><label for="recibe">Recibe</label> <g:textField
-						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" /></td>
+						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" size="10" /></td>
 
 				<td><label for="autoriza">Autoriza</label> <g:textField
-						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" /></td>
+						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" size="10" /></td>
 			</tr>
 			
 			<g:if test="${salidaInstance?.almacen != 'F'}" >		

@@ -168,16 +168,19 @@ abstract class OperacionController<A> implements IOperacionController {
 	
 	@Override
 	def cancelar(){
-		
+				
 		def idPadre = params.int('idPadre')
 		def mensaje = ""
+		
+		log.info(idPadre)
 		
 		if(idPadre){
 			mensaje = servicio.cancelar(idPadre, session.almacen);			
 		}
 		else
 			mensaje = "Error"
-			
+		
+		log.info(mensaje)	
 		flash.message = mensaje
 			
 		render(contentType: 'text/json') {['mensaje': mensaje ]}

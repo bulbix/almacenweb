@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportCierre" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fff2bc88-263f-4ab8-a591-276612b96b15">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="263"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
@@ -31,7 +31,7 @@
 		<variableExpression><![CDATA[$V{importe}]]></variableExpression>
 	</variable>
 	<group name="partida">
-		<groupExpression><![CDATA[$F{articulo}.getProperty("partida").getProperty("id")]]></groupExpression>
+		<groupExpression><![CDATA[$F{articulo}.getProperty("partida").getProperty("partida")]]></groupExpression>
 		<groupFooter>
 			<band height="13">
 				<textField pattern="¤ #,##0.0000">
@@ -42,7 +42,7 @@
 					<textFieldExpression><![CDATA[$V{sumaPartida}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="552f553c-b64e-44a0-91fd-c5f4e3b70c58" x="257" y="3" width="204" height="10"/>
+					<reportElement uuid="552f553c-b64e-44a0-91fd-c5f4e3b70c58" x="259" y="1" width="204" height="10"/>
 					<textElement>
 						<font size="6"/>
 					</textElement>
@@ -58,9 +58,9 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="112" splitType="Stretch">
+		<band height="125" splitType="Stretch">
 			<subreport>
-				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="1" y="0" width="570" height="110"/>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="570" height="110"/>
 				<subreportParameter name="reporteName">
 					<subreportParameterExpression><![CDATA['CIERRE AL ' + $F{fechaCierre}.format('dd/MM/yyyy')]]></subreportParameterExpression>
 				</subreportParameter>
@@ -72,6 +72,20 @@
 				</subreportParameter>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement uuid="a53137bc-1bb9-4e26-9094-b8b17dc70eb8" x="449" y="111" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="e9704b05-853d-4c10-b41f-39c631892bb0" x="529" y="111" width="40" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -121,7 +135,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="13" splitType="Stretch">
+		<band height="11" splitType="Stretch">
 			<rectangle>
 				<reportElement uuid="e375e64e-86f6-461b-b9f6-755ce242f8a6" stretchType="RelativeToBandHeight" x="2" y="1" width="571" height="9" backcolor="#FDF8A1">
 					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
@@ -131,7 +145,7 @@
 				</graphicElement>
 			</rectangle>
 			<textField pattern="¤ #,##0.0000">
-				<reportElement uuid="488c6e0a-eb7a-4d75-b618-8cc0cf0fd130" x="484" y="0" width="88" height="12"/>
+				<reportElement uuid="488c6e0a-eb7a-4d75-b618-8cc0cf0fd130" x="497" y="0" width="74" height="11"/>
 				<textElement textAlignment="Right">
 					<font size="6"/>
 				</textElement>
@@ -149,11 +163,11 @@
 				<textElement textAlignment="Left">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""+$F{articulo}.getProperty("unidad")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulo}.getProperty("unidad")]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="false">
+			<textField pattern="#,##0" isBlankWhenNull="false">
 				<reportElement uuid="c54f8fd7-2180-4a84-9e35-4b1ef3e38ded" mode="Transparent" x="303" y="0" width="61" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" markup="none">
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>

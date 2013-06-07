@@ -12,7 +12,7 @@ class CierreCeyeController extends CierreController<CierreCeye> {
 	CierreCeyeService cierreCeyeService
 	
 	public CierreCeyeController(){
-		super(CierreCeye,  'C')
+		super(CierreCeye)
 	}
 	
 	@PostConstruct

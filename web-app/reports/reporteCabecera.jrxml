@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteCabecera" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a1fca815-b34f-4e2b-834d-4d6ad9f9ac7d">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="263"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -32,13 +32,6 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{almacen}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="a53137bc-1bb9-4e26-9094-b8b17dc70eb8" x="3" y="88" width="80" height="13"/>
-				<textElement textAlignment="Right">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement uuid="1e4b1908-6ad4-4665-ae6c-3362670aa9d3" stretchType="RelativeToBandHeight" x="147" y="30" width="377" height="29"/>
 				<textElement textAlignment="Center">
@@ -46,13 +39,6 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 				</textElement>
 				<text><![CDATA[SUBDIRECCION DE COMPRAS Y SUMINISTROS DEPARTAMENTO DE ALMACENES Y CONTROL DE INVENTARIOS]]></text>
 			</staticText>
-			<textField evaluationTime="Report">
-				<reportElement uuid="e9704b05-853d-4c10-b41f-39c631892bb0" x="83" y="88" width="40" height="13"/>
-				<textElement>
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement uuid="cda24d64-5293-4ef9-ab1c-2b4ae955a52f" x="158" y="66" width="69" height="17"/>
 				<textElement>
@@ -76,14 +62,14 @@ $P{almacen}.equals("Q")?"CENIAQ CEYE":""]]></variableExpression>
 				<textFieldExpression><![CDATA[$P{reporteName}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement uuid="6badd7bd-c4f5-470e-8c75-e7a4f68d0fcc" x="491" y="88" width="81" height="13"/>
+				<reportElement uuid="6badd7bd-c4f5-470e-8c75-e7a4f68d0fcc" x="465" y="87" width="81" height="13"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="fec3229e-7f30-434a-a3fa-7fcd339373bc" x="438" y="88" width="54" height="13"/>
+				<reportElement uuid="fec3229e-7f30-434a-a3fa-7fcd339373bc" x="412" y="87" width="54" height="13"/>
 				<textElement>
 					<font size="6"/>
 				</textElement>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportePartida" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="139"/>
+	<property name="ireport.x" value="131"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -42,9 +42,9 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="113" splitType="Stretch">
+		<band height="130" splitType="Stretch">
 			<subreport>
-				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="1" y="1" width="570" height="110"/>
+				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="2" y="0" width="570" height="110"/>
 				<subreportParameter name="fechaFinal">
 					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -62,6 +62,20 @@
 				</subreportParameter>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
 			</subreport>
+			<textField>
+				<reportElement uuid="a53137bc-1bb9-4e26-9094-b8b17dc70eb8" x="451" y="110" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="e9704b05-853d-4c10-b41f-39c631892bb0" x="531" y="110" width="40" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

@@ -15,7 +15,7 @@ class CierreCeyeService extends CierreService<CierreCeye,ArticuloCeye> {
 	
 	
 	public CierreCeyeService(){
-		super(EntradaCeye,SalidaCeye,SalidaDetalleCeye,ArticuloCeye,CierreCeye,"C")
+		super(EntradaCeye,SalidaCeye,SalidaDetalleCeye,ArticuloCeye,CierreCeye)
 	}
 	
 	@PostConstruct

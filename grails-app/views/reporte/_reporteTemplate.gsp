@@ -18,7 +18,7 @@
 		<table>
 		
 		
-			<g:if test="${reportName != 'reporteExistencia'}">
+			<g:if test="${methodName != 'reporteExistencia'}">
 				<tr>
 					<td>
 						<label for="fechaInicial">Fecha Inicial</label>
@@ -32,7 +32,7 @@
 				</tr>
 			</g:if>
 			
-			<g:if test="${reportName != 'reportePartida'}">
+			<g:if test="${methodName != 'reportePartida'}">
 				<tr>
 					<td>
 						<label for="claveInicial">Clave Inicial</label>
@@ -54,7 +54,7 @@
 			</g:if>		
 			
 			
-			<g:if test="${reportName == 'reporteConsumo'}">
+			<g:if test="${methodName in ['reporteConsumo','reporteProporcionado']}">
 				<tr>
 					<td colspan="2">
 						<label for="partida">Area</label>

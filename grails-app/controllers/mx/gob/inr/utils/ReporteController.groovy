@@ -75,6 +75,7 @@ class ReporteController {
 			
 			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"			
+			params.almacen = session.almacen
 					
 			def data = reporteService."$methodName"(params) //Llamada dinamica del metodo 			
 			chain(controller: "jasper", action: "index", model: [data:data], params:params)

@@ -207,7 +207,7 @@ abstract class ReporteService {
 			order("articulo","asc")
 		}.each() {salidaDetalle ->
 				
-			reporteProporcionadoList << [articulo:salidaDetalle[0],cantidadPedida:salidaDetalle[1],cantidadSurtida:salidaDetalle[2]]		
+			reporteProporcionadoList << [articulo:salidaDetalle[1],cantidadPedida:salidaDetalle[2],cantidadSurtida:salidaDetalle[3]]		
 		}		
 		
 		reporteProporcionadoList

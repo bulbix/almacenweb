@@ -162,6 +162,8 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 		def salidasDetalle = salidasDetalle(idEntrada)
 		
+		log.info("SON salidas" + salidasDetalle)
+		
 		if(!salidasDetalle){		
 			cancelarCostoPromedio(entrada,almacen)
 			entrada.estado = 'C'

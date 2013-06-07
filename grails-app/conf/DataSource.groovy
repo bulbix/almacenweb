@@ -37,11 +37,11 @@ environments {
     }
     test {
         dataSource {          
-		   logSql = true
+		   //logSql = true
         }
 		
 		dataSource_materiales {			
-			logSql = true
+			//logSql = true
 		}	
     }
     production {

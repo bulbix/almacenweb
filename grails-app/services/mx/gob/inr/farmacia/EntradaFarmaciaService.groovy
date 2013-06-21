@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.gob.inr.farmacia.ArticuloFarmacia;
 import mx.gob.inr.farmacia.EntradaFarmacia;
 import mx.gob.inr.farmacia.EntradaDetalleFarmacia;
-import mx.gob.inr.materiales.SalidaDetalleMaterial;
-import mx.gob.inr.materiales.SalidaMaterial;
+import mx.gob.inr.materiales.*;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.services.EntradaService;
@@ -30,6 +29,29 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 		super.autoCompleteService = this.autoCompleteService				
 	}
 	
+	def checkFolioSalAlma(Integer folioSalAlma){
+		
+		def fechas = utilService.fechasAnioActual()
+
+		def criteriaSalida  = SalidaMaterial.createCriteria();
+
+		def resultSalida = criteriaSalida.get(){
+			eq("folio",folioSalAlma)
+			between("fecha",fechas.fechaInicio,fechas.fechaFin)
+			eq("cveArea",AREA_FARMACIA)
+			eq("almacen","F")
+		}
+		
+		def result = entityEntrada.createCriteria().get {
+			eq("idSalAlma",resultSalida?.id as Integer)
+		}
+
+		if(result)
+			return true
+		else
+			return false
+	}
+	
 	
 	
 	def consultarDetalleMaterial (Integer folioAlmacen, Short cveArea){
@@ -37,7 +59,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 		def query = """\
 			select sd from SalidaDetalleMaterial sd join fetch sd.id.salida s 
 			where s.folio = :folio and s.fecha between :fecha1 and :fecha2 and s.almacen = 'F' 
-			and s.cveArea = :area and s.estado <> 'C' order by sd.articulo
+			and s.cveArea = :area and s.estado <> 'C' order by sd.cveArt
 		"""
 		
 		def fechas = utilService.fechasAnioActual()
@@ -54,8 +76,11 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 		
 		
 		def results = detalle?.collect {
+			
+			def articulo = ArticuloMaterial.findWhere([cveArt:it.cveArt,almacen:it.almacen])
+			
 			[
-				cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
+				cveArt:it.cveArt,desArticulo:articulo.desArticulo?.trim(),unidad:articulo.unidad?.trim(),
 				cantidad:it.cantidadSurtida,precioEntrada:it.precioUnitario,noLote:it.noLote,
 				fechaCaducidad:it.fechaCaducidad?.format('dd/MM/yyyy')
 			]

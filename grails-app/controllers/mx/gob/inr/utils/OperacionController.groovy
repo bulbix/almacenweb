@@ -50,7 +50,7 @@ abstract class OperacionController<A> implements IOperacionController {
 			
 			if(almacenInstance instanceof Entrada){
 				if(almacenInstance.idSalAlma)
-					almacenInstance.folioAlmacen =SalidaMaterial.get(almacenInstance.idSalAlma).folio
+					almacenInstance.folioAlmacen =SalidaMaterial.get(almacenInstance.idSalAlma)?.folio
 			}
 			
 		}

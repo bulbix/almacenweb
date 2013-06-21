@@ -33,10 +33,20 @@ class UtilService {
    
    def usuarios(Long idPerfil){
 	   
-	   def perfil = Perfil.get(idPerfil)
-	   def usuariosList = UsuarioPerfil.findAllByPerfil(perfil).collect { it.usuario } as Set
-
-	   usuariosList
+	   def perfil = Perfil.get(idPerfil)   
+	   
+	   def usuariosPerfilList = UsuarioPerfil.createCriteria().list(){
+		   	projections{
+			   property("usuario.id")
+			}
+	   		eq("perfil",perfil)		   	   
+	   }
+	   
+	   def usuariosList = Usuario.createCriteria().list {
+		   'in'("id",usuariosPerfilList)
+	   }
+	   
+	   usuariosList 
    }  
    
    

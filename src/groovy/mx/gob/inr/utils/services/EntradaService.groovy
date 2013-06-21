@@ -192,7 +192,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		entradaList.each(){
 			if(it.idSalAlma)
-				it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).folio;
+				it.folioAlmacen = SalidaMaterial.get(it.idSalAlma)?.folio;
 			
 			it.dueno = usuarioLogueado == it.usuario
 		}

@@ -27,6 +27,8 @@ class SalidaMaterial  {
 		fecha column:'fecha_salida'
 		estado column:'estado_salida'
 		
+		almacen column:'id_almacen'
+		
 		version false
 		datasource 'materiales'
 	}

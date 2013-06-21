@@ -8,7 +8,7 @@ dataSource {
 }
 
 dataSource_materiales {
-	url = "jdbc:informix-sqli://192.168.10.1:1526/mat_2011:informixserver=ol_inrserver"
+	url = "jdbc:informix-sqli://192.168.10.1:1526/almacenes:informixserver=ol_inrserver"
 	driverClassName = "com.informix.jdbc.IfxDriver"
 	username = "informix"
 	password = "informix"

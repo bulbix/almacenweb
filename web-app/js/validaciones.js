@@ -72,14 +72,17 @@ function checkValue(url, value){
 	
 }
 
+
+function isValidDate(s) {
+	  var bits = s.split('/');
+	  var d = new Date(bits[2], bits[1] - 1, bits[0]);
+	  return d && (d.getMonth() + 1) == bits[1] && d.getDate() == Number(bits[0]);
+} 
+
 $.validator.addMethod("validateDate", function (value, element) {
 	try {
 
-		if (!value) {
-			return true;
-		}
-
-		return !isNaN(Date.parse(value));
+		return isValidDate(value)
 
 	}
 	catch (e) {		

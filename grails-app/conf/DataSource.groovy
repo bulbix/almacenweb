@@ -62,7 +62,7 @@ environments {
 		
 		dataSource_materiales {
 			//dbCreate = "update"
-			url = "jdbc:informix-sqli://192.168.10.1:1526/mat_2011:informixserver=ol_inrserver"			
+			url = "jdbc:informix-sqli://192.168.10.1:1526/almacenes:informixserver=ol_inrserver"			
 			properties {
 			   maxActive = -1
 			   minEvictableIdleTimeMillis=1800000

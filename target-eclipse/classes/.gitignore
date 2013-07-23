@@ -13,6 +13,11 @@
 /messages.properties
 /mx
 /org
+/spring
+/spring-security-core.properties
+/spring-security-core_de.properties
+/spring-security-core_fr.properties
+/templates
 /ApplicationResources$_run_closure1.class
 /ApplicationResources$_run_closure1_closure2.class
 /ApplicationResources.class
@@ -55,8 +60,6 @@
 /DefaultCacheConfig.class
 /DefaultSecurityConfig$_run_closure1.class
 /DefaultSecurityConfig.class
-/DefaultWebXmlConfig$_run_closure1.class
-/DefaultWebXmlConfig.class
 /JQueryConfig$_run_closure1.class
 /JQueryConfig.class
 /JQueryPluginResources$_run_closure1.class
@@ -108,4 +111,5 @@
 /UrlMappings.class
 /resources$_run_closure1.class
 /resources.class
-/templates
+/DefaultWebXmlConfig$_run_closure1.class
+/DefaultWebXmlConfig.class

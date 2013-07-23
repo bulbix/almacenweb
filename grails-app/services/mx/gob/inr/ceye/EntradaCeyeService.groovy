@@ -62,7 +62,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	
 	def precioAlmacen(Long cveArt){
 		
-		def articulo = ArticuloMaterial.get(cveArt)
+		def articulo = ArticuloMaterial.findWhere(cveArt:cveArt.intValue(),almacen:"F")
 		def precio = 0.0
 		
 		if(articulo)

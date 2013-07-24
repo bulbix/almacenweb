@@ -56,7 +56,8 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 		
 		//(", precioConvertido)
 		def precioFormat = String.format('%1$,.4f',precioConvertido)
-		[ualma:ualma, calma:calma, uceye:uceye,cceye:cceye,cantidad:cantidadConvertida, precio:precioFormat, cociente:cociente]
+		[ualma:ualma, calma:calma, uceye:uceye,cceye:cceye,cantidad:cantidadConvertida, precio:precioFormat,
+			 cociente:cociente, precioRaw:precioConvertido]
 	}
 	
 	
@@ -76,13 +77,12 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 			eq("tipo", tipo)
 		}
 		
-		def results = detalle?.collect {		
-			 
-			//def convertido = convertidora(it.articulo.id, it.cantidad)
-			def precioAlmacen = precioAlmacen(it.articulo.id)
-					
+		def results = detalle?.collect {
+			
+			def convertido = convertidora(it.articulo.id, it.cantidad)
+								
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-			cantidad:it.cantidad,precioEntrada:precioAlmacen,noLote:null,fechaCaducidad:null]				
+			cantidad:it.cantidad,precioEntrada:convertido.precioRaw,noLote:null,fechaCaducidad:null]				
 		}
 		
 		results

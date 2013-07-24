@@ -112,7 +112,15 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salidaDetalle.cantidadSurtida = it.restarExistencia
 			salidaDetalle.fechaCaducidad = it.fechaCaducidad
 			salidaDetalle.noLote = it.noLote
-			salidaDetalle.precioUnitario = jsonDetalle.costo as double
+			
+			if(salida instanceof SalidaFarmacia){
+				salidaDetalle.precioUnitario = articulo.movimientoProm							
+			}
+			else if(salida instanceof SalidaCeye){
+				salidaDetalle.precioUnitario = 	costoPromedio(articulo,almacen)			
+			}
+			
+			
 			salidaDetalle.presupuesto = null
 			salidaDetalle.actividad = null
 			salidaDetalle.entradaDetalle = entityEntradaDetalle.get (it.id)
@@ -294,7 +302,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		
 		borrarDetalle(idSalida, clave)		
 		def jsonDetalle=[cveArt:clave, solicitado:solicitado,surtido:surtido]		
-		guardarDetalle(jsonDetalle,salidaUpdate,null)
+		guardarDetalle(jsonDetalle,salidaUpdate,null,almacen)
 		return "success"
 		
 	}
@@ -474,14 +482,23 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		def articulo = entityArticulo.get(id)
 		articulo.desArticulo = articulo.desArticulo.trim()
 		
-		if(articulo instanceof ArticuloCeye){
-			def costo  = CostoPromedioCeye.createCriteria().get{
-				eq("articulo",articulo) 
-				eq("almacen",almacen)
-			}			
-			articulo.movimientoProm = costo.movimientoProm
+		if(articulo instanceof ArticuloCeye){				
+			articulo.movimientoProm = costoPromedio(articulo,almacen)
 		}	
 		return articulo
+	}
+	
+	/****
+	 * Obtiene el costo promedio del almacen de ceye
+	 */
+	def costoPromedio(ArticuloCeye articulo, String almacen){
+		
+		def costo  = CostoPromedioCeye.createCriteria().get{
+			eq("articulo",articulo)
+			eq("almacen",almacen)
+		}
+		
+		costo.movimientoProm		
 	}
 
 	@Override

@@ -33,14 +33,14 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 			eq("tipo", tipo)
 		}
 		
-		def results = detalle?.collect {		
-			 
-			//def convertido = convertidora(it.articulo.id, it.cantidad)
-			//def precioAlmacen = precioAlmacen(it.articulo.id)
+		def results = detalle?.collect { 
+			
 			def disponible = disponibilidadArticulo(it.articulo.id, fecha, almacen)
+			def costo  = costoPromedio(it.articulo, almacen)
+			
 					
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-			costo:it.articulo.movimientoProm,disponible:disponible,solicitado:it.cantidad,surtido:it.cantidad]				
+			costo:costo,disponible:disponible,solicitado:it.cantidad,surtido:it.cantidad]				
 		}
 		
 		results

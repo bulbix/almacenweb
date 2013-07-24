@@ -298,16 +298,13 @@ function controlesHead(){
 
 function detalleAdd(){
 	
-	var costo = 0.0
-	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13 && $("#insumo").valid() ) {
 			$.getJSON(url + "/buscarArticulo",{id:this.value})
 					.done(function( json ) {
 						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
-						 $("#costo").val(json.movimientoProm)
-						 costo = json.movimientoProm						 
+						 $("#costo").val(json.movimientoProm)				 
 						 $("#costo").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })						 
 						 $("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));	
 						 $("#solicitado").focus()
@@ -329,8 +326,7 @@ function detalleAdd(){
 			 if($("#formPadre").valid()){			 
 				 var data = [{ cveArt:$("#insumo").val(),
 					 		   solicitado:$("#solicitado").val(),					 		   
-					 		   surtido:$("#surtido").val(),
-					 		   costo:costo
+					 		   surtido:$("#surtido").val()
 					 		}];
 				 
 				 guardar(JSON.stringify(data))			

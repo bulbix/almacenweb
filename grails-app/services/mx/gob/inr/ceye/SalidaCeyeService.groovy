@@ -16,7 +16,8 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 	static transactional = true	
 	
 	public SalidaCeyeService(){
-		super(SalidaCeye,SalidaDetalleCeye, EntradaDetalleCeye,ArticuloCeye,CatAreaCeye,CierreCeye)						
+		super(SalidaCeye,SalidaDetalleCeye,
+			 EntradaDetalleCeye,ArticuloCeye,CatAreaCeye,CierreCeye)						
 	}
 	
 	@PostConstruct
@@ -26,7 +27,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 		super.autoCompleteService = this.autoCompleteService	
 	}
 	
-	def consultarPaquete(String tipo, Date fecha){
+	def consultarPaquete(String tipo, Date fecha,String almacen){
 		
 		def detalle = PaqueteQuirurgicoCeye.createCriteria().list(){
 			eq("tipo", tipo)
@@ -36,7 +37,7 @@ class SalidaCeyeService extends SalidaService<SalidaCeye> {
 			 
 			//def convertido = convertidora(it.articulo.id, it.cantidad)
 			//def precioAlmacen = precioAlmacen(it.articulo.id)
-			def disponible = disponibilidadArticulo(it.articulo.id, fecha)
+			def disponible = disponibilidadArticulo(it.articulo.id, fecha, almacen)
 					
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
 			costo:it.articulo.movimientoProm,disponible:disponible,solicitado:it.cantidad,surtido:it.cantidad]				

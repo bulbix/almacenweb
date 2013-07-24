@@ -89,6 +89,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		Double solicitado = jsonDetalle.solicitado as double
 		Double surtido = jsonDetalle.surtido as double
 		
+		//println ("jsonValor " + jsonDetalle.costo)
 		
 		def entradas = cargarEntradasDeSalida(clave, salida.fecha, almacen, surtido)
 		
@@ -111,7 +112,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salidaDetalle.cantidadSurtida = it.restarExistencia
 			salidaDetalle.fechaCaducidad = it.fechaCaducidad
 			salidaDetalle.noLote = it.noLote
-			salidaDetalle.precioUnitario = articulo.movimientoProm
+			salidaDetalle.precioUnitario = jsonDetalle.costo as double
 			salidaDetalle.presupuesto = null
 			salidaDetalle.actividad = null
 			salidaDetalle.entradaDetalle = entityEntradaDetalle.get (it.id)
@@ -148,7 +149,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		Integer renglon = 1
 		
 		jsonArrayDetalle.each() {
-			renglon = guardarDetalle(it, salida, renglon)
+			renglon = guardarDetalle(it, salida, renglon,almacen)
 		}
 		
 		return "Salida Guardada"
@@ -336,11 +337,11 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		
 		def query =
 		"""\
-			select sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
+			select sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.precioUnitario,
 			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fecha
 			from $entitySalidaDetalleName sd 			
 			where sd.salida.id = $idSalida  
-			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.articulo.movimientoProm,
+			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.precioUnitario,
 			sd.cantidadPedida,sd.salida.fecha 
 			order by sd.articulo.id
 
@@ -360,7 +361,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 					  disponibilidadArticulo(it[0], it[6],params.almacen),
 					  it[4],it[5]], id: it[0]
 			]
-		}
+		}	
+		
 		
 		def jsonData = [rows: results, page: currentPage, records: totalRows, total: numberOfPages]
 		

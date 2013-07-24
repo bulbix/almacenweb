@@ -25,7 +25,7 @@ class SalidaCeyeController extends SalidaController<SalidaCeye> {
 	def consultarPaquete(){
 		def tipo = params.tipo
 		def fecha = new Date().parse("dd/MM/yyyy",params.fecha) 
-		def jsonArray = salidaCeyeService.consultarPaquete(tipo,fecha) as JSON
+		def jsonArray = salidaCeyeService.consultarPaquete(tipo,fecha,session.almacen) as JSON
 		render jsonArray
 	}
 }

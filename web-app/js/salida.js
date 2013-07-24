@@ -210,6 +210,7 @@ function consultarDetalle(){
 	    rowList:[20, 40, 60 ,80],
 	    //sortname: 'id',
 	    //sortorder: 'asc',
+	    sortable: false,
 	    viewrecords: true,
 	    gridview: true,
 	    caption: 'Salida Detalle'//,
@@ -292,7 +293,12 @@ function controlesHead(){
 	
 }
 
+
+
+
 function detalleAdd(){
+	
+	var costo = 0.0
 	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13 && $("#insumo").valid() ) {
@@ -300,7 +306,8 @@ function detalleAdd(){
 					.done(function( json ) {
 						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
-						 $("#costo").val(json.movimientoProm)						 
+						 $("#costo").val(json.movimientoProm)
+						 costo = json.movimientoProm						 
 						 $("#costo").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })						 
 						 $("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));	
 						 $("#solicitado").focus()
@@ -318,10 +325,12 @@ function detalleAdd(){
 	$("#surtido").keypress(function(e){	
 		 if(e.which == 13) {
 			 
+			 
 			 if($("#formPadre").valid()){			 
 				 var data = [{ cveArt:$("#insumo").val(),
 					 		   solicitado:$("#solicitado").val(),					 		   
-					 		   surtido:$("#surtido").val()
+					 		   surtido:$("#surtido").val(),
+					 		   costo:costo
 					 		}];
 				 
 				 guardar(JSON.stringify(data))			

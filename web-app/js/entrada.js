@@ -183,6 +183,7 @@ function consultarDetalle(){
 	    rowList:[20, 40, 60 ,80],
 	    //sortname: 'id',
 	    //sortorder: 'asc',
+	    sortable: false,
 	    viewrecords: true,
 	    gridview: true,
 	    caption: 'Entrada Detalle'			   

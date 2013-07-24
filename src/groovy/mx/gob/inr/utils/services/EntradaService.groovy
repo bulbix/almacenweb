@@ -237,7 +237,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				if(salidasDetalle){
 					def sumaSurtido = salidasDetalle.sum { it.cantidadSurtida }
 					if(cantidad < sumaSurtido)
-						return "Cantidad utilizada $suma"
+						return "Cantidad utilizada $sumaSurtido"
 				}
 			}				
 			

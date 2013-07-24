@@ -189,6 +189,7 @@ abstract class OperacionController<A> implements IOperacionController {
 	
 	@Override
 	def consultarDetalle(){
+		params.almacen = session.almacen
 		def json = servicio.consultarDetalle(params) as JSON
 		log.info(json)
 		render json

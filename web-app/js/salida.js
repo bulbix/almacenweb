@@ -1,6 +1,8 @@
 $(document).ready(function() {	
 	
-	$("#fecha").focus()
+	$("#fecha").focus()	
+	
+	$("#fecha").datepicker({dateFormat: 'dd/mm/yy'});
 	
 	autoCompleteArticulo(function(){						 
 		$("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));
@@ -175,7 +177,8 @@ function capturar(){
 			$(".busqueda").hide()
 		}
 		
-		consultarPaquete()			
+		consultarPaquete()
+		
 	});
 	
 
@@ -271,13 +274,14 @@ function controlesHead(){
 	}
 		
 	
-	if($("#paqueteq").val() != undefined && $("#paqueteq").val() !=''){
+	/*if($("#paqueteq").val() != undefined && $("#paqueteq").val() !=''){
 		$(".busqueda").hide()
-	}
+	}*/
 	
 	$("#guardarPaquete").click(function(){	
 		if($(".cabecera").valid() && $("#folio").valid()){
 			guardarTodo()
+			$(".busqueda").show()
 		}
 	});
 	
@@ -309,7 +313,11 @@ function detalleAdd(){
 						 $("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));	
 						 $("#solicitado").focus()
 						 
-			})
+					})
+					.fail(function() {
+						alert("La clave " + $("#insumo").val() + " no existe")
+						limpiarRenglonDetalle()
+					})
 		 }
 	});
 	

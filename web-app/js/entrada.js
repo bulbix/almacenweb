@@ -1,6 +1,8 @@
 $(document).ready(function() {	
 	$("#fecha").focus()
 	
+	$("#fecha").datepicker({dateFormat: 'dd/mm/yy'});
+	
 	autoCompleteArticulo(function(){
 		$("#cantidad").focus()
 	});
@@ -17,7 +19,40 @@ $(document).ready(function() {
 	controlesHead()
 	maskDates()
 	
+	
+	capturarClave()
 });
+
+
+function capturarClave(){
+	
+	 $( "#capturaArticulo" ).dialog({
+		 autoOpen: false,
+		 height: 400,
+		 width: 600,
+		 modal: true,
+		 buttons: {
+		 "Guardar": function() {
+			 var bValid = true;
+			 $( this ).dialog( "close" );
+		 },
+		 "Cancelar": function() {
+		 	( this ).dialog( "close" );
+		 }
+		 },
+		 close: function() {
+			 allFields.val( "" ).removeClass( "ui-state-error" );
+		 }
+		 });
+	 
+	 
+		 $("#btnCapturaArticulo" ).button().click(function() {
+			 $( "#capturaArticulo" ).dialog( "open" );
+		 });
+	
+}
+
+
 
 function validar(){
 	$("#formPadre").validate({
@@ -288,7 +323,11 @@ function detalleAdd(){
 						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
 						 $("#cantidad").focus()
-			})
+					})
+					.fail(function() {
+						alert("La clave " + $("#insumo").val() + " no existe")
+						limpiarRenglonDetalle()
+					})
 		 }
 	});
 	

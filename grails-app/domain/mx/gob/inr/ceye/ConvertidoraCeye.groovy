@@ -9,7 +9,7 @@ class ConvertidoraCeye {
 	
 	
 	static mapping = {
-		id column:'cve_art'
+		id generator:'assigned',column:'cve_art'
 		version false
 		table 'convertidora_ceye'
 	}

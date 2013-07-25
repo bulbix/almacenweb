@@ -6,6 +6,8 @@ abstract class Articulo {
 	String unidad
 	String presentacion
 	Double movimientoProm
+	//String partida
+	String almacen
 	
 	String toString(){
 		return String.format("(%s) %s", id, desArticulo)

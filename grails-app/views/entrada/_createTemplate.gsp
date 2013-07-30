@@ -19,6 +19,9 @@
 			<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
 			<li><a href="#" id="actualizar" style="display:none" class="edit botonOperacion">Actualizar</a></li>	
 			<li><a href="#" id="cancelar" style="display:none" class="delete botonOperacion">Cancelar</a></li>
+			<li><a href="/almacenWeb/articuloCeye" 
+			onclick="window.open(this.href, 'child', 'scrollbars,width=900,height=600'); return false">Catalogo Articulo</a>
+			</li>
 		</sec:noAccess>
 		
 	</ul>

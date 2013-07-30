@@ -230,7 +230,9 @@ function consultarPaquete(){
 	$("#guardar").show()
 }
 
-function guardarTodo(){
+function guardarTodo(boton){	
+	
+	boton.disabled = true
 	
     var frm = $("#formPadre");
     var dataPadre = JSON.stringify(frm.serializeObject());
@@ -256,6 +258,8 @@ function guardarTodo(){
 		$('.botonOperacion').show()
 		alert(data.mensaje)
 	});
+	
+	$(boton).hide()
 }
 
 

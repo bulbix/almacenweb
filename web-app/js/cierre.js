@@ -1,5 +1,11 @@
 $(document).ready(function() {
 	
+	 $("#fechaCierre").datepicker(
+				{dateFormat: 'dd/mm/yy',
+				 showButtonPanel: true,
+				 changeMonth: true,
+			     changeYear: true});
+	
 	
 	$("#generar").click( function() {
 		

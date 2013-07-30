@@ -284,7 +284,8 @@ function controlesHead(){
 	
 	$("#guardarPaquete").click(function(){	
 		if($(".cabecera").valid() && $("#folio").valid()){
-			guardarTodo()
+			guardarTodo(this)
+			$("#paqueteq").prop('disabled', true)
 			$(".busqueda").show()
 		}
 	});

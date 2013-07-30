@@ -48,6 +48,6 @@
 </form>
 
 <div id="progressbar">
-	<div class="progress-label">Loading...</div>
+	<div class="progress-label">...</div>
 </div>
 

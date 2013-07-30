@@ -297,13 +297,14 @@ function controlesHead(){
 	
 	$("#guardarAlmacen").click(function(){	
 		if( $(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
-			guardarTodo()
+			guardarTodo(this)
 		}
 	});
 	
 	$("#guardarPaquete").click(function(){	
 		if($(".cabecera").valid() && $("#folio").valid() && $("#remision").valid()){
-			guardarTodo()
+			guardarTodo(this)
+			$("#paqueteq").prop('disabled', true)
 		}
 	});
 	

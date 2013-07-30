@@ -2,6 +2,8 @@ package mx.gob.inr.utils.services
 
 import java.util.Date;
 
+import mx.gob.inr.ceye.CierreCeye
+import mx.gob.inr.ceye.CostoPromedioCeye;
 import mx.gob.inr.farmacia.ArticuloFarmacia;
 import mx.gob.inr.farmacia.CierreFarmacia;
 import mx.gob.inr.utils.UtilService;
@@ -124,7 +126,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 					}
 					else
 					{
-						nuevoCostoPromedio = costoAnteriorMes;
+						nuevoCostoPromedio = cierreAnterior.importe;
 					}
 					
 					/**Se mete al acumulado la nueva existencia de entradas*/
@@ -136,14 +138,13 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 				
 					sumaSalidaAnt += concentra.cantidad
 					
-					def salidaDetalle = entitySalidaDetalle.createCriteria().get{
+					def salidaDetalle = entitySalidaDetalle.createCriteria().list{
 						eq("salida.id", concentra.llave )
 						eq("articulo", articulo )
+					}.each{					
+						it.precioUnitario = nuevoCostoPromedio					
+						it.save([flush:true])
 					}
-					
-					salidaDetalle.precioUnitario = nuevoCostoPromedio
-					
-					salidaDetalle.save([flush:true])
 					
 					break;
 					
@@ -194,9 +195,19 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 				
 				cierreNuevo.save([flush:true])
 				
-				articulo.movimientoProm = 	cierreNuevo.importe
+				if(entityCierre instanceof CierreFarmacia){
+					articulo.movimientoProm = 	cierreNuevo.importe
+					articulo.save([flush:true])
+				}
+				else if(entityCierre instanceof CierreCeye){
+					def costo  = CostoPromedioCeye.createCriteria().get{
+						eq("articulo",articulo)
+						eq("almacen",almacen)
+					}		
+					costo.movimientoProm = cierreNuevo.importe
+					costo.save([flush:true])
+				}			
 				
-				articulo.save([flush:true])
 			}
 			
 			//Calculamos el porcentaje

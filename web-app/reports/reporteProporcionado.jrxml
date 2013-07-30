@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteProporcionado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="131"/>
+	<property name="ireport.x" value="235"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -21,7 +21,7 @@
 	<variable name="porcentaje" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[($V{sumSurtido} / $V{sumPedido}) * 100]]></variableExpression>
 	</variable>
-	<variable name="sumTotalPedido" class="java.lang.Double" incrementType="Group" incrementGroup="articulo" calculation="Sum">
+	<variable name="sumTotalPedido" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$V{sumPedido}]]></variableExpression>
 	</variable>
 	<variable name="sumTotalSurtido" class="java.lang.Double" calculation="Sum">
@@ -207,6 +207,14 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumTotalSurtido}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="2cc22ea7-6dcf-45c1-8131-c80c09403540" mode="Transparent" x="399" y="1" width="53" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumTotalPedido}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

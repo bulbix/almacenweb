@@ -9,7 +9,6 @@ import mx.gob.inr.ceye.ArticuloCeye;
 import mx.gob.inr.ceye.CostoPromedioCeye;
 import mx.gob.inr.ceye.SalidaCeye
 import mx.gob.inr.farmacia.SalidaFarmacia;
-import mx.gob.inr.utils.AlmacenException;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.Cie09;
 import mx.gob.inr.utils.Paciente;
@@ -165,6 +164,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
+	@Transactional
 	def String actualizar(S salida, Long idSalidaUpdate,String almacen){		
 	
 	 def salidaUpdate = entitySalida.get(idSalidaUpdate);
@@ -201,7 +201,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			 
 			 if(surtido > disponible){
 				 def fechaFormat = salida.fecha.format("dd/MM/yyyy")
-				 throw new AlmacenException("A la fecha $fechaFormat la existencia es:$disponible Clave:$clave")//Rollback				 
+				 throw new RuntimeException("A la fecha $fechaFormat la existencia es:$disponible Clave:$clave")//Rollback				 
 			 } 
 		 }		 
 		 
@@ -210,7 +210,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			 def clave = it[0].id
 			 def jsonDetalle = [cveArt: clave,solicitado:it[2],surtido:it[1]]
 			 //borrarDetalle(idSalidaUpdate, clave)
-			 renglon = guardarDetalle(jsonDetalle, salidaUpdate, renglon)			 
+			 renglon = guardarDetalle(jsonDetalle, salidaUpdate, renglon,almacen)			 
 		 }		 
 	 }
 	 
@@ -308,6 +308,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	}
 	
 	@Override
+	@Transactional
 	def borrarDetalle(Long idSalida, Long clave){
 		
 		def detalle = entitySalidaDetalle.createCriteria().list(){

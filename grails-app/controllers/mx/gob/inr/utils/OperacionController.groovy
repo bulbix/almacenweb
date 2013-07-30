@@ -157,7 +157,7 @@ abstract class OperacionController<A> implements IOperacionController {
 			try{
 				mensaje = servicio.actualizar(almacen, idPadre,session.almacen)
 			}
-			catch(AlmacenException e){
+			catch(RuntimeException e){
 				mensaje = e.message
 			}
 		}

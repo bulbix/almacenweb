@@ -2,7 +2,11 @@ $(document).ready(function() {
 	
 	$("#folio").focus()	
 	
-	$("#fecha").datepicker({dateFormat: 'dd/mm/yy'});
+	$("#fecha").datepicker(
+	{dateFormat: 'dd/mm/yy',
+	 showButtonPanel: true,
+	 changeMonth: true,
+     changeYear: true});
 	
 	autoCompleteArticulo(function(){						 
 		$("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));

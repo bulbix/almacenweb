@@ -1,5 +1,5 @@
 $(document).ready(function() {	
-	$("#fecha").focus()
+	$("#folio").focus()
 	
 	$("#fecha").datepicker({dateFormat: 'dd/mm/yy'});
 	
@@ -197,13 +197,13 @@ function consultarDetalle(){
 	    mtype: 'GET',
 	    colNames:['Clave','Descripcion', 'U. Medida','Cantidad','Precio U.','Lote','F. Caducidad'],
 	    colModel :[ 
-	      {name:'cveArt', index:'cveArt', width:50, align:'center',editable:false}, 
+	      {name:'cveArt', index:'cveArt', width:50, align:'center',editable:false,search:true,stype:'text'}, 
 	      {name:'desArticulo', index:'desArticulo', width:500,editable:false},	      
 	      {name:'unidad', index:'unidad', width:100,editable:false,align:'center'},
-	      {name:'cantidad', index:'cantidad', width:50,editable:true,align:'center'},
-	      {name:'precioEntrada', index:'precioEntrada', width:70,editable:true,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
+	      {name:'cantidad', index:'cantidad', width:80,editable:true,align:'center'},
+	      {name:'precioEntrada', index:'precioEntrada', width:120,editable:true,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
 	      {name:'noLote', index:'noLote', width:100,editable:true},
-	      {name:'fechaCaducidad', index:'fechaCaducidad', width:100,editable:true,sorttype:'date',align:'center'}
+	      {name:'fechaCaducidad', index:'fechaCaducidad', width:120,editable:true,sorttype:'date',align:'center'}
 	    ],
 	    postData:{idPadre:function() { return $('#idPadre').val() }},
 	    onSelectRow: function(id){	
@@ -226,6 +226,8 @@ function consultarDetalle(){
 	
 	$("#detalle").jqGrid('setGridWidth', 950);
 	$("#detalle").jqGrid('setGridHeight', 250);
+	
+	//jQuery("#detalle").filterToolbar();
 	
 	$("#detalle").jqGrid("navGrid", "#pager",
 			{

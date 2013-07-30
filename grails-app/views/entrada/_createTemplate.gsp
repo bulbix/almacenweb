@@ -164,7 +164,7 @@
 							name="cantidad" size="3" /></td>
 							
 				<td><label for="precio">Precio U.</label> <g:textField
-				name="precio" size="8" readonly="${entradaInstance?.almacen != 'F'}" /></td>
+				name="precio" size="10" readonly="${entradaInstance?.almacen != 'F'}" /></td>
 				
 				<g:if test="${entradaInstance?.almacen == 'F'}">					
 					<td><label for="nolote">Lote</label> <g:textField

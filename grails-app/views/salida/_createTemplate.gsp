@@ -120,16 +120,20 @@
 			
 			
 			<tr>
-				<td><label for="entrega">Entrega</label> <g:select
+				<td colspan="3" ><label for="entrega">Entrega</label> <g:select
 						name="entrega" from="${usuariosList}" optionKey="id" class="cabecera" 
 						optionValue="nombre" value="${salidaInstance?.entrego?.id}" 
 						noSelection="${['':'SELECCIONE ENTREGA']}" /></td>
-
-				<td><label for="recibe">Recibe</label> <g:textField
-						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" size="10" /></td>
+				
+			</tr>
+			
+			<tr>
+				<td colspan="2"><label for="recibe">Recibe</label> <g:textField
+						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" size="50" /></td>
 
 				<td><label for="autoriza">Autoriza</label> <g:textField
-						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" size="10" /></td>
+						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" size="50" /></td>						
+				
 			</tr>
 			
 			<g:if test="${salidaInstance?.almacen != 'F'}" >		
@@ -159,7 +163,7 @@
 				<td><label for="unidad">Unidad</label> <g:textField
 						name="unidad" readonly="true" size="15" /></td>
 				<td><label for="costo">Costo</label> <g:textField
-						name="costo" readonly="true" size="8" />
+						name="costo" readonly="true" size="10" />
 				</td>			
 				<td><label for="disponible">Disponible</label> <g:textField
 						name="disponible" readonly="true" size="3" /></td>

@@ -52,7 +52,7 @@ class AutoCompleteService {
 	   def query = {
 		   or{
 			   ilike("descdiag", aprox)
-			   sqlRestriction("(clavediag || '') like '$aprox'")
+			   sqlRestriction("(iddiagnostico || '') like '$aprox'")
 		   }
 		   maxResults(10)
 		   order("descdiag","asc")
@@ -61,7 +61,7 @@ class AutoCompleteService {
 	   def alist = Cie09.createCriteria().list(query)
 
 	   def results = alist?.collect {
-		   def display = String.format("(%s) %s",it.clavediag,it.descdiag.trim())
+		   def display = String.format("(%s) %s",it.id,it.descdiag.trim())
 		   [id:it.id,value:display,label:display]
 	   }
 

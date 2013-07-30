@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportValeEntrada" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="358e940e-7be2-4f64-acd3-ff6c7721599d">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="759"/>
+	<property name="ireport.x" value="251"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -241,14 +241,6 @@
 	</columnHeader>
 	<detail>
 		<band height="10">
-			<rectangle>
-				<reportElement uuid="e375e64e-86f6-461b-b9f6-755ce242f8a6" stretchType="RelativeToBandHeight" x="1" y="1" width="571" height="9" backcolor="#FDF8A1">
-					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
-				</reportElement>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-			</rectangle>
 			<textField pattern="#,##0" isBlankWhenNull="true">
 				<reportElement uuid="732e3d10-f932-4018-b509-1cc2ba066ff6" x="303" y="0" width="43" height="10"/>
 				<textElement textAlignment="Right">
@@ -284,7 +276,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noLote}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="true">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="true">
 				<reportElement uuid="63ffba60-db1c-44aa-9c5a-62fce7da99bd" x="452" y="0" width="55" height="10"/>
 				<textElement textAlignment="Right">
 					<font size="6"/>
@@ -298,7 +290,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fechaCaducidad}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.0000" isBlankWhenNull="true">
+			<textField pattern="$ #,##0.0000" isBlankWhenNull="true">
 				<reportElement uuid="1ca60b9a-72d8-4117-9534-920f6b7420d1" x="514" y="0" width="57" height="10"/>
 				<textElement textAlignment="Right">
 					<font size="6"/>
@@ -398,7 +390,7 @@
 				</textElement>
 				<text><![CDATA[TOTAL:]]></text>
 			</staticText>
-			<textField pattern="¤ #,##0.0000">
+			<textField pattern="$ #,##0.0000">
 				<reportElement uuid="e1e641b4-9350-49b3-8c45-b5908f4e7cd8" x="507" y="0" width="64" height="20"/>
 				<textElement textAlignment="Right">
 					<font size="6"/>

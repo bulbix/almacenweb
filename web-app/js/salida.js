@@ -1,6 +1,6 @@
 $(document).ready(function() {	
 	
-	$("#fecha").focus()	
+	$("#folio").focus()	
 	
 	$("#fecha").datepicker({dateFormat: 'dd/mm/yy'});
 	
@@ -195,10 +195,10 @@ function consultarDetalle(){
 	      {name:'cveArt', index:'cveArt', width:50, align:'center',editable:false}, 
 	      {name:'desArticulo', index:'desArticulo', width:500,editable:false},	      
 	      {name:'unidad', index:'unidad', width:100,editable:false,align:'center'},
-	      {name:'costo', index:'costo', width:70,editable:false,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
-	      {name:'disponible', index:'disponible', width:60,editable:false,align:'center'},
-	      {name:'solicitado', index:'solicitado', width:60,editable:true,align:'center'},	      
-	      {name:'surtido', index:'surtido', width:60,editable:true,align:'center'}
+	      {name:'costo', index:'costo', width:120,editable:false,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
+	      {name:'disponible', index:'disponible', width:90,editable:false,align:'center'},
+	      {name:'solicitado', index:'solicitado', width:90,editable:true,align:'center'},	      
+	      {name:'surtido', index:'surtido', width:90,editable:true,align:'center'}
 	    ],
 	    postData:{idPadre: function() { return $('#idPadre').val() }},
 	    onSelectRow: function(id){	

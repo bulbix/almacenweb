@@ -1,4 +1,4 @@
-package mx.gob.inr.ceye
+	package mx.gob.inr.ceye
 import grails.plugins.springsecurity.SpringSecurityService;
 
 import javax.annotation.PostConstruct;
@@ -37,9 +37,9 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 		
 		Integer cantidadConvertida = cantidad
 		Double precioConvertido  = precioAlmacen(cveArt)
-		Double cociente = 1.0
-		String ualma="", uceye="";
-		Double calma=1.0, cceye = 1.0;
+		Double cociente = 1.00
+		String ualma="PIEZA", uceye="PIEZA"
+		Double calma=1.00, cceye = 1.00
 		
 		if(convertidora){
 			
@@ -52,10 +52,9 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 			cantidadConvertida = cantidadConvertida * cociente;
 			precioConvertido = precioConvertido / cociente
 						
-		}				
+		}
 		
-		//(", precioConvertido)
-		def precioFormat = String.format('%1$,.4f',precioConvertido)
+		def precioFormat = String.format('%1.4f',precioConvertido)
 		[ualma:ualma, calma:calma, uceye:uceye,cceye:cceye,cantidad:cantidadConvertida, precio:precioFormat,
 			 cociente:cociente, precioRaw:precioConvertido]
 	}

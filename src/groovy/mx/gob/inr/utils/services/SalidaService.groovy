@@ -491,6 +491,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	/****
 	 * Obtiene el costo promedio del almacen de ceye
 	 */
+	@Transactional(readOnly=true)
 	def costoPromedio(ArticuloCeye articulo, String almacen){
 		
 		def costo  = CostoPromedioCeye.createCriteria().get{

@@ -23,7 +23,8 @@ class EntradaCeyeController extends EntradaController<EntradaCeye> {
 	def convertidora(){
 		def clave = params.long('clave')
 		def cantidad = params.int('cantidad')
-		def convertidoraJSON = entradaCeyeService.convertidora(clave, cantidad) as  JSON		
+		def convertidoraJSON = entradaCeyeService.convertidora(clave, cantidad) as  JSON
+		log.info(convertidoraJSON)		
 		render convertidoraJSON
 	}
 	

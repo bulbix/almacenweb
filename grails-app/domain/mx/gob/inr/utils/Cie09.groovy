@@ -17,7 +17,7 @@ class Cie09 {
     }
 	
 	String toString(){
-		return  String.format("(%s) %s",clavediag ,descdiag)
+		return  String.format("(%s) %s",id ,descdiag)
 	}
 	
 }

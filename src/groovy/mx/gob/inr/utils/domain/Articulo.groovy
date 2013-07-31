@@ -5,8 +5,7 @@ abstract class Articulo {
 	String desArticulo
 	String unidad
 	String presentacion
-	Double movimientoProm
-	//String partida
+	Double movimientoProm	
 	String almacen
 	
 	String toString(){

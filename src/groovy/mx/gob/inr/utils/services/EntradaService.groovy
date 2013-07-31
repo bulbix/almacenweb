@@ -294,11 +294,27 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			eq('entrada.id',idEntrada)
 		}
 
+		//Para la busqueda
+		def searchOper = params.searchOper
+		def searchString = params.searchString
+		def searchField = params.searchField
+		def search = params._search		
+		
 		def criteria = entityEntradaDetalle.createCriteria()
+		
 
 		def detalle = criteria.list(max: maxRows, offset: rowOffset) {
 			eq('entrada.id',idEntrada)
-			//order(sortIndex, sortOrder)
+			
+			if(search == 'true'){
+				if(searchOper == 'eq' && searchField == 'cveArt'){
+					if(searchString)
+						eq('articulo.id',searchString.toLong())
+				}
+				 
+			}
+			
+			order('renglon', 'asc')
 		}
 
 		def totalRows = detalleCount.size();

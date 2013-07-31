@@ -4,6 +4,8 @@ import mx.gob.inr.utils.domain.Articulo;
 
 class ArticuloMaterial extends Articulo {
 	
+	String partida
+	
     static mapping = {
 		id column:'cve_art'
 		version false		

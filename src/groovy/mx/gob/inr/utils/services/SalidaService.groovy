@@ -340,7 +340,20 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
 		def idSalida  = Long.parseLong(params.idPadre)
 		
-		log.info("IDSALIDA " + params.idPadre)
+		
+		//Para la busqueda
+		def searchOper = params.searchOper
+		def searchString = params.searchString
+		def searchField = params.searchField
+		def search = params._search
+		def searchClave = ""		
+		if(search == 'true'){
+			if(searchOper == 'eq' && searchField == 'cveArt'){
+				if(searchString)
+					searchClave = " and sd.articulo.id = $searchString "
+			}
+			 
+		}
 		
 		def entitySalidaDetalleName = entitySalidaDetalle.name
 		
@@ -350,8 +363,10 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fecha
 			from $entitySalidaDetalleName sd 			
 			where sd.salida.id = $idSalida  
+			$searchClave
 			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.precioUnitario,
 			sd.cantidadPedida,sd.salida.fecha 
+			
 			order by sd.articulo.id
 
 		"""

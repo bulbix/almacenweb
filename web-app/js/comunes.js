@@ -15,7 +15,7 @@ $.fn.serializeObject = function()
    return o;
 };
 
-function autoComplete(input,url,hidden,funcSelect){
+function autoComplete(input,url,hidden,funcSelect, minimumTrigger){
 	$(input).autocomplete({
 		  source: function(request, response){
 		   $.ajax({
@@ -31,7 +31,7 @@ function autoComplete(input,url,hidden,funcSelect){
 		    }
 		   });
 		  },
-		  minLength: 2, // triggered only after minimum 2 characters have been entered.
+		  minLength: minimumTrigger, // triggered only after minimum 2 characters have been entered.
 		  select: function(event, ui) { // event handler when user selects a company from the list.
 			  $(hidden).val(ui.item.id); // update the hidden field.
 			  
@@ -42,7 +42,7 @@ function autoComplete(input,url,hidden,funcSelect){
 }
 
 function autoCompletePaciente(funcSelect){
-	autoComplete("#pacienteauto","/almacenWeb/autoComplete/listarPaciente","#idPaciente",funcSelect)
+	autoComplete("#pacienteauto","/almacenWeb/autoComplete/listarPaciente","#idPaciente",funcSelect,4)
 }
 
 function autoCompleteArticulo(funcSelect){	
@@ -56,23 +56,23 @@ function autoCompleteArticulo(funcSelect){
 				  $("#costo").currency({ region: 'MXN', thousands: ',', decimal: '.', decimals: 4 })
 				 funcSelect()
 		  	})	
-	})	
+	},4)	
 }
 
 function autoCompleteArea(funcSelect){
-	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect)
+	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect,3)
 }
 
 function autoCompleteProcedimiento(funcSelect){
-	autoComplete("#procedimientoauto",url + "/listarProcedimiento","#idProcedimiento",funcSelect)
+	autoComplete("#procedimientoauto",url + "/listarProcedimiento","#idProcedimiento",funcSelect,2)
 }
 
 function autoCompleteRecibio(funcSelect){
-	autoComplete("#recibeauto", url + "/listarRecibe",null,funcSelect)
+	autoComplete("#recibeauto", url + "/listarRecibe",null,funcSelect,4)
 }
 
 function autoCompleteAutorizo(funcSelect){
-	autoComplete("#autorizaauto", url + "/listarAutoriza",null,funcSelect)
+	autoComplete("#autorizaauto", url + "/listarAutoriza",null,funcSelect,4)
 }
 
 ////FUNCIONES PERSISTENCIA////////////////////

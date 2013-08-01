@@ -25,4 +25,9 @@ class EntradaDetalleCeye extends EntradaDetalle {
 		
 		importe formula: "cantidad * precio_entrada"
     }
+	
+	static constraints = {
+		fechaCaducidad(nullable:true)
+		noLote(nullable:true) 
+	 }
 }

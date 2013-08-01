@@ -1,7 +1,11 @@
 package mx.gob.inr.utils
 
 import java.util.Date;
+import mx.gob.inr.ceye.ArticuloCeye
+import mx.gob.inr.farmacia.ArticuloFarmacia
+import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
+import mx.gob.inr.utils.domain.Articulo;
 
 class UtilService {	
 	
@@ -202,6 +206,42 @@ class UtilService {
 	   
 	   def almacenMap = [F:'FARMACIA',C:'CEYE',S:'SUBCEYE',Q:'CENIAQ CEYE']	   
 	   almacenMap[almacen]
+   }
+   
+   
+   def getMovimientoPromedio(Articulo articulo,String almacen){
+	   
+	   def movimientoProm = 0.0
+	   
+	   if(articulo instanceof ArticuloFarmacia){
+		   movimientoProm = articulo.movimientoProm
+	   }
+	   else if(articulo instanceof ArticuloCeye){
+		   def costoPromedio  = CostoPromedioCeye.createCriteria().get{
+			   eq("articulo",articulo)
+			   eq("almacen",almacen)
+		   }
+		   movimientoProm = costoPromedio.movimientoProm
+	   }
+	   
+	   return movimientoProm
+   }
+   
+   def setMovimientoPromedio(Articulo articulo, double costo, String almacen){
+	   
+	   if(articulo instanceof ArticuloFarmacia){
+		   articulo.movimientoProm = costo
+		   articulo.save([validate:false])
+	   }
+	   else if(articulo instanceof ArticuloCeye){
+		   def costoPromedio  = CostoPromedioCeye.createCriteria().get{
+			   eq("articulo",articulo)
+			   eq("almacen",almacen)
+		   }
+		   costoPromedio.movimientoProm = costo
+		   costoPromedio.save([validate:false])
+	   }
+	   
    }
    
 }

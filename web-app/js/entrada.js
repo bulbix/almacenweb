@@ -74,7 +74,8 @@ function validar(){
                 recibe:{required:true},                
                 insumo: {required:true, number:true,checkInsumo:true},
                 cantidad: {required:true},
-                precio: {required:true, number:true}
+                precio: {required:true, number:true},
+                fechaCaducidad: {required:true,validateDate:true}
         },
 		messages: {
 				fecha : {required:"Requerido"},
@@ -85,7 +86,8 @@ function validar(){
 				recibe:{required:"Requerido"},
 				insumo :{required:"Requerido", number:"Numerico"},
 				cantidad:{required:"Requerido"},
-				precio: {required:"Requerido", number:"Numerico"}
+				precio: {required:"Requerido", number:"Numerico"},
+				fechaCaducidad: {required:"Requerido"}
 							
 		}
   });
@@ -323,6 +325,10 @@ function controlesHead(){
 
 function detalleAdd(){
 	
+	$("#insumo").focus(function(){	
+		limpiarRenglonDetalle()
+	});
+	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13 && $("#insumo").valid() ) {
 			$.getJSON(url + "/buscarArticulo",{id:this.value})
@@ -413,6 +419,7 @@ function agregar(){
 		 $("#caducidadlast").html($("#fechaCaducidad").val());	 			 
 		
 		 limpiarRenglonDetalle()
+		 $("#insumo").focus()
 		 $("#folioAlmacen").prop('disabled', true);
 		
 	 }
@@ -423,8 +430,11 @@ function agregar(){
 /////////////////FUNCIONES PROPIAS////////////
 
 function maskDates(){
-	 //$("#fecha").mask("99/99/9999");	
-	 $("#fechaCaducidad").mask("99/99/9999");
+	/*$("#fechaCaducidad").datepicker({
+		dateFormat: 'dd/mm/yy',
+		showButtonPanel: true,
+		changeMonth: true,
+		changeYear: true});*/
 }
 
 function consultarDetalleMaterial(){

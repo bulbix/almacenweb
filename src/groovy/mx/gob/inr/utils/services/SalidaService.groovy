@@ -112,13 +112,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salidaDetalle.fechaCaducidad = it.fechaCaducidad
 			salidaDetalle.noLote = it.noLote
 			
-			if(salida instanceof SalidaFarmacia){
-				salidaDetalle.precioUnitario = articulo.movimientoProm							
-			}
-			else if(salida instanceof SalidaCeye){
-				salidaDetalle.precioUnitario = 	costoPromedio(articulo,almacen)			
-			}
-			
+			salidaDetalle.precioUnitario = costoPromedio(articulo, almacen)			
 			
 			salidaDetalle.presupuesto = null
 			salidaDetalle.actividad = null
@@ -309,7 +303,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
 	@Override
 	@Transactional
-	def borrarDetalle(Long idSalida, Long clave){
+	def borrarDetalle(Long idSalida, Long clave, String almacen=null){
 		
 		def detalle = entitySalidaDetalle.createCriteria().list(){
 			eq('salida.id', idSalida)
@@ -509,13 +503,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	 */
 	@Transactional(readOnly=true)
 	def costoPromedio(ArticuloCeye articulo, String almacen){
-		
-		def costo  = CostoPromedioCeye.createCriteria().get{
-			eq("articulo",articulo)
-			eq("almacen",almacen)
-		}
-		
-		costo.movimientoProm		
+		utilService.getMovimientoPromedio(articulo, almacen)
 	}
 
 	@Override

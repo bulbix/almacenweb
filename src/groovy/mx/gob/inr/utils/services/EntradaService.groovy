@@ -82,7 +82,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		entradaDetalle.articulo = articulo
 		entradaDetalle.cantidad = jsonDetalle.cantidad as double
 		entradaDetalle.existencia = jsonDetalle.cantidad as double
-		entradaDetalle.noLote = jsonDetalle.noLote
+		
 		entradaDetalle.precioEntrada = jsonDetalle.precioEntrada as double
 
 		if(!renglon)
@@ -90,18 +90,26 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		else
 			entradaDetalle.renglon = renglon
 
-
-		try{
-			entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonDetalle.fechaCaducidad)
+		if(entradaDetalle instanceof EntradaDetalleFarmacia){
+			entradaDetalle.noLote = jsonDetalle.noLote	
+			try{
+				entradaDetalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",jsonDetalle.fechaCaducidad)
+			}
+			catch(Exception e){
+				entradaDetalle.fechaCaducidad = new Date()
+			}
 		}
-		catch(Exception e){
+		else if(entradaDetalle instanceof EntradaDetalleCeye){
+			entradaDetalle.noLote = null
 			entradaDetalle.fechaCaducidad = null
 		}
-
-		entradaDetalle.save([validate:false])
 		
-		this.actualizarCostoPromedio(entradaDetalle,almacen)
 
+		
+
+		this.getCostoPromedio(entradaDetalle,almacen)
+		
+		entradaDetalle.save([validate:false])
 	}
 
 	@Override
@@ -165,7 +173,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		log.info("SON salidas" + salidasDetalle)
 		
 		if(!salidasDetalle){		
-			cancelarCostoPromedio(entrada,almacen)
+			cancelarTodoCostoPromedio(entrada,almacen)
 			entrada.estado = 'C'
 			entrada.save([validate:false])
 			return "Cancelado"
@@ -209,7 +217,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	@Override
-	def actualizarDetalle(Long idEntrada, params,String almacen=null){
+	def actualizarDetalle(Long idEntrada, params,String almacen){
 
 		
 		def clave = params.long('id')
@@ -217,8 +225,8 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		def precioEntrada = params.double('precioEntrada') 
 		
 		def detalle = entityEntradaDetalle.createCriteria().get{
-			eq('entrada.id', idEntrada)
-			eq("articulo.id", clave)
+			entrada { eq('id', idEntrada)}
+			articulo {eq("id", clave)}
 			maxResults(1)
 		}
 
@@ -243,37 +251,48 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			
 			detalle.existencia += (cantidad - detalle.cantidad)
 			detalle.cantidad = cantidad
-			detalle.precioEntrada = precioEntrada
-			detalle.noLote = params.noLote
-						
-			try{
-				if(params.fechaCaducidad)
-					detalle.fechaCaducidad = new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
+			detalle.precioEntrada = precioEntrada			
+			
+			if(detalle instanceof EntradaDetalleFarmacia){
+				detalle.noLote = params.noLote
+				try{
+					detalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
+				}
+				catch(Exception e){
+					detalle.fechaCaducidad = new Date()
+					return "Formato fecha caducidad invalido"
+				}
 			}
-			catch(Exception e){
-				return "Formato fecha caducidad invalido"
+			else if(detalle instanceof EntradaDetalleCeye){
+				detalle.noLote = null
 				detalle.fechaCaducidad = null
-			}
+			}		
 		}
 
-		detalle.save([validate:false])
+		this.actualizarCostoPromedio(detalle,almacen)		
+		detalle.save([validate:false])	
 		
 		return "success"
 	}
 
 	@Override
-	def borrarDetalle(Long idEntrada, Long clave){
+	def borrarDetalle(Long idEntrada, Long clave, String almacen){
 		
 		def salidaDetalle = salidasDetalle(idEntrada,clave)
 		
 		if(salidaDetalle.size() != 0){
 			return "Clave ya tiene salida"
 		}
-		
-		def detalle = entityEntradaDetalle.createCriteria().list(){
-				eq('entrada.id', idEntrada)
-				eq("articulo.id", clave)
-			}*.delete()	
+			
+		def entradasDetalle = entityEntradaDetalle.createCriteria().list(){
+			entrada { eq('id', idEntrada)}
+			articulo {eq("id", clave)}
+		}
+			
+		for(entradaDetalle in entradasDetalle){			
+			this.cancelarCostoPromedio(entradaDetalle,almacen)
+			entradaDetalle.delete()
+		}
 		
 		return "success"
 	}
@@ -495,80 +514,124 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		else
 			return disponible
 	}
+	
+	def disponibilidadArticuloAnio(Long clave, Date fecha,String almacen, E entradaParam = null){
 		
-	def getMovimientoPromedio(Articulo articulo,String almacen){
+		def criteria = entityEntradaDetalle.createCriteria()
 		
-		def movimientoProm = 0.0
+		Calendar fechaCal = Calendar.getInstance();
+		fechaCal.setTime(fecha);
+ 
+		int anio = fechaCal.get(Calendar.YEAR);
 		
-		if(articulo instanceof ArticuloFarmacia){
-			movimientoProm = articulo.movimientoProm
-		}
-		else if(articulo instanceof ArticuloCeye){
-			def costoPromedio  = CostoPromedioCeye.createCriteria().get{
-				eq("articulo",articulo)
-				eq("almacen",almacen)
+		def disponible = criteria.get {
+		
+			projections {
+				sum("existencia")
 			}
-			movimientoProm = costoPromedio.movimientoProm
+		
+			entrada {
+				eq("almacen", almacen)
+				eq("estado","A")				
+				sqlRestriction(" year(fecha_entrada)= $anio ")
+			}
+		
+			articulo {
+				eq("id",clave)
+			}
+			
+			if(entradaParam){
+				eq("entrada",entradaParam)
+			}
+			
 		}
 		
-		return movimientoProm	
+		if(!disponible)
+			return 0
+		else
+			return disponible
 	}
 	
-	def setMovimientoPromedio(Articulo articulo, double costo, String almacen){
+	
+	
+	def getCostoPromedio(entradaDetalle, String almacen){
 		
-		if(articulo instanceof ArticuloFarmacia){
-			articulo.movimientoProm = costo
-			articulo.save([validate:false])
-		}
-		else if(articulo instanceof ArticuloCeye){
-			def costoPromedio  = CostoPromedioCeye.createCriteria().get{
-				eq("articulo",articulo)
-				eq("almacen",almacen)
-			}
-			costoPromedio.movimientoProm = costo
-			costoPromedio.save([validate:false])
-		}
+		double costo = 0.0
+			
+		def articulo = entradaDetalle.articulo		
+		def movimientoProm = utilService.getMovimientoPromedio(articulo,almacen)	
 		
+		def sumExistencia = disponibilidadArticuloAnio(articulo.id, entradaDetalle.entrada.fecha,almacen)
+		
+		def denominador = sumExistencia + entradaDetalle.cantidad
+		
+		if(denominador == 0.0)
+			denominador = 1.0
+		
+		costo = ((sumExistencia * movimientoProm) + (entradaDetalle.cantidad * entradaDetalle.precioEntrada)) / denominador
+		
+		if(costo < 0.0)
+			costo = 0.0
+		
+		
+		utilService.setMovimientoPromedio(articulo, costo, almacen)		
+	}
+	
+	
+	def cancelarCostoPromedio(entradaDetalle, String almacen){
+		
+		double costo = 0.0
+		
+		def articulo = entradaDetalle.articulo				
+		def movimientoProm = utilService.getMovimientoPromedio(articulo,almacen)
+		
+		def sumExistencia = disponibilidadArticuloAnio(articulo.id, entradaDetalle.entrada.fecha,almacen)
+		
+		def denominador = (sumExistencia - entradaDetalle.cantidad)
+		
+		if(denominador == 0.0)
+			denominador = 1.0
+		
+		costo = (( sumExistencia * movimientoProm)-(entradaDetalle.cantidad*entradaDetalle.precioEntrada)) / denominador
+		
+		if(costo < 0.0)
+			costo = 0.0
+		
+		utilService.setMovimientoPromedio(entradaDetalle.articulo, costo,almacen)	
 	}
 	
 	def actualizarCostoPromedio(entradaDetalle, String almacen){
 		
 		double costo = 0.0
-			
-		def articulo = entradaDetalle.articulo		
-		def movimientoProm = getMovimientoPromedio(articulo,almacen)	
 		
-		def sumExistencia = disponibilidadArticulo(articulo.id, entradaDetalle.entrada.fecha,almacen)
+		def articulo = entradaDetalle.articulo
+		def movimientoProm = utilService.getMovimientoPromedio(articulo,almacen)
 		
-		def denominador = sumExistencia + entradaDetalle.cantidad
+		def sumExistencia = disponibilidadArticuloAnio(articulo.id, entradaDetalle.entrada.fecha,almacen)
+		def sumExistenciaEntrada = disponibilidadArticuloAnio(articulo.id, entradaDetalle.entrada.fecha,almacen,entradaDetalle.entrada)
 		
-		if(denominador.equals(0.0))
+		def denominador = (sumExistencia + entradaDetalle.cantidad - sumExistenciaEntrada)
+		
+		if(denominador == 0.0)
 			denominador = 1.0
 		
-		costo = ((sumExistencia * movimientoProm) + (entradaDetalle.cantidad * entradaDetalle.precioEntrada)) / denominador
+		costo = (( (sumExistencia  - sumExistenciaEntrada) * movimientoProm)+(entradaDetalle.cantidad*entradaDetalle.precioEntrada)) / denominador
 		
-		setMovimientoPromedio(articulo, costo, almacen)
+		if(costo < 0.0)
+			costo = 0.0
+		
+		utilService.setMovimientoPromedio(entradaDetalle.articulo, costo,almacen)
 		
 	}
 	
-	def cancelarCostoPromedio(E entrada, String almacen){
-		
+	def cancelarTodoCostoPromedio(E entrad, String almacen){
 		def entradasDetalle = entityEntradaDetalle.createCriteria().list(){
-			articulo{}
-			eq("entrada", entrada)
-		}	
+			entrada { eq('id', entrad.id)}
+			articulo {}
+		}
 		
-		for(entradaDetalle in entradasDetalle){
-			
-			def sumExistenciaGeneral = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha,almacen)
-			def sumExistenciaEntrada = disponibilidadArticulo(entradaDetalle.articulo.id, entrada.fecha,almacen, entrada)
-			def movimientoProm = getMovimientoPromedio(entradaDetalle.articulo,almacen)
-			
-			double costo = (((sumExistenciaGeneral - sumExistenciaEntrada) * movimientoProm)
-				-(entradaDetalle.cantidad*entradaDetalle.precioEntrada)) / 
-				(sumExistenciaGeneral - sumExistenciaEntrada - entradaDetalle.cantidad)
-			
-			setMovimientoPromedio(entradaDetalle.articulo, costo,almacen)			
+		for(entradaDetalle in entradasDetalle){		
+			cancelarCostoPromedio(entradaDetalle, almacen)
 		}		
 		
 	}

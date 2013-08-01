@@ -27,7 +27,7 @@ interface IOperacionService <E> {
 	
 	def actualizarDetalle(Long id, jsonDetalle, String almacen)
 	
-	def borrarDetalle(Long id, Long clave)
+	def borrarDetalle(Long id, Long clave, String almacen)
 	
 	def consultarDetalle(params)
 	

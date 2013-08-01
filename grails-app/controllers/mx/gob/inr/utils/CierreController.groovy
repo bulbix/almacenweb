@@ -77,6 +77,8 @@ abstract class CierreController <C extends Cierre>  {
 	def reporte(){
 		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
+		params.locale =  new Locale("es","MX");
+		
 		Date fechaCierre = new Date().parse("dd/MM/yyyy", params.fechaCierre)
 		def data = cierreService.reporte(fechaCierre,session.almacen)
 		chain(controller: "jasper", action: "index", model: [data:data], params:params)		

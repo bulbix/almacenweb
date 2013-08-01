@@ -195,18 +195,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 				
 				cierreNuevo.save([flush:true])
 				
-				if(entityCierre instanceof CierreFarmacia){
-					articulo.movimientoProm = 	cierreNuevo.importe
-					articulo.save([flush:true])
-				}
-				else if(entityCierre instanceof CierreCeye){
-					def costo  = CostoPromedioCeye.createCriteria().get{
-						eq("articulo",articulo)
-						eq("almacen",almacen)
-					}		
-					costo.movimientoProm = cierreNuevo.importe
-					costo.save([flush:true])
-				}			
+				utilService.setMovimientoPromedio(articulo,cierreNuevo.importe,almacen)			
 				
 			}
 			

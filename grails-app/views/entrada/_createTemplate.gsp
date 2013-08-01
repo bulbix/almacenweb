@@ -131,7 +131,7 @@
 		
 		<table>
 			<tr>						
-				<td><label for="supervisa">Supervisa</label> <g:select
+				<td><label for="supervisa">Solicita</label> <g:select
 						name="supervisa" from="${usuariosList}" optionKey="id"
 						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
 						noSelection="${['':'SELECCIONE SUPERVISA']}" class="cabecera" /></td>			

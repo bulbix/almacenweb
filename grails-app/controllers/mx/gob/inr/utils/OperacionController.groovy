@@ -209,7 +209,7 @@ abstract class OperacionController<A> implements IOperacionController {
 				mensaje = servicio.actualizarDetalle(idPadre,params,session.almacen)
 				break
 			case "del":
-				mensaje = servicio.borrarDetalle(idPadre,clave)
+				mensaje = servicio.borrarDetalle(idPadre,clave,session.almacen)
 				break
 		}
 		
@@ -262,6 +262,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
+		params.locale =  new Locale("es","MX");
 		
 		long id=params.long('id')		
 		def data = servicio.reporte(id,session.almacen)

@@ -96,11 +96,8 @@ function guardar(dataDetalle){
 	
 	request.done(function(data) {
 		$('#idPadre').val(data.idPadre)		
-		$('#detalle').trigger("reloadGrid");
-		
+		$('#detalle').trigger("reloadGrid");		
 		$('.botonOperacion').show()
-		
-		$("#insumo").focus()
 	});
 }
 
@@ -211,7 +208,8 @@ function limpiarRenglonDetalle(){
 	
 	$(".busqueda :input").each(function(){
 		$(this).val('');
-	});	
+	});
+	
 }
 
 function consultarPaquete(){

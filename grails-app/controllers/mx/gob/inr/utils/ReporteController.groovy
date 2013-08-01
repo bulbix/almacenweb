@@ -74,7 +74,8 @@ class ReporteController {
 		//try{			
 			
 			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
-			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"			
+			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
+			params.locale =  new Locale("es","MX");
 			params.almacen = session.almacen
 					
 			def data = reporteService."$methodName"(params) //Llamada dinamica del metodo 			

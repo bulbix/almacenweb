@@ -307,6 +307,10 @@ function controlesHead(){
 
 function detalleAdd(){
 	
+	$("#insumo").focus(function(){	
+		limpiarRenglonDetalle()
+	});
+	
 	$("#insumo").keypress(function(e){	
 		 if(e.which == 13 && $("#insumo").valid() ) {
 			$.getJSON(url + "/buscarArticulo",{id:this.value})
@@ -353,6 +357,7 @@ function detalleAdd(){
 				 $('#disponiblelast').html(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()))
 				 
 				 limpiarRenglonDetalle()
+				 $("#insumo").focus()
 			 }
 		 }
 	});	

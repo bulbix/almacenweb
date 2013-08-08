@@ -221,7 +221,7 @@ class UtilService {
 			   eq("articulo",articulo)
 			   eq("almacen",almacen)
 		   }
-		   movimientoProm = costoPromedio.movimientoProm
+		   movimientoProm = costoPromedio?.movimientoProm?:0.0
 	   }
 	   
 	   return movimientoProm
@@ -238,8 +238,11 @@ class UtilService {
 			   eq("articulo",articulo)
 			   eq("almacen",almacen)
 		   }
-		   costoPromedio.movimientoProm = costo
-		   costoPromedio.save([validate:false])
+		   
+		   if(costoPromedio){		   
+			   costoPromedio.movimientoProm = costo
+			   costoPromedio.save([validate:false])
+		   }
 	   }
 	   
    }

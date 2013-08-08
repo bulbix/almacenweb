@@ -10,7 +10,7 @@ class CierreCeye extends Cierre {
 		version false
 		table 'cierre_ceye'
 		articulo column:'cve_art'
-		id composite: ['fechaCierre','articulo']
+		id composite: ['fechaCierre','articulo','almacen']
 	}
 	
 	

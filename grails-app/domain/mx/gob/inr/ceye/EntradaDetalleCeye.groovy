@@ -6,7 +6,10 @@ import mx.gob.inr.utils.domain.EntradaDetalle;
 class EntradaDetalleCeye extends EntradaDetalle {
 
     EntradaCeye entrada	
-	ArticuloCeye articulo	
+	ArticuloCeye articulo
+	Double cantidadSolicitada
+	Integer solicitadoFarmacia
+	Integer cantidadFarmacia	
 	
 	static transients = ['restarExistencia']
 

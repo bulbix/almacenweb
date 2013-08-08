@@ -9,6 +9,7 @@
 
 	<script type="text/javascript">
 			var url = '/almacenWeb/entradaCeye'
+			var almacen = 'C'
 	</script>
 				
 	<g:render template="/entrada/createTemplate" model="[usuariosList:usuariosList,entradaInstance: almacenInstance,

@@ -275,9 +275,9 @@ input[type=checkbox], input[type=radio] {
 	padding: 0;
 }
 
-input:focus, select:focus, textarea:focus {
-	background-color: #ffffff;
-	border: 1px solid #eeeeee;
+input:focus, select:focus, textarea:focus {	
+	border: 2px solid #0000FF;
+    background-color: #ffffff;	
 	outline: 0;
 	   -moz-box-shadow: 0 0 0.5em #ffffff;
 	-webkit-box-shadow: 0 0 0.5em #ffffff;
@@ -478,7 +478,7 @@ th.desc a {
 }
 
 th:hover, tr:hover {
-	background: #E1F2B6;
+	background: #EED1BE;
 }
 
 /* PAGINATION */
@@ -604,3 +604,11 @@ a.skip {
     font-size: 1em !important;
     font-weight:lighter;
  }
+
+
+.focus {
+    border: 2px solid #AA88FF;
+    background-color: #FFEEAA;
+}
+ 
+ 

@@ -5,15 +5,19 @@ $(document).ready(function() {
 		dateFormat: 'dd/mm/yy',
 		showButtonPanel: true,
 		changeMonth: true,
-		changeYear: true});
+		changeYear: true,
+		
+		onSelect: function () {	       
+	        $("#folio").focus();
+	    }
+		
+	});
 	
 	autoCompleteArticulo(function(){
 		$("#cantidad").focus()
 	});
 	
-	autoCompleteArea(function(){
-		$("#registra").focus()
-	});
+	autoCompleteArea(function(){});
 	
 	consultarDetalle();
 	detalleAdd();
@@ -73,7 +77,10 @@ function validar(){
                 supervisa:{required:true},
                 recibe:{required:true},                
                 insumo: {required:true, number:true,checkInsumo:true},
-                cantidad: {required:true},
+                solicitado: {required:true,number:true},
+                cantidad: {required:true,number:true},
+                convertidoSolicitado: {required:true,number:true},
+                convertido: {required:true,number:true},
                 precio: {required:true, number:true},
                 fechaCaducidad: {required:true,validateDate:true}
         },
@@ -85,7 +92,10 @@ function validar(){
 				supervisa:{required:"Requerido"},
 				recibe:{required:"Requerido"},
 				insumo :{required:"Requerido", number:"Numerico"},
-				cantidad:{required:"Requerido"},
+				solicitado:{required:"Requerido",number:"Numerico"},
+				cantidad:{required:"Requerido",number:"Numerico"},
+				convertidoSolicitado:{required:"Requerido",number:"Numerico"},
+				convertido:{required:"Requerido",number:"Numerico"},
 				precio: {required:"Requerido", number:"Numerico"},
 				fechaCaducidad: {required:"Requerido"}
 							
@@ -201,15 +211,16 @@ function consultarDetalle(){
 	    url: url +'/consultarDetalle',
 	    datatype: 'json',
 	    mtype: 'GET',
-	    colNames:['Clave','Descripcion', 'U. Medida','Cantidad','Precio U.','Lote','F. Caducidad'],
+	    colNames:['Clave','Descripcion', 'U. Medida','Solicitado','Cantidad','Precio U.','Lote','F. Caducidad'],
 	    colModel :[ 
 	      {name:'cveArt', index:'cveArt', width:50, align:'center',editable:false,search:true,stype:'text'}, 
 	      {name:'desArticulo', index:'desArticulo', width:500,editable:false},	      
 	      {name:'unidad', index:'unidad', width:100,editable:false,align:'center'},
+	      {name:'solicitado', index:'solicitado', width:80,editable:true,align:'center',hidden: true},
 	      {name:'cantidad', index:'cantidad', width:80,editable:true,align:'center'},
 	      {name:'precioEntrada', index:'precioEntrada', width:120,editable:true,align:'right',formatter: 'currency', formatoptions: { decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 4, prefix: "$", suffix:"", defaultValue: '0.00'}},
-	      {name:'noLote', index:'noLote', width:100,editable:true},
-	      {name:'fechaCaducidad', index:'fechaCaducidad', width:120,editable:true,sorttype:'date',align:'center'}
+	      {name:'noLote', index:'noLote', width:100,editable:true,hidden: true},
+	      {name:'fechaCaducidad', index:'fechaCaducidad', width:120,editable:true,sorttype:'date',align:'center',hidden: true}
 	    ],
 	    postData:{idPadre:function() { return $('#idPadre').val() }},
 	    onSelectRow: function(id){	
@@ -230,10 +241,10 @@ function consultarDetalle(){
 	    caption: 'Entrada Detalle'			   
 	})	
 	
-	$("#detalle").jqGrid('setGridWidth', 950);
-	$("#detalle").jqGrid('setGridHeight', 250);
 	
-	//jQuery("#detalle").filterToolbar();
+	
+	
+	
 	
 	$("#detalle").jqGrid("navGrid", "#pager",
 			{
@@ -259,6 +270,21 @@ function consultarDetalle(){
 			},	
 			{},
 			{});
+	
+	if(almacen == 'F'){		
+		jQuery("#detalle").jqGrid('showCol',"noLote");
+		jQuery("#detalle").jqGrid('showCol',"fechaCaducidad");
+		jQuery("#detalle").setColProp('precioEntrada',{editable:true});
+	}
+	else{
+		jQuery("#detalle").jqGrid('showCol',"solicitado");
+		jQuery("#detalle").setColProp('precioEntrada',{editable:false});
+		
+		
+	}
+	
+	$("#detalle").jqGrid('setGridWidth', 950);
+	$("#detalle").jqGrid('setGridHeight', 250);
 	
 }
 
@@ -335,7 +361,13 @@ function detalleAdd(){
 					.done(function( json ) {
 						 $("#artauto").val(json.desArticulo)						 
 						 $("#unidad").val(json.unidad)
-						 $("#cantidad").focus()
+						 
+						 if(almacen == 'F'){						 
+							 $("#cantidad").focus()
+						 }
+						 else{
+							 $("#solicitado").focus()
+						 }
 					})
 					.fail(function() {
 						alert("La clave " + $("#insumo").val() + " no existe")
@@ -344,23 +376,44 @@ function detalleAdd(){
 		 }
 	});
 	
+	$("#solicitado").keypress(function(e){	
+		 if(e.which == 13) {
+			 if(almacen != 'F'){
+					$.getJSON(url + "/convertidora",{clave:$("#insumo").val(),cantidad:this.value})
+						.done(function( json ) {							 
+							 $("#precio").val(json.precio)
+							 $("#convertidoSolicitado").val(json.cantidad)
+							 $("#ualmacen").val(json.ualma)
+							 $("#calmacen").val(json.calma)
+							 $("#uceye").val(json.uceye)
+							 $("#cceye").val(json.cceye)
+							 $("#cociente").val(json.cociente)
+							 
+							 $("#cantidad").focus()
+						})
+			}
+		 }
+	});
+	
 	$("#cantidad").keypress(function(e){	
 		 if(e.which == 13) {
 			
 			$("#precio").focus()
-			 
-			$.getJSON(url + "/convertidora",{clave:$("#insumo").val(),cantidad:this.value})
-				.done(function( json ) {
-					 $("#precio").val(json.precio)
-					 $("#convertido").val(json.cantidad)
-					 $("#ualmacen").val(json.ualma)
-					 $("#calmacen").val(json.calma)
-					 $("#uceye").val(json.uceye)
-					 $("#cceye").val(json.cceye)
-					 $("#cociente").val(json.cociente)
-					 
-					 $("#convertido").focus()
-			})
+			
+			if(almacen != 'F'){
+				$.getJSON(url + "/convertidora",{clave:$("#insumo").val(),cantidad:this.value})
+					.done(function( json ) {
+						 $("#precio").val(json.precio)
+						 $("#convertido").val(json.cantidad)
+						 $("#ualmacen").val(json.ualma)
+						 $("#calmacen").val(json.calma)
+						 $("#uceye").val(json.uceye)
+						 $("#cceye").val(json.cceye)
+						 $("#cociente").val(json.cociente)
+						 
+						 $("#convertido").focus()
+				})
+			}
 			 
 					
 		 }
@@ -403,7 +456,10 @@ function agregar(){
 		 
 		 
 		 var data = [{	cveArt:$("#insumo").val(),
-			 			cantidad:cantidad,
+			 			solicitadoFarmacia:$("#solicitado").val(),
+			 			cantidadFarmacia:$("#cantidad").val(),			 			
+			 			solicitado:$("#convertidoSolicitado").val(),
+			 			cantidad:cantidad,			 			
 			 			precioEntrada:$("#precio").val(),
 			 			noLote:$("#noLote").val(),
 			 			fechaCaducidad:$("#fechaCaducidad").val()}];
@@ -412,7 +468,12 @@ function agregar(){
 		 
 		 $("#clavelast").html($("#insumo").val());
 		 $("#deslast").html($("#artauto").val());
-		 $("#unidadlast").html($("#unidad").val());		 
+		 $("#unidadlast").html($("#unidad").val());
+		 
+		 if(almacen != 'F'){
+			 $("#solicitadolast").html($("#convertidoSolicitado").val());		
+		 }
+		 
 		 $("#cantidadlast").html(cantidad);		 
 		 $("#preciolast").html($("#precio").val());
 		 $("#lotelast").html($("#noLote").val());

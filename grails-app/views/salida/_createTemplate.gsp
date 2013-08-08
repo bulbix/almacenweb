@@ -68,13 +68,13 @@
 	<input type="hidden" id="existeCierre" value="${existeCierre}" />
 	<input type="hidden" id="estado" value="${salidaInstance?.estado}" />
 
-	<form id="formPadre">
+	<form id="formPadre" action="">
 
 		<input type="hidden" value="${salidaInstance?.id}" name="idPadre" id="idPadre" />
 
 		<table>
 			<tr>
-				<td><label for="fechaa">Fecha</label> <g:textField
+				<td><label for="fecha">Fecha</label> <g:textField
 						name="fecha" class="cabecera"
 						value="${salidaInstance?.fecha.format('dd/MM/yyyy')}"
 						size="9" /></td>
@@ -82,25 +82,26 @@
 				<td><label for="folio">Folio</label> <g:textField
 						name="folio" 
 						value="${salidaInstance?.folio}" size="5" /></td>
-						
-				<g:if test="${salidaInstance?.almacen != 'F'}">
-					<td><label for="nosala">No. Sala</label> <g:textField
-							 name="nosala" 	value="${salidaInstance?.nosala}" size="5" /></td>
-				</g:if>				
-				<g:else>
-					<td></td>
-				</g:else>
+				
+				<td>		
+					<g:if test="${salidaInstance?.almacen != 'F'}">
+						<label for="nosala">No. Sala</label> <g:textField
+								 name="nosala" 	value="${salidaInstance?.nosala}" size="5" />
+					</g:if>
+				</td>
 			</tr>
-
+		</table>
+		
+		<table>
 			<tr>
-				<td colspan="3"><label for="areaauto">Area</label> <g:textField
+				<td><label for="areaauto">Area</label> <g:textField
 						name="areaauto" style="width: 700px;" 
 						value="${salidaInstance?.area}" /> <input type="hidden" class="cabecera" 
 					name="cveArea" id="cveArea" value="${salidaInstance?.area?.id}" />
 				</td>
+			</tr>
 			<tr>
-			<tr>
-				<td colspan="3"><label for="pacienteauto">Paciente</label> <g:textField
+				<td><label for="pacienteauto">Paciente</label> <g:textField
 						name="pacienteauto" style="width: 700px;"
 						value="${salidaInstance?.paciente}" /> <input type="hidden"
 					name="idPaciente" id="idPaciente"
@@ -109,44 +110,53 @@
 			
 			<g:if test="${salidaInstance?.almacen != 'F'}">
 				<tr>
-					<td colspan="3"><label for="procedimientoauto">Procedimiento</label> <g:textField
+					<td><label for="procedimientoauto">Procedimiento</label> <g:textField
 							name="procedimientoauto" style="width: 700px;"
 							value="${salidaInstance?.diagnostico}" /> <input type="hidden"
 						name="idProcedimiento" id="idProcedimiento"
 						value="${salidaInstance?.diagnostico?.id}" /></td>
 				<tr>
 			
-			</g:if>
+			</g:if>	
+		</table>		
 			
+		<table>
+			<tr>
+				<td>				
+					<g:if test="${salidaInstance?.almacen == 'F'}">	
+						<label for="recibe">Recibe</label> 
+					</g:if>
+					<g:else>
+						<label for="recibe">Solicita</label>
+					</g:else>
+					
+					<g:textField name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" size="50" />				
+				</td>
+
+				<td>
+					<label for="autoriza">Autoriza</label>
+					<g:textField name="autorizaauto" value="${salidaInstance?.jefeServicio}" 
+					class="cabecera" size="50" />
+				</td>
+			</tr>			
 			
 			<tr>
-				<td colspan="3" ><label for="entrega">Entrega</label> <g:select
+				<td><label for="entrega">Entrega</label><g:select
 						name="entrega" from="${usuariosList}" optionKey="id" class="cabecera" 
 						optionValue="nombre" value="${salidaInstance?.entrego?.id}" 
-						noSelection="${['':'SELECCIONE ENTREGA']}" /></td>
+						noSelection="${['':'SELECCIONE ENTREGA']}" />
+				</td>
 				
-			</tr>
-			
-			<tr>
-				<td colspan="2"><label for="recibe">Recibe</label> <g:textField
-						name="recibeauto" value="${salidaInstance?.recibio}" class="cabecera" size="50" /></td>
-
-				<td><label for="autoriza">Autoriza</label> <g:textField
-						name="autorizaauto" value="${salidaInstance?.jefeServicio}" class="cabecera" size="50" /></td>						
-				
-			</tr>
-			
-			<g:if test="${salidaInstance?.almacen != 'F'}" >		
-				<tr>		
-					<td colspan="3" >
+				<g:if test="${salidaInstance?.almacen != 'F'}" >
+					<td>
 						<label for="paqueteq">Paquete Quirurgico</label>
 						<g:select name="paqueteq" from="${PaqueteTipoQuirurgicoCeye.list()}" optionKey="tipo"
 						optionValue="descripcion" value="${salidaInstance?.paqueteq}" 
 						noSelection="${['':'SELECCIONE PAQUETE']}" />
 						<input type="button" id="guardarPaquete" style="display:none" value="Guardar" />
-					</td>
-				</tr>		
-			</g:if>
+					</td>				
+				</g:if>				
+			</tr>
 
 		</table>
 

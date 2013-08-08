@@ -32,6 +32,7 @@ function autoComplete(input,url,hidden,funcSelect, minimumTrigger){
 		   });
 		  },
 		  minLength: minimumTrigger, // triggered only after minimum 2 characters have been entered.
+		  autoFocus: true,
 		  select: function(event, ui) { // event handler when user selects a company from the list.
 			  $(hidden).val(ui.item.id); // update the hidden field.
 			  
@@ -60,11 +61,11 @@ function autoCompleteArticulo(funcSelect){
 }
 
 function autoCompleteArea(funcSelect){
-	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect,3)
+	autoComplete("#areaauto",url + "/listarArea","#cveArea",funcSelect,1)
 }
 
 function autoCompleteProcedimiento(funcSelect){
-	autoComplete("#procedimientoauto",url + "/listarProcedimiento","#idProcedimiento",funcSelect,2)
+	autoComplete("#procedimientoauto",url + "/listarProcedimiento","#idProcedimiento",funcSelect,1)
 }
 
 function autoCompleteRecibio(funcSelect){
@@ -259,5 +260,3 @@ function guardarTodo(boton){
 	
 	$(boton).hide()
 }
-
-

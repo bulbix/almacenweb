@@ -99,7 +99,10 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				entradaDetalle.fechaCaducidad = new Date()
 			}
 		}
-		else if(entradaDetalle instanceof EntradaDetalleCeye){
+		else if(entradaDetalle instanceof EntradaDetalleCeye){			
+			entradaDetalle.solicitadoFarmacia = jsonDetalle.solicitadoFarmacia as int
+			entradaDetalle.cantidadFarmacia  = jsonDetalle.cantidadFarmacia as int
+			entradaDetalle.cantidadSolicitada = jsonDetalle.solicitado as double 			
 			entradaDetalle.noLote = null
 			entradaDetalle.fechaCaducidad = null
 		}
@@ -221,8 +224,10 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		
 		def clave = params.long('id')
-		def cantidad = params.double('cantidad')
-		def precioEntrada = params.double('precioEntrada') 
+		def cantidad = params.double('cantidad')		
+		def precioEntrada = params.double('precioEntrada')
+		
+		def solicitado = params.double('solicitado')
 		
 		def detalle = entityEntradaDetalle.createCriteria().get{
 			entrada { eq('id', idEntrada)}
@@ -230,10 +235,18 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			maxResults(1)
 		}
 
-		if(detalle){
+		if(detalle){		
 			
-			if(precioEntrada == null || precioEntrada < 0.0){
-				return "Precio Invalido"
+			//Para el modulo de CEYE
+			if(detalle instanceof EntradaDetalleCeye){
+				if(solicitado ==null || solicitado < 0.0){
+					return "Solicitado Invalido"
+				}				
+			}
+			else if(detalle instanceof EntradaDetalleFarmacia){
+				if(precioEntrada == null || precioEntrada < 0.0){
+					return "Precio Invalido"
+				}
 			}
 			
 			if(cantidad ==null || cantidad < 0.0){
@@ -250,10 +263,10 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			}				
 			
 			detalle.existencia += (cantidad - detalle.cantidad)
-			detalle.cantidad = cantidad
-			detalle.precioEntrada = precioEntrada			
+			detalle.cantidad = cantidad						
 			
 			if(detalle instanceof EntradaDetalleFarmacia){
+				detalle.precioEntrada = precioEntrada
 				detalle.noLote = params.noLote
 				try{
 					detalle.fechaCaducidad =  new Date().parse("dd/MM/yyyy",params.fechaCaducidad)
@@ -264,6 +277,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				}
 			}
 			else if(detalle instanceof EntradaDetalleCeye){
+				detalle.cantidadSolicitada = solicitado
 				detalle.noLote = null
 				detalle.fechaCaducidad = null
 			}		
@@ -335,16 +349,29 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			
 			order('renglon', 'asc')
 		}
+		
+		
 
 		def totalRows = detalleCount.size();
 		def numberOfPages = Math.ceil(totalRows / maxRows)
 
 		def results = detalle?.collect {
-			[
-				cell:[it.articulo.id,it.articulo.desArticulo?.trim(),
-					it.articulo.unidad?.trim(),it.cantidad,it.precioEntrada,
+			
+			if(entityEntradaDetalle.name.contains("Ceye")){
+				[cell:[it.articulo.id,it.articulo.desArticulo?.trim(),
+						it.articulo.unidad?.trim(),
+						it.cantidadSolicitada,it.cantidad,it.precioEntrada,
+						it.noLote,it.fechaCaducidad?.format('dd/MM/yyyy')], id: it.articulo.id
+				]				
+			}
+			else{
+				[cell:[it.articulo.id,it.articulo.desArticulo?.trim(),
+					it.articulo.unidad?.trim(),0,it.cantidad,it.precioEntrada,
 					it.noLote,it.fechaCaducidad?.format('dd/MM/yyyy')], id: it.articulo.id
-			]
+				]
+			}
+			
+			
 		}
 
 		def jsonData = [rows: results, page: currentPage, records: totalRows, total: numberOfPages]

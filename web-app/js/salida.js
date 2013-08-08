@@ -1,4 +1,4 @@
-$(document).ready(function() {	
+$(document).ready(function() {
 	
 	$("#folio").focus()	
 	
@@ -13,29 +13,15 @@ $(document).ready(function() {
 		$("#solicitado").focus()
 	});
 		
-	autoCompleteArea(function(){
-		$("#pacienteauto").focus()
-	});	
+	autoCompleteArea(function(){})	
 	
-	autoCompletePaciente(function(){
-		
-		if($("#procedimientoauto").val() != undefined)
-			$("#procedimientoauto").focus()
-		else		
-			$("#entrega").focus()
-	});
+	autoCompletePaciente(function(){})
 	
-	autoCompleteProcedimiento(function(){
-		$("#entrega").focus()
-	})
+	autoCompleteProcedimiento(function(){})
 	
-	autoCompleteRecibio(function(){
-		$("#autorizaauto").focus()	
-	})
+	autoCompleteRecibio(function(){})
 	
-	autoCompleteAutorizo(function(){
-		$("#insumo").focus()		
-	})
+	autoCompleteAutorizo(function(){})
 	
 	consultarDetalle();
 	detalleAdd();
@@ -134,7 +120,7 @@ function capturar(){
 			 if($("#procedimientoauto").val() != undefined)
 					$("#procedimientoauto").focus()
 				else		
-					$("#entrega").focus()	
+					$("#recibeauto").focus()	
 		 }
 	});
 	
@@ -142,20 +128,13 @@ function capturar(){
 	
 	procedimiento.keypress(function(e){	
 		 if(e.which == 13) {
-			 $("#entrega").focus()	
+			 $("#recibeauto").focus()	
 		 }
 	});
 
 	procedimiento.change( function() {
 		if(procedimiento.val() == "")
 			$("#idProcedimiento").val("")
-	});
-	
-	
-	$("#entrega").keypress(function(e){	
-		 if(e.which == 13) {
-			$("#recibeauto").focus()		
-		 }
 	});
 	
 	$("#recibeauto").keypress(function(e){	
@@ -166,9 +145,20 @@ function capturar(){
 	
 	$("#autorizaauto").keypress(function(e){	
 		 if(e.which == 13) {
+			$("#entrega").focus()		
+		 }
+	});
+	
+	
+	$("#entrega").keypress(function(e){	
+		 if(e.which == 13) {
 			$("#insumo").focus()		
 		 }
 	});
+	
+	
+	
+	
 	
 	$("#paqueteq").change(function(){
 		

@@ -10,6 +10,7 @@
 	
 		<script type="text/javascript">
 			var url = '/almacenWeb/salidaFarmacia'
+			var almacen = 'C'
 		</script>
 				
 		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,

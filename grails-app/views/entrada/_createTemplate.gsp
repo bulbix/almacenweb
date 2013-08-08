@@ -131,10 +131,22 @@
 		
 		<table>
 			<tr>						
-				<td><label for="supervisa">Solicita</label> <g:select
+				<td>
+				
+				<g:if test="${entradaInstance?.almacen == 'F'}">				
+						<label for="supervisa">Supervisa</label> <g:select
 						name="supervisa" from="${usuariosList}" optionKey="id"
 						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
-						noSelection="${['':'SELECCIONE SUPERVISA']}" class="cabecera" /></td>			
+						noSelection="${['':'SELECCIONE SUPERVISA']}" class="cabecera" />
+				</g:if>
+				<g:else>
+					<label for="supervisa">Solicita</label> <g:select
+						name="supervisa" from="${usuariosList}" optionKey="id"
+						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
+						noSelection="${['':'SELECCIONE SOLICITA']}" class="cabecera" />
+				</g:else>
+				
+				</td>			
 				<td><label for="recibe">Recibe</label> <g:select name="recibe"
 						from="${usuariosList}" optionKey="id" optionValue="nombre" 
 						value="${entradaInstance?.recibio?.id}" 
@@ -152,7 +164,7 @@
 
 		<table id="tblBusqueda" class="busqueda">
 			<tr>
-				<td colspan="6"><label for="artauto">Descripción
+				<td colspan="7"><label for="artauto">Descripción
 						Articulo</label> <g:textField name="artauto" style="width: 700px;" />
 				</td>
 			</tr>
@@ -162,6 +174,13 @@
 				
 				<td><label for="unidad">Unidad</label> <g:textField
 						name="unidad" readonly="true" /></td>
+
+				<td>						
+					<g:if test="${entradaInstance?.almacen != 'F'}">
+						<label for="solicitado">Solicitado</label> <g:textField
+								name="solicitado" size="3" />
+					</g:if>
+				</td>
 						
 				<td><label for="cantidad">Cantidad</label> <g:textField
 							name="cantidad" size="3" /></td>
@@ -177,9 +196,13 @@
 						name="fechaCaducidad" size="8" /></td>				
 				</g:if>
 				<g:else>
+					
+					<td><label for="convertidoSolicitado">Solicitado</label> <g:textField
+							name="convertidoSolicitado" size="5" /></td>
+					
 					<td><label for="convertido">Convertido</label> <g:textField
 							name="convertido" size="5" /></td>
-					<td></td>
+					
 				</g:else>
 			</tr>
 		</table>
@@ -216,6 +239,11 @@
 				<td><label>Clave</label></td>
 				<td><label>Descripcion</label></td>
 				<td><label>Unidad</label></td>
+				
+				<g:if test="${entradaInstance.almacen != 'F'}">
+					<td><label>Solicitado</label></td>
+				</g:if>
+				
 				<td><label>Cantidad</label></td>
 				<td><label>Precio U.</label></td>
 				
@@ -233,6 +261,11 @@
 				<td><label id="clavelast"></label></td>
 				<td><label id="deslast"></label></td>
 				<td><label id="unidadlast"></label></td>
+				
+				<g:if test="${entradaInstance.almacen != 'F'}">
+					<td><label id="solicitadolast"></label></td>
+				</g:if>
+				
 				<td><label id="cantidadlast"></label></td>
 				<td><label id="preciolast"></label></td>
 				<g:if test="${entradaInstance.almacen == 'F'}">

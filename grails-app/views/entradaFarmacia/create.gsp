@@ -9,6 +9,7 @@
 
 	<script type="text/javascript">
 			var url = '/almacenWeb/entradaFarmacia'
+			var almacen = 'F'
 	</script>				
 	
 	<g:render template="/entrada/createTemplate" 

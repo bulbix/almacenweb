@@ -68,8 +68,5 @@
 					</tr>
 				</g:each>
 				</tbody>
-			</table>
-			<div class="pagination">
-				<g:paginate total="${entradaInstanceTotal}" />
-			</div>
+			</table>			
 		</div>

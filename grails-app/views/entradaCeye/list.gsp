@@ -12,7 +12,7 @@
 		
 		
 	<div class="paginateButtons">
-		    <filterpane:paginate total="${entradaInstanceTotal}" domainBean="mx.gob.inr.ceye.EntradaCeye"/>
+		    <filterpane:paginate total="${almacenInstanceTotal}" domainBean="mx.gob.inr.ceye.EntradaCeye"/>
 		    <filterpane:filterButton text="Busqueda" appliedText="Cambiar Filtro"/>
 		    <filterpane:isNotFiltered>Lista Completa, No Filtrada!</filterpane:isNotFiltered>
 		    <filterpane:isFiltered>Filtro Aplicado!</filterpane:isFiltered>
@@ -21,7 +21,7 @@
 			
 	<filterpane:filterPane domain="mx.gob.inr.ceye.EntradaCeye" 
 		associatedProperties="usuario.username,area.desArea" 
-		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado"/>
+		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado,almacen"/>
 		
 		
 	</body>

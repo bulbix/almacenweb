@@ -28,11 +28,11 @@ hibernate {
 environments {
     development {
         dataSource {
-		   logSql = true
+		   //logSql = true
         }
 		
 		dataSource_materiales {			
-			logSql = true
+			//logSql = true
 		}
     }
     test {

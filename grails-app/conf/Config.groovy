@@ -78,7 +78,7 @@ log4j = {
 		layout:pattern(conversionPattern: '"%d{dd-MM-yyyy HH:mm:ss,SSS} Digitizer: [%p] [%C.%M] %m%n"')
     }*/
 	
-	info "grails.app"
+	//info "grails.app"
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP

@@ -8,7 +8,7 @@
 		<tr>
 			<td><label for="fechaCierre">Fecha Cierre</label> 
 				<g:textField name="fechaCierre" size="8" 
-				 value="${fechaCierre?.format('dd/MM/yyy')}" readonly="true" />
+				 value="${fechaCierre?.format('dd/MM/yyyy')}" readonly="true" />
 			</td>
 			
 			<td><label for="marbeteInicial">Marbete Inicial</label> 

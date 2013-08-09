@@ -36,20 +36,20 @@
 					<g:each in="${cierreInstanceList}" status="i" var="fechaCierre">
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 							<td>
-								${fechaCierre?.format('dd/MM/yyy')}
+								${fechaCierre?.format('dd/MM/yyyy')}
 							</td>
 							
 							<td>
 								<g:jasperReport jasper="reportCierre" format="PDF,XLSX" delimiter=" " name="ReporteCierre" 
 									controller="${controllerName}" action="reporte">		
-								<input type="hidden" name="fechaCierre" value="${fechaCierre?.format('dd/MM/yyy')}" />
+								<input type="hidden" name="fechaCierre" value="${fechaCierre?.format('dd/MM/yyyy')}" />
 								<input type="hidden" name="almacen" value="${almacen}" />								
 								</g:jasperReport>
 							
 							</td>
 														
 							<td>
-								<g:link  action="eliminar" params="[fechaCierre: fechaCierre?.format('dd/MM/yyy')]" >Eliminar</g:link>
+								<g:link  action="eliminar" onclick="return confirm('Esta seguro de eliminar el cierre?');"  params="[fechaCierre: fechaCierre?.format('dd/MM/yyyy')]" >Eliminar</g:link>
 							</td>							
 						</tr>
 					</g:each>

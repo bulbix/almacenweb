@@ -143,7 +143,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 						eq("articulo", articulo )
 					}.each{					
 						it.precioUnitario = nuevoCostoPromedio					
-						it.save()
+						it.save([validate:false])
 					}
 					
 					break;
@@ -193,7 +193,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 							
 				def cierreNuevo = calcularAjusteCierre(listaConcentradora,fechaCierre, cierreAnterior, articulo,almacen)
 				
-				cierreNuevo.save()				
+				cierreNuevo.save([validate:false])				
 				utilService.setMovimientoPromedio(articulo,cierreNuevo.importe,almacen)			
 				
 			}

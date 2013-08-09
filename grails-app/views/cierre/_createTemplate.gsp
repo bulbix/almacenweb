@@ -34,7 +34,7 @@
 		<tr>
 			<td><label for="fechaCierre">Fecha Cierre</label> <g:textField
 					name="fechaCierre" size="8"
-					value="${cierreInstance?.fechaCierre?.format('dd/MM/yyy')}" />
+					value="${cierreInstance?.fechaCierre?.format('dd/MM/yyyy')}" />
 			</td>
 		
 

@@ -22,12 +22,12 @@
 				<tr>
 					<td>
 						<label for="fechaInicial">Fecha Inicial</label>
-						<g:textField name="fechaInicial" value="${fechaInicial.format('dd/MM/yyy')}" size="8"/>
+						<g:textField name="fechaInicial" value="${fechaInicial.format('dd/MM/yyyy')}" size="8"/>
 					</td>
 				
 					<td>
 						<label for="fechaFinal">Fecha Final</label>
-						<g:textField name="fechaFinal" value="${fechaFinal.format('dd/MM/yyy')}" size="8"/>
+						<g:textField name="fechaFinal" value="${fechaFinal.format('dd/MM/yyyy')}" size="8"/>
 					</td>
 				</tr>
 			</g:if>

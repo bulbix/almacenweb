@@ -14,6 +14,7 @@ import mx.gob.inr.utils.Cie09;
 import mx.gob.inr.utils.Paciente;
 import mx.gob.inr.seguridad.Usuario;
 import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.domain.Articulo
 import mx.gob.inr.utils.domain.Salida;
 
 abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
@@ -502,7 +503,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	 * Obtiene el costo promedio del almacen de ceye
 	 */
 	@Transactional(readOnly=true)
-	def costoPromedio(ArticuloCeye articulo, String almacen){
+	def costoPromedio(Articulo articulo, String almacen){
 		utilService.getMovimientoPromedio(articulo, almacen)
 	}
 

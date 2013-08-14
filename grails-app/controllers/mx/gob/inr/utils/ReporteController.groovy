@@ -19,13 +19,17 @@ class ReporteController {
 	}
 	
 	def cargarParams(){		
-		def fechaInicial = new Date()
+		def fechaInicial = utilService.fechaPrimeroMes()
 		def fechaFinal = new Date()
 		def claveInicial = utilService.clave(entityArticulo,"min")
 		def claveFinal =  utilService.clave(entityArticulo,"max")
 		def partidaList = Partida.listOrderByDesPart()
 		
 		def areaList
+		
+		if(params.almacen){
+			session.almacen = params.almacen
+		}
 		
 		if(session.almacen == 'F')
 			areaList = CatAreaFarmacia.listOrderByDesArea()

@@ -19,28 +19,21 @@ abstract class ReporteService {
 		this.entityArticulo = entityArticulo	
 	}
 	
-	def reporteKardex(params){		
+	def reporteKardex(params){
 		
-		String nameCierre, nameVista
+		def nameVista = "v_kardex", entityCierre = CierreFarmacia		
 		
-		if(params.almacen == 'F'){
-			nameCierre = "cierre"
-			nameVista = "v_kardex"
-		}
-		else{
-			nameCierre = "cierre_ceye"
+		if(params.almacen != 'F'){
 			nameVista = "v_kardexceye"
-		}		
+			entityCierre = CierreCeye
+		}
 		
 		def claveInicial = params.long('claveInicial')
 		def claveFinal = params.long('claveFinal')
 		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
 		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
 		
-		//params.fechaInicial = fechaInicial
-		//params.fechaFinal = fechaFinal
-		
-		def articuloList = entityArticulo.createCriteria().list(){		
+		def articuloList = entityArticulo.createCriteria().list(){
 			
 			partida{
 				if(params.partida){
@@ -49,33 +42,28 @@ abstract class ReporteService {
 			}
 						
 						
-			between("id",claveInicial, claveFinal)			
+			between("id",claveInicial, claveFinal)
 			order("id","asc")
-		}				
+		}
 		
-		def db = new Sql(dataSource)		
-		def fechaCierre = utilService.obtenerFechaCierre(fechaInicial)		
-		
+		def db = new Sql(dataSource)
 		
 		def reporteKardexList = []
 		
 		for(articulo in articuloList){
 			
+			def cierre = utilService.cierreAnterior(entityCierre,fechaInicial,articulo,params.almacen)
+			
+			if(cierre){
+				
+				//cierre.fechaCierre = new java.util.Date(cierre.fechaCierre.getTime())
+				
+				reporteKardexList << [articulo:articulo,fecha:cierre.fechaCierre,folio:0,procedencia:"(EXISTENCIA AL ${cierre.fechaCierre.format('dd/MM/yyyy')})",
+				cantidad:cierre.existencia,precio:cierre.importe,importe:(cierre.existencia*cierre.importe),tipo:'CIERRE',almacen:params.almacen]
+			}
+			
 			def query =
-			""" 
-				SELECT 	c.cve_art AS articulo, 
-					   	c.fecha_cierre AS fecha, 
-					   	0 AS folio, 
-						('EXISTENCIA AL ' || fecha_cierre) AS procedencia, 
-						c.existencia AS cantidad, 
-						c.importe AS precio,
-						'CIERRE' AS tipo, 
-						almacen 
-				FROM $nameCierre c 
-				WHERE fecha_cierre = ?
-				AND cve_art = $articulo.id 
-				AND almacen = '$params.almacen' 
-			UNION ALL 
+			"""
 				SELECT * 
 				FROM $nameVista 
 				WHERE articulo = $articulo.id  
@@ -84,17 +72,17 @@ abstract class ReporteService {
 				ORDER BY fecha, folio 		
 			"""
 						
-			db.eachRow(query,[new java.sql.Date(fechaCierre.getTime()),
-				new java.sql.Date(fechaInicial.getTime()),new java.sql.Date(fechaFinal.getTime())]){			
+			db.eachRow(query,[new java.sql.Date(fechaInicial.getTime()),new java.sql.Date(fechaFinal.getTime())]){
 				
 				reporteKardexList << [articulo:articulo,fecha:it.fecha,folio:it.folio,procedencia:it.procedencia,
-							cantidad:it.cantidad,precio:it.precio,importe:(it.cantidad*it.precio),tipo:it.tipo,almacen:almacen]
+				cantidad:it.cantidad,precio:it.precio,importe:(it.cantidad*it.precio),tipo:it.tipo,almacen:params.almacen]
 			}
-		}		
+		}
 		
 		reporteKardexList
 	}
-		
+	
+	
 	def reporteExistencia(params){
 		
 		def entityCierre, entityEntradaDetalle, entitySalidaDetalle
@@ -192,6 +180,7 @@ abstract class ReporteService {
 								
 				between("fecha",fechaInicial, fechaFinal)
 				eq("estado","A")
+				eq("almacen",params.almacen)
 			}
 			
 			articulo{
@@ -263,9 +252,10 @@ abstract class ReporteService {
 				}
 				
 				if(tipo == 'S'){										
-					salida{
+					salida{						
 						between("fecha",fechaInicial, fechaFinal)
 						eq("estado","A")
+						eq("almacen",params.almacen)
 					}
 										
 					if(key == 'federal'){
@@ -281,7 +271,8 @@ abstract class ReporteService {
 				else{					
 					entrada{
 						between("fecha",fechaInicial, fechaFinal)
-						eq("estado","A")					
+						eq("estado","A")
+						eq("almacen",params.almacen)
 						
 						if(key == 'federal'){
 							or{
@@ -360,12 +351,14 @@ abstract class ReporteService {
 									
 					between("fecha",fechaInicial, fechaFinal)
 					eq("estado","A")
+					eq("almacen",params.almacen)
 				}
 			}
 			else{
 				entrada{
 					between("fecha",fechaInicial, fechaFinal)
 					eq("estado","A")
+					eq("almacen",params.almacen)
 				}
 				
 			}
@@ -417,6 +410,8 @@ abstract class ReporteService {
 		
 		consumoMap.each(){key,value ->
 			
+			
+			
 			def reporteMes = reporteList.find { r -> r.articulo == key[0] }
 			
 			if(reporteMes){
@@ -425,6 +420,7 @@ abstract class ReporteService {
 			else{
 				reporteMes = new ReporteMes(area:area,numMeses:numMeses)
 				reporteMes.articulo = key[0]
+				reporteMes.articulo.movimientoProm  = utilService.getMovimientoPromedio(key[0],params.almacen)
 				reporteMes."${key[1]}" = value
 				reporteList << reporteMes
 			}

@@ -11,6 +11,7 @@ class CierreCeye extends Cierre {
 		table 'cierre_ceye'
 		articulo column:'cve_art'
 		id composite: ['fechaCierre','articulo','almacen']
+		fechaCierre(type:'date')
 	}
 	
 	

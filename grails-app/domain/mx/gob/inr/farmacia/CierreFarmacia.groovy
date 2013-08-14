@@ -15,6 +15,7 @@ class CierreFarmacia extends Cierre {
 		table 'cierre'
 		articulo column:'cve_art'
 		id composite: ['fechaCierre','articulo']
+		fechaCierre(type:'date')
 	}
 	
 }

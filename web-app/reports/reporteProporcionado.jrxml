@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteProporcionado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="235"/>
+	<property name="ireport.x" value="340"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -18,17 +18,11 @@
 	<field name="cantidadPedida" class="java.lang.Double"/>
 	<field name="articulo" class="mx.gob.inr.utils.domain.Articulo"/>
 	<field name="cantidadSurtida" class="java.lang.Double"/>
-	<variable name="porcentaje" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[($V{sumSurtido} / $V{sumPedido}) * 100]]></variableExpression>
-	</variable>
 	<variable name="sumTotalPedido" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$V{sumPedido}]]></variableExpression>
+		<variableExpression><![CDATA[$F{cantidadPedida}]]></variableExpression>
 	</variable>
 	<variable name="sumTotalSurtido" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{cantidadSurtida}]]></variableExpression>
-	</variable>
-	<variable name="sumPorcentaje" class="java.lang.Double">
-		<variableExpression><![CDATA[($V{sumTotalSurtido}/$V{sumTotalPedido})*100.0]]></variableExpression>
 	</variable>
 	<variable name="sumSurtido" class="java.lang.Double" resetType="Group" resetGroup="articulo" calculation="Sum">
 		<variableExpression><![CDATA[$F{cantidadSurtida}]]></variableExpression>
@@ -36,10 +30,16 @@
 	<variable name="sumPedido" class="java.lang.Double" resetType="Group" resetGroup="articulo" calculation="Sum">
 		<variableExpression><![CDATA[$F{cantidadPedida}]]></variableExpression>
 	</variable>
+	<variable name="porcentaje" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{sumSurtido}/$V{sumPedido}*100.0]]></variableExpression>
+	</variable>
+	<variable name="sumPorcentaje" class="java.lang.Double">
+		<variableExpression><![CDATA[($V{sumTotalSurtido}/$V{sumTotalPedido})*100.0]]></variableExpression>
+	</variable>
 	<group name="articulo">
 		<groupExpression><![CDATA[$F{articulo}.getProperty("id")]]></groupExpression>
 		<groupHeader>
-			<band height="15">
+			<band height="10">
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="5260cb0d-edca-43a0-a013-d1702e3d5355" x="0" y="0" width="42" height="10"/>
 					<textElement textAlignment="Center">
@@ -77,8 +77,8 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{sumPedido}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Group" evaluationGroup="articulo" pattern="#,##0" isBlankWhenNull="false">
-					<reportElement uuid="af944520-a9ef-442b-8818-7851b1795146" mode="Transparent" x="515" y="0" width="57" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textField evaluationTime="Group" evaluationGroup="articulo" pattern="###0.00" isBlankWhenNull="false">
+					<reportElement uuid="5713310d-a777-4bfa-85b6-5bfaa7327a80" mode="Transparent" x="514" y="0" width="56" height="10" forecolor="#000000" backcolor="#FFFFFF"/>
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 						<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 						<paragraph lineSpacing="Single"/>
@@ -193,14 +193,6 @@
 				<text><![CDATA[Totales:]]></text>
 			</staticText>
 			<textField evaluationTime="Report" pattern="#,##0" isBlankWhenNull="false">
-				<reportElement uuid="f40d4ec7-66d0-4b6d-b3aa-91015d17afb2" mode="Transparent" x="514" y="0" width="57" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{sumPorcentaje}]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report" pattern="#,##0" isBlankWhenNull="false">
 				<reportElement uuid="c7c2fec9-6a82-430f-8903-a340689e4db8" mode="Transparent" x="457" y="0" width="53" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -215,6 +207,14 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{sumTotalPedido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="false">
+				<reportElement uuid="b9b989f9-7f0d-4524-a101-18d5263737af" mode="Transparent" x="514" y="0" width="56" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sumPorcentaje}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

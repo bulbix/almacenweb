@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportKardex" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="55603be5-5e22-40d9-a42a-05fb6405effe">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="235"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
@@ -14,7 +14,7 @@
 		<![CDATA[]]>
 	</queryString>
 	<field name="articulo" class="mx.gob.inr.utils.domain.Articulo"/>
-	<field name="fecha" class="java.sql.Date"/>
+	<field name="fecha" class="java.util.Date"/>
 	<field name="folio" class="java.lang.Integer"/>
 	<field name="procedencia" class="java.lang.String"/>
 	<field name="cantidad" class="java.math.BigDecimal"/>

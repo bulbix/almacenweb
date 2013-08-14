@@ -1,11 +1,13 @@
 package mx.gob.inr.utils
 
 import java.util.Date;
+
 import mx.gob.inr.ceye.ArticuloCeye
 import mx.gob.inr.farmacia.ArticuloFarmacia
 import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
+import mx.gob.inr.utils.domain.Cierre
 
 class UtilService {	
 	
@@ -21,6 +23,19 @@ class UtilService {
 			}
 		}		
 		number
+	}
+	
+	/****
+	 * Regresa el primer dia del mes en curso
+	 * @param tipo
+	 * @return
+	 */
+	def fechaPrimeroMes(){
+		def fecha = new Date()		
+		
+		def fechaPrimero = new Date()
+		fechaPrimero.set(month:fecha.getAt(Calendar.MONTH),date:1)
+		fechaPrimero
 	}
 		
    def fechasAnioActual(){
@@ -145,35 +160,42 @@ class UtilService {
 	   	return false
    }
    
-   /****
-	* Obtiene la fecha de cierre de acuerdo ala fechaInicial
-	*
-	* @param fecha
-	* @return
-	*/
-   def obtenerFechaCierre(Date fecha) {
-
-	   Calendar fechaCal = Calendar.getInstance();
-	   fechaCal.setTime(fecha);
-
-	   int anio = fechaCal.get(Calendar.YEAR);
-	   int mes = fechaCal.get(Calendar.MONTH);
-
-	   if (mes == 0) {// mes en 11 y anio menos uno
-		   anio = anio - 1;
-		   mes = 11;
-	   } else {// restamos un mes
-		   mes -= 1;
-	   }
-
-	   Date fechaCierre;
-
-	   Calendar calFin = Calendar.getInstance();
-	   calFin.set(anio, mes, 1);
-	   calFin.set(anio, mes, calFin.getActualMaximum(Calendar.DAY_OF_MONTH));
-	   fechaCierre = calFin.getTime();
-	   return fechaCierre;
-   }
+   def cierreAnterior(entityCierre, Date fechaCierre, Articulo articulo, String almacen){
+		
+		def mFechaCierre = fechaDesglosada(fechaCierre)
+		def fechaCierreAnterior = new Date()
+		
+		Calendar cal = Calendar.getInstance();
+		
+		if(mFechaCierre.mes == 0){			
+			cal.set(mFechaCierre.anio - 1 , 11 , 1)//01/12/anio ANterior			
+		}
+		else{			
+			cal.set(mFechaCierre.anio , mFechaCierre.mes -1 , 1) //01/mes ANterior/anio Cierre			
+		}
+		
+		fechaCierreAnterior  = cal.getTime();
+		
+		def mFechaCierreAnterior = fechaDesglosada(fechaCierreAnterior)
+		
+		def cierre = entityCierre.createCriteria().get{
+			sqlRestriction("month(fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
+			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
+			eq("articulo",articulo)
+			eq("almacen", almacen)
+		}
+		
+		if(!cierre){			
+			cierreAnterior = entityCierre.newInstance()
+			def result = new Date()
+			result.set(year:2000,month:0,date:1)
+			cierreAnterior.fechaCierre = result
+			cierreAnterior.existencia = 0
+			cierreAnterior.importe = 0.0
+		}
+		
+		return cierre
+	}
    
    /***
     * 

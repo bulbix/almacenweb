@@ -32,33 +32,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 		this.entityCierre = entityCierre		
 	}	
 	
-	def cierreAnterior(Date fechaCierre, A articulo, String almacen){
-		
-		def mFechaCierre = utilService.fechaDesglosada(fechaCierre)
-		def fechaCierreAnterior = new Date()
-		
-		if(mFechaCierre.mes == 0){
-			Calendar cal = Calendar.getInstance();
-			cal.set(mFechaCierre.anio - 1 , 11 , 1)//01/12/anio ANterior
-			fechaCierreAnterior  = cal.getTime();
-		}
-		else{
-			Calendar cal = Calendar.getInstance();
-			cal.set(mFechaCierre.anio , mFechaCierre.mes -1 , 1) //01/mes ANterior/anio Cierre
-			fechaCierreAnterior  = cal.getTime();
-		}
-		
-		def mFechaCierreAnterior = utilService.fechaDesglosada(fechaCierreAnterior)
-		
-		def cierre = entityCierre.createCriteria().get{
-			sqlRestriction("month(fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
-			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
-			eq("articulo",articulo)
-			eq("almacen", almacen)
-		}
-		
-		return cierre
-	}
+	
 	
 	def concentrarEntradaSalida(Date fechaCierre, A articulo,String almacen){
 	
@@ -181,15 +155,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			if(articulo){
 			
 				def listaConcentradora = concentrarEntradaSalida(fechaCierre, articulo, almacen)
-				def cierreAnterior  = cierreAnterior(fechaCierre, articulo,almacen)
-				
-				if(!cierreAnterior){
-					
-					cierreAnterior = entityCierre.newInstance()
-					cierreAnterior.existencia = 0
-					cierreAnterior.importe = 0.0
-				}
-				
+				def cierreAnterior  = utilService.cierreAnterior(entityCierre,fechaCierre, articulo,almacen)
 							
 				def cierreNuevo = calcularAjusteCierre(listaConcentradora,fechaCierre, cierreAnterior, articulo,almacen)
 				

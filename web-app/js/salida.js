@@ -273,7 +273,7 @@ function controlesHead(){
 	}*/
 	
 	$("#guardarPaquete").click(function(){	
-		if($(".cabecera").valid() && $("#folio").valid()){
+		if(confirm('Esta seguro de guardar el paquete?') && $(".cabecera").valid() && $("#folio").valid()){
 			guardarTodo(this)
 			$("#paqueteq").prop('disabled', true)
 			$(".busqueda").show()
@@ -281,13 +281,15 @@ function controlesHead(){
 	});
 	
 	$("#actualizar").click(function(){		
-		if($(".cabecera").valid()){
+		if(confirm('Esta seguro de actualizar la salida?') && $(".cabecera").valid()){
 			actualizar();
 		}	
 	})
 	
 	$("#cancelar").click(function(){
-		cancelar()
+		if(confirm('Esta seguro de cancelar la salida?')){
+			cancelar()
+		}
 	})
 	
 }

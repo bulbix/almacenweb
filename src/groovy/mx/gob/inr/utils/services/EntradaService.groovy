@@ -99,9 +99,19 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				entradaDetalle.fechaCaducidad = new Date()
 			}
 		}
-		else if(entradaDetalle instanceof EntradaDetalleCeye){			
-			entradaDetalle.solicitadoFarmacia = jsonDetalle.solicitadoFarmacia as int
-			entradaDetalle.cantidadFarmacia  = jsonDetalle.cantidadFarmacia as int
+		else if(entradaDetalle instanceof EntradaDetalleCeye){		
+			
+			//Validacion por si viene de un paquete
+			if(jsonDetalle.solicitadoFarmacia)						
+				entradaDetalle.solicitadoFarmacia = jsonDetalle.solicitadoFarmacia as int
+			else
+				entradaDetalle.solicitadoFarmacia = jsonDetalle.solicitado as int 
+			
+			if(jsonDetalle.cantidadFarmacia)
+				entradaDetalle.cantidadFarmacia  = jsonDetalle.cantidadFarmacia as int
+			else
+				entradaDetalle.cantidadFarmacia  = jsonDetalle.cantidad as int
+			
 			entradaDetalle.cantidadSolicitada = jsonDetalle.solicitado as double 			
 			entradaDetalle.noLote = null
 			entradaDetalle.fechaCaducidad = null

@@ -265,8 +265,9 @@ class UtilService {
 			   costoPromedio.movimientoProm = costo
 			   costoPromedio.save([validate:false])
 		   }
-	   }
-	   
-   }
+	   }	   
+   
+   } 
+  
    
 }

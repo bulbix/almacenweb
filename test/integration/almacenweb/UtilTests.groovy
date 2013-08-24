@@ -17,7 +17,7 @@ class UtilTests {
 	
 	@Test
 	void encodePassword(){
-		String password = 'e'
+		String password = 'muñoz'
 		assertEquals(springSecurityService.encodePassword(password),"huevos")
 	}
 	

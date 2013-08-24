@@ -54,7 +54,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 						
 		}
 		
-		def precioFormat = String.format('%1.4f',precioConvertido)
+		def precioFormat = String.format(new Locale("es","MX"), '%1.4f',precioConvertido)
 		[ualma:ualma, calma:calma, uceye:uceye,cceye:cceye,cantidad:cantidadConvertida, precio:precioFormat,
 			 cociente:cociente, precioRaw:precioConvertido]
 	}
@@ -81,7 +81,7 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 			def convertido = convertidora(it.articulo.id, it.cantidad)
 								
 			[cveArt:it.articulo.id,desArticulo:it.articulo.desArticulo?.trim(),unidad:it.articulo.unidad?.trim(),
-			cantidad:it.cantidad,precioEntrada:convertido.precioRaw,noLote:null,fechaCaducidad:null]				
+			solicitado:it.cantidad,cantidad:it.cantidad,precioEntrada:convertido.precioRaw,noLote:null,fechaCaducidad:null]				
 		}
 		
 		results

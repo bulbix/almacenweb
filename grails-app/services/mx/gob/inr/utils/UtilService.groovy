@@ -58,11 +58,12 @@ class UtilService {
 		   	projections{
 			   property("usuario.id")
 			}
-	   		eq("perfil",perfil)		   	   
+	   		eq("perfil",perfil)					   	   
 	   }
 	   
 	   def usuariosList = Usuario.createCriteria().list {
 		   'in'("id",usuariosPerfilList)
+		    order("nombre")
 	   }
 	   
 	   usuariosList 

@@ -3,11 +3,11 @@ package mx.gob.inr.utils
 class AutoCompleteService {
 
     def listarArticulo(String term, entityArticulo)	{
-	   def aprox = term + "%"
+	   def aprox = "%" + term + "%"
 	   
 	   def query = {
 		   ilike("desArticulo", aprox)
-		   maxResults(10)
+		   maxResults(50)
 		   order("desArticulo","asc")
 	   }
 	   
@@ -24,14 +24,14 @@ class AutoCompleteService {
    
    def listarArea(String term, entityArea){
 	   
-	   def aprox = term + "%"
+	   def aprox = "%" + term + "%"
 	   
 	   def query = {
 		   or{
 			   ilike("desArea", aprox)
 			   sqlRestriction("(cve_area || '') like '$aprox'")
 		   }
-		   maxResults(10)
+		   maxResults(20)
 		   order("desArea","asc")
 	   }
 	   
@@ -47,14 +47,14 @@ class AutoCompleteService {
    
    def listarProcedimiento(String term){
 	   
-	   def aprox = term + "%"
+	   def aprox = "%" + term + "%"
 	   
 	   def query = {
 		   or{
 			   ilike("descdiag", aprox)
 			   sqlRestriction("(iddiagnostico || '') like '$aprox'")
 		   }
-		   maxResults(10)
+		   maxResults(20)
 		   order("descdiag","asc")
 	   }
 	   
@@ -81,7 +81,7 @@ class AutoCompleteService {
 		   
 		   eq("idtipopaciente", 'N')
 		   order("numeroregistro", "desc")
-		   maxResults(10)
+		   maxResults(20)
 	   }
 	   
 	   def paclist = Paciente.createCriteria().list(query)
@@ -97,7 +97,7 @@ class AutoCompleteService {
    
    def listarNombre(entity, campo, term){
 	   
-	   def aprox = term + "%"
+	   def aprox = "%" + term + "%"
 	   
 	   log.info("stringlist " + aprox)
 	   
@@ -110,6 +110,7 @@ class AutoCompleteService {
 			   distinct (campo)
 			}
 		   
+		   order(campo)
 		   maxResults(10)
 	   }
 	   

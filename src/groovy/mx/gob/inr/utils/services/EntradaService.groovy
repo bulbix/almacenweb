@@ -472,28 +472,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		return detalleList		
 	}
 
-	def checkFolioSalAlma(Integer folioSalAlma){
-
-		def fechas = utilService.fechasAnioActual()
-
-		def criteriaSalida  = SalidaMaterial.createCriteria();
-
-		def resultSalida = criteriaSalida.get(){
-			eq("folio",folioSalAlma)
-			between("fecha",fechas.fechaInicio,fechas.fechaFin)
-			eq("cveArea",AREA_FARMACIA) 
-			eq("almacen","F")
-		}
-
-		def result = entityEntrada.createCriteria().get {
-			eq("idSalAlma",resultSalida?.id as int)
-		}
-		
-		if(result)
-			return true
-		else
-			return false
-	}
+	
 	
 	def entradasDetalle(Long clave, Date fecha, String almacen){
 

@@ -16,6 +16,7 @@
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'mobile.css')}" type="text/css">		
 		<link rel='stylesheet' href="${resource(dir: 'css', file: 'jquery.dataTables.css')}" type="text/css"/> 
 		<link rel="stylesheet" href="${resource(dir:'css',file:'ui.jqgrid.css')}" type="text/css" />
+		<link rel="stylesheet" href="${resource(dir:'css',file:'jquery-ui-timepicker-addon.css')}" type="text/css" />
 		
 		<g:javascript library="jquery"/>
 		<g:javascript library="jquery-ui"/>		
@@ -32,7 +33,8 @@
 		<g:javascript src="jquery.maskedinput.min.js"/>
 		<g:javascript src="jquery.validate.min.js"/>
 		<g:javascript src="jquery.currency.js"/>
-		<g:javascript src="jquery.timer.js"/>	
+		<g:javascript src="jquery.timer.js"/>
+		<g:javascript src="jquery-ui-timepicker-addon.js"/>	
 	
 		<table>
 			<tr>

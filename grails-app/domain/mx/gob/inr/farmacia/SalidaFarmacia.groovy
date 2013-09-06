@@ -9,15 +9,17 @@ class SalidaFarmacia extends Salida  {
 	
 	CatAreaFarmacia area
 	
-	static hasMany = [salidasDetalle:SalidaDetalleFarmacia]
+	String tipoSolicitud
+	Date horaEntrega = new Date()
 	
-	
-	static transients = ['dueno']
-	
-	static constraints = {
-	
+	public SalidaFarmacia(){
+		horaEntrega.set(hour:10, minute:0)
 	}
-
+	
+	
+	static hasMany = [salidasDetalle:SalidaDetalleFarmacia]	
+	static transients = ['dueno']
+		
 	static mapping = {
 		table 'salida'
 		id column:'id_salida'

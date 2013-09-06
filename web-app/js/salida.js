@@ -12,15 +12,13 @@ $(document).ready(function() {
 		$("#disponible").val(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()));
 		$("#solicitado").focus()
 	});
+	
+	$('#horaEntrega').timepicker();
 		
-	autoCompleteArea(function(){})	
-	
+	autoCompleteArea(function(){})
 	autoCompletePaciente(function(){})
-	
 	autoCompleteProcedimiento(function(){})
-	
 	autoCompleteRecibio(function(){})
-	
 	autoCompleteAutorizo(function(){})
 	
 	consultarDetalle();

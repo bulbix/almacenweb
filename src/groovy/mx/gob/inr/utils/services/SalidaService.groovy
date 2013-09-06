@@ -58,7 +58,9 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		salida.usuario = usuarioRegistro
 		salida.paciente = Paciente.get(jsonSalida.idPaciente)
 		
-		if(salida instanceof SalidaFarmacia){			
+		if(salida instanceof SalidaFarmacia){
+			salida.tipoSolicitud = jsonSalida.tipoSolicitud
+			salida.horaEntrega = new Date().parse("HH:mm",jsonSalida.horaEntrega)		
 		}
 		else if(salida instanceof SalidaCeye){
 			salida.diagnostico =  Cie09.get(jsonSalida.idProcedimiento)

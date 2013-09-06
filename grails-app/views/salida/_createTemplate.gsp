@@ -159,6 +159,26 @@
 			</tr>
 
 		</table>
+		
+		<g:if test="${salidaInstance?.almacen == 'F'}" >
+			<table>
+				<tr>
+					<td>
+						<label for="horaEntrega">Hora Entrega</label>
+						<g:textField name="horaEntrega" value="${salidaInstance?.horaEntrega?.format('HH:mm')}" 
+						class="cabecera" size="5" readonly="true" />
+					</td>
+					<td>
+						<label for="tipoSolicitud">Tipo Solicitud</label>								
+						<g:select name="tipoSolicitud" from="${['paciente', 'stock']}" 
+							value="${salidaInstance?.tipoSolicitud}"  />
+						
+					</td>
+				</tr>
+			</table>		
+		
+		
+		</g:if>
 
 
 		<table id="tblBusqueda" class="busqueda">

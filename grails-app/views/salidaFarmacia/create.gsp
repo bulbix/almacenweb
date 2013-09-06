@@ -10,7 +10,7 @@
 	
 		<script type="text/javascript">
 			var url = '/almacenWeb/salidaFarmacia'
-			var almacen = 'C'
+			var almacen = 'F'			
 		</script>
 				
 		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,

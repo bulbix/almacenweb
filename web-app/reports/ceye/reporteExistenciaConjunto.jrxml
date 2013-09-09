@@ -24,7 +24,7 @@
 	<parameter name="ordenacion" class="java.lang.String"/>
 	<parameter name="fechaInicial" class="java.lang.String"/>
 	<parameter name="fechaFinal" class="java.lang.String"/>
-	<parameter name="fechaCierre" class="java.lang.String"/>
+	<parameter name="fechaCierreCeye" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/bulbix/Workspaces/MyEclipse 8.5/saihweb/public_html/WEB-INF/reportes/ceye/"]]></defaultValueExpression>
 	</parameter>
@@ -32,6 +32,8 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="fechaCierreSubceye" class="java.lang.String"/>
+	<parameter name="fechaCierreCeniaq" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
     cve_art,
@@ -61,7 +63,7 @@
         FROM
             cierre_ceye cc
         WHERE
-            fecha_cierre = $P{fechaCierre}
+            fecha_cierre = $P{fechaCierreCeye}
         AND cc.cve_art = artExt.cve_art
         AND almacen = 'C'
     )
@@ -107,7 +109,7 @@
         FROM
             cierre_ceye cc
         WHERE
-            fecha_cierre = $P{fechaCierre}
+            fecha_cierre = $P{fechaCierreSubceye}
         AND cc.cve_art = artExt.cve_art
         AND almacen = 'S'
     )
@@ -153,7 +155,7 @@
         FROM
             cierre_ceye cc
         WHERE
-            fecha_cierre = $P{fechaCierre}
+            fecha_cierre = $P{fechaCierreCeniaq}
         AND cc.cve_art = artExt.cve_art
         AND almacen = 'Q'
     )
@@ -367,14 +369,6 @@ ORDER BY artExt.cve_art]]>
 	<detail>
 		<band height="11" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{totalEntrada} != 0 || $V{totalSalida} != 0]]></printWhenExpression>
-			<rectangle>
-				<reportElement uuid="bf451bf0-dd8e-48a7-b688-d7ce3bb52b3a" stretchType="RelativeToBandHeight" x="0" y="1" width="752" height="9" backcolor="#FDF8A1">
-					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
-				</reportElement>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-			</rectangle>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="828cac1e-1c83-4f66-97c3-970736c0dabc" x="49" y="0" width="147" height="10"/>
 				<textElement>

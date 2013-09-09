@@ -22,8 +22,7 @@
 	        SD.cantidad_surtida,
 	        SD.precio_unitario,
 	        (SD.cantidad_surtida * SD.precio_unitario) as importe,
-	        (SELECT ED.fecha_caducidad FROM entrada_detalle ED WHERE ED.id_entrada = SD.id_entrada
-                AND ED.renglon_entrada = SD.renglon_entrada ) as fecha_caducidad,
+	        (SELECT ED.fecha_caducidad FROM entrada_detalle ED WHERE ED.id_entradadetalle = SD.id_entradadetalle ) as fecha_caducidad,
 	        (SELECT E.numero_entrada FROM entrada E WHERE E.id_entrada = SD.id_entrada ) as numero_entrada
 	FROM salida S, salida_detalle SD ,articulo A, cat_area CA
 	WHERE S.id_salida = SD.id_salida
@@ -181,14 +180,6 @@
 	</columnHeader>
 	<detail>
 		<band height="11" splitType="Stretch">
-			<rectangle>
-				<reportElement uuid="02a3b177-5cfb-44b3-b6f9-1fb64f695a33" stretchType="RelativeToBandHeight" x="1" y="0" width="571" height="11" backcolor="#FDF8A1">
-					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
-				</reportElement>
-				<graphicElement>
-					<pen lineWidth="0.0"/>
-				</graphicElement>
-			</rectangle>
 			<textField pattern="###0">
 				<reportElement uuid="fc8a2f51-46b5-421a-a2a6-e5e14d54b0bc" x="323" y="0" width="31" height="10"/>
 				<textElement textAlignment="Center">

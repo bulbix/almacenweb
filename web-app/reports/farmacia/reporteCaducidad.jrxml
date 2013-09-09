@@ -118,7 +118,7 @@
 				<textElement textAlignment="Left">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""+$F{articulo}.getProperty("unidad")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{articulo}.getProperty("unidad")]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement uuid="3ff3051a-c8c0-4ff7-95df-3716394ffc3d" x="419" y="0" width="75" height="10"/>

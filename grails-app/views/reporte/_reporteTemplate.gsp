@@ -32,7 +32,7 @@
 				</tr>
 			</g:if>
 			
-			<g:if test="${!methodName.contains('reportePartida')}">
+			<g:if test="${!methodName.contains('reportePartida') && !methodName.contains('reporteSurtimiento') }">
 				<tr>
 					<td>
 						<label for="claveInicial">Clave Inicial</label>

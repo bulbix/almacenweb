@@ -26,4 +26,8 @@ class ReporteFarmaciaController extends ReporteController {
 		cargarParams()
 	}
 	
+	def reporteSurtimiento(){
+		cargarParams()
+	}
+	
 }

@@ -187,12 +187,12 @@ class UtilService {
 		}
 		
 		if(!cierre){			
-			cierreAnterior = entityCierre.newInstance()
+			cierre = entityCierre.newInstance()
 			def result = new Date()
 			result.set(year:2000,month:0,date:1)
-			cierreAnterior.fechaCierre = result
-			cierreAnterior.existencia = 0
-			cierreAnterior.importe = 0.0
+			cierre.fechaCierre = result
+			cierre.existencia = 0
+			cierre.importe = 0.0
 		}
 		
 		return cierre

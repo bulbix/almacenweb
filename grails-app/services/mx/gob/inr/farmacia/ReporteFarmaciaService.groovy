@@ -75,5 +75,70 @@ class ReporteFarmaciaService extends ReporteService{
 		
 	}
 
+	
+	def reporteSurtimiento(params){
+		
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
+		
+		def reporteList = []
+		
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
+		
+		int numPaciente = 0;
+		int numStock = 0;
+		
+		def salidaList = SalidaFarmacia.createCriteria().list(){			
+			area{				
+			}	
+			
+			between("fecha",fechaInicial, fechaFinal)			
+			order("fecha","asc")
+			order("folio","asc")
+			
+		}.each { salida ->
+			int noClaveSolicitadas = 0;
+			int noClavesCompletas = 0;
+			int noClavesIncompletas = 0;
+			int noClavesCero = 0;
+			
+			def detalleList = SalidaDetalleFarmacia.createCriteria().list(){
+				eq("salida.id", salida.id)
+			}
+			
+			if(salida.tipoSolicitud){
+				if(salida.tipoSolicitud.equals("paciente")){
+					numPaciente++;
+				}
+				else if(salida.tipoSolicitud.equals("stock")){
+					numStock++;
+				}
+			}
+			
+			for(detalle in detalleList){
+				noClaveSolicitadas++;
+				
+				if(detalle.cantidadPedida == detalle.cantidadSurtida)
+					noClavesCompletas++;
+				else if((detalle.cantidadPedida != detalle.cantidadSurtida) && detalle.cantidadSurtida != 0)
+					noClavesIncompletas++;
+				else
+					noClavesCero++;
+			}
+			
+			reporteList << [fechaSalida: salida.fecha, folioSalida:salida.folio,area:salida.area, noClavesSolicitadas:noClaveSolicitadas,
+				noClavesCompletas:noClavesCompletas,noClavesIncompletas:noClavesIncompletas,
+				noClavesCero:noClavesCero,tipoSolicitud:"",numPaciente:0,numStock:0]	
+		}
+		
+		for(surtimiento in reporteList){
+			surtimiento['numPaciente'] = numPaciente
+			surtimiento['numStock'] = numStock
+		}
+		
+		reporteList
+		
+	}
    
 }

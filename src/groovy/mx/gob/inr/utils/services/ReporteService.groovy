@@ -119,8 +119,10 @@ abstract class ReporteService {
 		for(articulo in articuloList){		
 			
 			def existenciaCierre = entityCierre.createCriteria().get{
-				property("existencia")
-				gt("fechaCierre",maximaFechaCierre)
+				projections{
+					property("existencia")
+				}
+				eq("fechaCierre",maximaFechaCierre)
 				eq("articulo.id",articulo.id)
 				eq("almacen",params.almacen)
 			}

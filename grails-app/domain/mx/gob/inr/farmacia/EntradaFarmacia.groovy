@@ -25,6 +25,7 @@ class EntradaFarmacia extends Entrada {
         version false
 		
 		usuario updateable: false
+		idSalAlma updateable:false
     }    
 
     static constraints = {		

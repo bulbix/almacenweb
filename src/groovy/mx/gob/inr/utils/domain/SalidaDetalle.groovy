@@ -12,7 +12,7 @@ abstract class SalidaDetalle implements Serializable {
 	//Salida salida
 	Integer renglon
 	//Entrada entrada
-	Integer renglonEntrada
+	//Integer renglonEntrada
 	//Articulo articulo
 	Integer cantidadPedida
 	Integer cantidadSurtida

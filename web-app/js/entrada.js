@@ -324,8 +324,10 @@ function controlesHead(){
 	}	
 	
 	$("#guardarAlmacen").click(function(){	
-		if( $(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
+		if( confirm('Esta seguro de guardar el folio de almacen?') && 
+		 $(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
 			guardarTodo(this)
+			$("#folioAlmacen").prop('disabled', true);
 		}
 	});
 	

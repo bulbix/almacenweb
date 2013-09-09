@@ -13,7 +13,7 @@ class SalidaFarmacia extends Salida  {
 	Date horaEntrega = new Date()
 	
 	public SalidaFarmacia(){
-		horaEntrega.set(hour:10, minute:0)
+		//horaEntrega.set(hour:10, minute:0)
 	}
 	
 	

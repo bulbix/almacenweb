@@ -8,7 +8,7 @@ import mx.gob.inr.utils.domain.SalidaDetalle;
 class SalidaDetalleFarmacia extends SalidaDetalle {
 	
 	SalidaFarmacia salida
-	EntradaFarmacia entrada
+	//EntradaFarmacia entrada
 	ArticuloFarmacia articulo
 	EntradaDetalleFarmacia entradaDetalle	
 	
@@ -26,7 +26,7 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 		renglon column: 'renglon_salida'
 		//entradaDetalle column:['id_entrada','renglon_entrada']
 		entradaDetalle column:'id_entradadetalle'
-		entrada column:'id_entrada'		
+		//entrada column:'id_entrada'		
 		id column:'id_salidadetalle'
 		id generator:'sequence' ,params:[sequence:'sq_idsalidadetallefarmacia']
 		

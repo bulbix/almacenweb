@@ -4,7 +4,7 @@ import mx.gob.inr.utils.domain.Articulo;
 
 class ArticuloMaterial extends Articulo implements Serializable {
 
-	String partida
+	//String partida
 	Integer cveArt
 	
     static mapping = {

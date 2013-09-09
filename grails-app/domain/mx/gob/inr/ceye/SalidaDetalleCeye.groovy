@@ -7,7 +7,7 @@ import mx.gob.inr.utils.domain.SalidaDetalle;
 class SalidaDetalleCeye extends SalidaDetalle {
 
 	SalidaCeye salida
-	EntradaCeye entrada
+	//EntradaCeye entrada
 	ArticuloCeye articulo
 	EntradaDetalleCeye entradaDetalle
 		
@@ -23,7 +23,7 @@ class SalidaDetalleCeye extends SalidaDetalle {
 		salida column:'id_salida'
 		articulo column :'cve_art'
 		renglon column: 'renglon_salida'
-		entrada column:'id_entrada'
+		//entrada column:'id_entrada'
 		//entradaDetalle column:['id_entrada','renglon_entrada']
 		entradaDetalle column:'id_entradadetalle'
 		id column:'id_salidadetalle'

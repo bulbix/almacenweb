@@ -107,8 +107,8 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			else
 				salidaDetalle.renglon = renglon++
 			
-			salidaDetalle.entrada = it.entrada
-			salidaDetalle.renglonEntrada = it.renglon
+			//salidaDetalle.entrada = it.entrada
+			//salidaDetalle.renglonEntrada = it.renglon
 			salidaDetalle.articulo = articulo
 			salidaDetalle.cantidadPedida = solicitado
 			salidaDetalle.cantidadSurtida = it.restarExistencia

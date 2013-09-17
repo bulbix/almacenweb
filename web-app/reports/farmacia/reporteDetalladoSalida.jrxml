@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportDetalladoSalida" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="87c06de6-759e-4b58-9a95-62c96db6968f">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="34"/>
+	<property name="ireport.x" value="466"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="fechaInicial" class="java.lang.String"/>
 	<parameter name="fechaFinal" class="java.lang.String"/>
@@ -23,7 +23,7 @@
 	        SD.precio_unitario,
 	        (SD.cantidad_surtida * SD.precio_unitario) as importe,
 	        (SELECT ED.fecha_caducidad FROM entrada_detalle ED WHERE ED.id_entradadetalle = SD.id_entradadetalle ) as fecha_caducidad,
-	        (SELECT E.numero_entrada FROM entrada E WHERE E.id_entrada = SD.id_entrada ) as numero_entrada
+	        (SELECT E.numero_entrada FROM entrada E WHERE E.id_entrada = (SELECT id_entrada FROM entrada_detalle ED WHERE  ED.id_entradadetalle = SD.id_entradadetalle) ) as numero_entrada
 	FROM salida S, salida_detalle SD ,articulo A, cat_area CA
 	WHERE S.id_salida = SD.id_salida
 	AND   A.cve_art = SD.cve_art

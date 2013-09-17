@@ -7,6 +7,7 @@ import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.reportes.*;
 import mx.gob.inr.ceye.*
 import mx.gob.inr.utils.*;
+import mx.gob.inr.materiales.SalidaMaterial;
 
 abstract class ReporteService {
 		
@@ -74,7 +75,15 @@ abstract class ReporteService {
 						
 			db.eachRow(query,[new java.sql.Date(fechaInicial.getTime()),new java.sql.Date(fechaFinal.getTime())]){
 				
-				reporteKardexList << [articulo:articulo,fecha:it.fecha,folio:it.folio,procedencia:it.procedencia,
+				def procedencia = it.procedencia
+				
+				if(procedencia.startsWith('ALMACEN/FARMACIA')){
+					def idSalAlma = procedencia.substring(procedencia.indexOf("(")+1, procedencia.indexOf(")"))					
+					def numeroSalida = SalidaMaterial.get(idSalAlma)?.folio					
+					procedencia = 'ALMACEN/FARMACIA (' + numeroSalida + ')'
+				}
+							
+				reporteKardexList << [articulo:articulo,fecha:it.fecha,folio:it.folio,procedencia:procedencia,
 				cantidad:it.cantidad,precio:it.precio,importe:(it.cantidad*it.precio),tipo:it.tipo,almacen:params.almacen]
 			}
 		}

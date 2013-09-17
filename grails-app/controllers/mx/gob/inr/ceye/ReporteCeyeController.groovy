@@ -18,7 +18,7 @@ class ReporteCeyeController extends ReporteController {
 	}
 	
 	def reporteConvertidora(){
-		[almacen:almacen]
+		cargarParams()
 	}
 	
 	def reporteExistenciaConjunto(){

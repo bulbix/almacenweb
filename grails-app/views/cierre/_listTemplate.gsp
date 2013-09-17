@@ -6,8 +6,8 @@
 					<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 				</sec:noAccess>
 				
-					<li><a class="home" href="${createLink(action: 'list')}">
-				<g:message code="default.refresh.label"/></a>
+				<li><a class="home" href="${createLink(action: 'list')}">
+					<g:message code="default.refresh.label"/></a>
 				</li>
 				
 			</ul>
@@ -47,10 +47,11 @@
 								</g:jasperReport>
 							
 							</td>
-														
-							<td>
-								<g:link  action="eliminar" onclick="return confirm('Esta seguro de eliminar el cierre?');"  params="[fechaCierre: fechaCierre?.format('dd/MM/yyyy')]" >Eliminar</g:link>
-							</td>							
+							<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">							
+								<td>
+									<g:link  action="eliminar" onclick="return confirm('Esta seguro de eliminar el cierre?');"  params="[fechaCierre: fechaCierre?.format('dd/MM/yyyy')]" >Eliminar</g:link>
+								</td>
+							</sec:noAccess>							
 						</tr>
 					</g:each>
 				</tbody>

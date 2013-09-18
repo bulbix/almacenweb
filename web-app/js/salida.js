@@ -249,12 +249,18 @@ function controlesHead(){
 	if($("#idPadre").val() != ''){		
 		
 		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' || $("#isDueno").val()=='false' ){
-			$(".botonOperacion").hide()
-			$(".busqueda").hide()
 			
-			$("#formPadre :input").each(function(){
-				$(this).prop('disabled', true)
-			});	
+			if($("#isAdmin").val()=='false'){
+				$(".botonOperacion").hide()
+				$(".busqueda").hide()
+				$("#formPadre :input").each(function(){
+					$(this).prop('disabled', true)
+				});	
+			}
+			else{
+				$(".botonOperacion").show()
+				$(".busqueda").show()
+			}		
 			
 			$("#imprimir").show()
 		}

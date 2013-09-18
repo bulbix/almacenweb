@@ -46,7 +46,7 @@ class Usuario {
 	}
 	
 	String toString(){
-		return username
+		return nombre
 	}
 	
 }

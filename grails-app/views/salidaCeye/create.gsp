@@ -14,7 +14,7 @@
 		</script>
 				
 		<g:render template="/salida/createTemplate" model="[usuariosList:usuariosList,salidaInstance: almacenInstance,
-		existeCierre:existeCierre,isDueno:isDueno]" />
+		existeCierre:existeCierre,isDueno:isDueno,isAdmin:isAdmin]" />
 		
 	</body>
 </html>

@@ -56,17 +56,21 @@ abstract class OperacionController<A> implements IOperacionController {
 		}
 		
 		def usuariosList = null
+		def isAdmin = false
+		
 		
 		if(session.almacen == 'F'){
 			usuariosList = servicio.usuarios(servicio.PERFIL_FARMACIA)
+			isAdmin = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_FARMACIA_ADMIN'} != null
 		}
 		else{
 			usuariosList = servicio.usuarios(servicio.PERFIL_CEYE)
+			isAdmin = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_CEYE_ADMIN'} != null
 		}		
 		
-		def isDueno = almacenInstance.usuario == springSecurityService.currentUser
+		def isDueno = almacenInstance.usuario == springSecurityService.currentUser		 
 		
-		[usuariosList:usuariosList,almacenInstance: almacenInstance,existeCierre:existeCierre, isDueno:isDueno]
+		[usuariosList:usuariosList,almacenInstance: almacenInstance,existeCierre:existeCierre, isDueno:isDueno, isAdmin:isAdmin]
 	}
 	
 	@Override

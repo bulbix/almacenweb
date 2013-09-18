@@ -76,6 +76,7 @@
 	</g:if>
 	
 	<input type="hidden" id="isDueno" value="${isDueno}" />
+	<input type="hidden" id="isAdmin" value="${isAdmin}" />
 	<input type="hidden" id="existeCierre" value="${existeCierre}" />
 	<input type="hidden" id="estado" value="${entradaInstance?.estado}" />
 	

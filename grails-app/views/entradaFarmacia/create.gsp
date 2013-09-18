@@ -13,7 +13,8 @@
 	</script>				
 	
 	<g:render template="/entrada/createTemplate" 
-	model="[usuariosList:usuariosList,entradaInstance:almacenInstance, existeCierre:existeCierre,isDueno:isDueno]" />
+	model="[usuariosList:usuariosList,entradaInstance:almacenInstance, existeCierre:existeCierre,
+	isDueno:isDueno,isAdmin:isAdmin]" />
 	
 </body>
 </html>

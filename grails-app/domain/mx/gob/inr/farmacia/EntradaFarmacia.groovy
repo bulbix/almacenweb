@@ -4,6 +4,8 @@ import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaFarmacia extends Entrada {	
 	
+	static auditable = true
+	
 	String devolucion
 	
 	static hasMany = [entradasDetalle:EntradaDetalleFarmacia]
@@ -26,9 +28,14 @@ class EntradaFarmacia extends Entrada {
 		
 		usuario updateable: false
 		idSalAlma updateable:false
+		fechaCaptura updateable:false
     }    
 
     static constraints = {		
     }
+	
+	def onSave = {
+		println "new entrada inserted"
+	}
 	
 }

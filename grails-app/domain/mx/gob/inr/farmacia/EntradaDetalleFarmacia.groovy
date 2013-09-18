@@ -5,7 +5,9 @@ import java.io.Serializable;
 import mx.gob.inr.utils.domain.EntradaDetalle;
 
 class EntradaDetalleFarmacia extends EntradaDetalle {
-		
+
+	static auditable = true
+	
 	EntradaFarmacia entrada	
 	ArticuloFarmacia articulo	
 	

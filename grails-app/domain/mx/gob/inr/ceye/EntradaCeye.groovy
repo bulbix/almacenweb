@@ -4,6 +4,8 @@ import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaCeye extends Entrada {
 
+	static auditable = true
+	
 	CatAreaCeye area
 	String paqueteq
 		
@@ -28,7 +30,7 @@ class EntradaCeye extends Entrada {
 		
 		usuario updateable: false
 		paqueteq updateable:false
-		
+		fechaCaptura updateable:false
 	}
 	
     static constraints = {

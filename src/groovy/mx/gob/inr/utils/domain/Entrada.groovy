@@ -18,6 +18,7 @@ abstract class Entrada {
 	String presupuesto
 	Usuario usuario
 	Date fechaCaptura = new Date()
+	Date fechaModificacion = new Date()
 	String ipTerminal		
 	Integer folioAlmacen
 	

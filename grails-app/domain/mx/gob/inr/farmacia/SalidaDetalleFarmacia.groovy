@@ -7,6 +7,8 @@ import mx.gob.inr.utils.domain.SalidaDetalle;
 
 class SalidaDetalleFarmacia extends SalidaDetalle {
 	
+	static auditable = true
+	
 	SalidaFarmacia salida
 	//EntradaFarmacia entrada
 	ArticuloFarmacia articulo

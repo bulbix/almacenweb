@@ -5,6 +5,8 @@ import mx.gob.inr.utils.domain.EntradaDetalle;
 
 class EntradaDetalleCeye extends EntradaDetalle {
 
+	static auditable = true
+	
     EntradaCeye entrada	
 	ArticuloCeye articulo
 	Double cantidadSolicitada

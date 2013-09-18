@@ -6,6 +6,8 @@ import mx.gob.inr.utils.domain.SalidaDetalle;
 
 class SalidaDetalleCeye extends SalidaDetalle {
 
+	static auditable = true
+	
 	SalidaCeye salida
 	//EntradaCeye entrada
 	ArticuloCeye articulo

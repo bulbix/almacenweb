@@ -7,6 +7,8 @@ import mx.gob.inr.utils.domain.Salida;
 
 class SalidaFarmacia extends Salida  {	
 	
+	static auditable = true
+	
 	CatAreaFarmacia area
 	
 	String tipoSolicitud
@@ -37,6 +39,7 @@ class SalidaFarmacia extends Salida  {
 		
 		
 		usuario updateable: false
+		fechaCaptura updateable:false
 	}
 	
 	

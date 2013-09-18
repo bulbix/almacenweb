@@ -20,6 +20,7 @@ abstract class Salida {
 	Usuario usuario
 	String ipTerminal
 	Date fechaCaptura = new Date()
+	Date fechaModificacion = new Date()
 	Paciente paciente
 	
 	boolean dueno

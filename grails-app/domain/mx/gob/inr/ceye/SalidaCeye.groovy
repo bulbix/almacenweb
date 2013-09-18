@@ -5,6 +5,8 @@ import mx.gob.inr.utils.domain.Salida;
 
 class SalidaCeye extends Salida {
 
+	static auditable = true
+	
     CatAreaCeye area
 	Cie09 diagnostico
 	Short nosala
@@ -36,6 +38,6 @@ class SalidaCeye extends Salida {
 		
 		usuario updateable: false
 		paqueteq updateable:false
-		//fechaCaptura updateable:false
+		fechaCaptura updateable:false
 	}
 }

@@ -97,3 +97,5 @@ log4j = {
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'mx.gob.inr.seguridad.Usuario'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'mx.gob.inr.seguridad.UsuarioPerfil'
 grails.plugins.springsecurity.authority.className = 'mx.gob.inr.seguridad.Perfil'
+
+//auditLog.verbose = true

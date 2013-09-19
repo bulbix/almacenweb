@@ -297,7 +297,7 @@ function controlesHead(){
 			$(".busqueda").show()
 		}
 		
-		if($("#estado").val()=='C' || $("#existeCierre").val()=='true'){
+		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' || ($("#isDueno").val()=='false' && $("#isAdmin").val()=='false')){
 			$(".botonOperacion").hide()
 			$(".busqueda").hide()
 			$("#formPadre :input").each(function(){

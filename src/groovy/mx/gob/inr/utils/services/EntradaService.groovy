@@ -154,7 +154,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		}
 		
 		if(entrada.folio != entradaUpdate.folio){
-			if(checkFolio(entrada.folio)){
+			if(checkFolio(entrada.folio,almacen)){
 				mensaje = "Folio no actualizable, ya existe"
 				entrada.folio = entradaUpdate.folio
 			}

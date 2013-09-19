@@ -9,7 +9,8 @@
 	
 		<g:render template="/cierre/listTemplate" 
 		model="[cierreInstanceList: cierreInstanceList,
-			 cierreInstanceTotal: cierreInstanceTotal, almacen:almacen]" />		
+			 cierreInstanceTotal: cierreInstanceTotal,
+			 almacen:almacen,isAdmin:isAdmin]" />		
 		
 		
 	</body>

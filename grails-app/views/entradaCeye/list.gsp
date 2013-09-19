@@ -8,7 +8,9 @@
 	<body>
 	
 		<g:render template="/entrada/listTemplate" 
-			model="[entradaInstanceList: almacenInstanceList, entradaInstanceTotal: almacenInstanceTotal, almacen:almacen]" />
+			model="[entradaInstanceList: almacenInstanceList,
+			 entradaInstanceTotal: almacenInstanceTotal,
+			 almacen:almacen,isAdmin:isAdmin]" />
 		
 		
 	<div class="paginateButtons">

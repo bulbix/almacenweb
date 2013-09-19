@@ -59,7 +59,7 @@
 							
 							<td>${fieldValue(bean: salidaInstance, field: "estado")=='A'?'ACTIVO':'CANCELADO'}</td>
 							
-							<g:if test="${salidaInstance.estado == 'C' && salidaInstance?.dueno}" >
+							<g:if test="${salidaInstance.estado == 'C' && (salidaInstance?.dueno || isAdmin)}" >
 								<td><g:link action="eliminar" id="${salidaInstance.id}" onclick="return confirm('Esta seguro de eliminar la salida?');">Eliminar</g:link></td>
 							</g:if>
 							

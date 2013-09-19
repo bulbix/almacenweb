@@ -291,26 +291,19 @@ function consultarDetalle(){
 function controlesHead(){
 	
 	if($("#idPadre").val() != ''){		
-		if($("#estado").val()=='C' || $("#existeCierre").val()=='true' || $("#isDueno").val()=='false' ){
-			
-			if($("#isAdmin").val()=='false'){
-				$(".botonOperacion").hide()
-				$(".busqueda").hide()
-				$("#formPadre :input").each(function(){
-					$(this).prop('disabled', true)
-				});	
-			}
-			else{
-				$(".botonOperacion").show()
-				$(".busqueda").show()
-			}
-			
-			
-			
-			$("#imprimir").show()
-		}
-		else{
+		
+		if($("#isAdmin").val()=='true' ||  $("#isDueno").val()=='true'){
 			$(".botonOperacion").show()
+			$(".busqueda").show()
+		}
+		
+		if($("#estado").val()=='C' || $("#existeCierre").val()=='true'){
+			$(".botonOperacion").hide()
+			$(".busqueda").hide()
+			$("#formPadre :input").each(function(){
+				$(this).prop('disabled', true)
+			});
+			$("#imprimir").show()				
 		}
 		
 		$("#paqueteq").prop('disabled', true)

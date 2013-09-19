@@ -169,7 +169,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	 def mensaje = "Salida actualizada"
 	 
 	 if(salida.folio != salidaUpdate.folio ){
-		 if (checkFolio(salida.folio)){
+		 if (checkFolio(salida.folio,almacen)){
 			 mensaje = "Folio no actualizable, ya existe";
 			 salida.folio = salidaUpdate.folio
 		 }

@@ -17,6 +17,7 @@ abstract class OperacionController<A> implements IOperacionController {
 		
 	def filterPaneService
 	SpringSecurityService springSecurityService
+	UtilService utilService
 	
 	public OperacionController(entityAlmacen){
 		this.entityAlmacen = entityAlmacen		
@@ -56,19 +57,16 @@ abstract class OperacionController<A> implements IOperacionController {
 		}
 		
 		def usuariosList = null
-		def isAdmin = false
-		
-		
+				
 		if(session.almacen == 'F'){
-			usuariosList = servicio.usuarios(servicio.PERFIL_FARMACIA)
-			isAdmin = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_FARMACIA_ADMIN'} != null
+			usuariosList = servicio.usuarios(servicio.PERFIL_FARMACIA)			
 		}
 		else{
-			usuariosList = servicio.usuarios(servicio.PERFIL_CEYE)
-			isAdmin = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_CEYE_ADMIN'} != null
+			usuariosList = servicio.usuarios(servicio.PERFIL_CEYE)			
 		}		
 		
-		def isDueno = almacenInstance.usuario == springSecurityService.currentUser		 
+		def isDueno = almacenInstance.usuario == springSecurityService.currentUser
+		def isAdmin = utilService.isAdmin(session.almacen)
 		
 		[usuariosList:usuariosList,almacenInstance: almacenInstance,existeCierre:existeCierre, isDueno:isDueno, isAdmin:isAdmin]
 	}
@@ -90,8 +88,10 @@ abstract class OperacionController<A> implements IOperacionController {
 		params.almacen = session.almacen
 		params.max = Math.min(max ?: 10, 100)
 		def result = servicio.listar(params,springSecurityService.currentUser)		
+		def isAdmin = utilService.isAdmin(session.almacen)
 		
-		[almacen:session.almacen, almacenInstanceList: result.lista, almacenInstanceTotal: result.total]
+		[almacen:session.almacen, almacenInstanceList: result.lista,
+			almacenInstanceTotal: result.total,isAdmin:isAdmin]
 		
 		
 	}

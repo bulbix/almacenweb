@@ -34,8 +34,4 @@ class EntradaFarmacia extends Entrada {
     static constraints = {		
     }
 	
-	def onSave = {
-		println "new entrada inserted"
-	}
-	
 }

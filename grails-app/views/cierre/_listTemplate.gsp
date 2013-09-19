@@ -47,11 +47,11 @@
 								</g:jasperReport>
 							
 							</td>
-							<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">							
+							<g:if test="${isAdmin}">							
 								<td>
 									<g:link  action="eliminar" onclick="return confirm('Esta seguro de eliminar el cierre?');"  params="[fechaCierre: fechaCierre?.format('dd/MM/yyyy')]" >Eliminar</g:link>
 								</td>
-							</sec:noAccess>							
+							</g:if>					
 						</tr>
 					</g:each>
 				</tbody>

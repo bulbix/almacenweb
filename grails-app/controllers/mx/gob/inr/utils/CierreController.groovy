@@ -6,7 +6,8 @@ import mx.gob.inr.utils.services.CierreService;
 
 abstract class CierreController <C extends Cierre>  {
 
-    public CierreService cierreService	
+    public CierreService cierreService
+	UtilService utilService
 	protected entityCierre	
 	
 	
@@ -24,8 +25,11 @@ abstract class CierreController <C extends Cierre>  {
 			session.almacen = params.almacen
 		}	
 		
-		def result = cierreService.listar(session.almacen)		
-		[almacen:session.almacen, cierreInstanceList: result.lista, cierreInstanceTotal: result.total]
+		def result = cierreService.listar(session.almacen)	
+		def isAdmin = utilService.isAdmin(session.almacen)
+			
+		[almacen:session.almacen, cierreInstanceList: result.lista,
+			cierreInstanceTotal: result.total, isAdmin:isAdmin]
 		
     }
 

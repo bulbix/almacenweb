@@ -1,5 +1,7 @@
 package mx.gob.inr.utils
 
+import grails.plugins.springsecurity.SpringSecurityService;
+
 import java.util.Date;
 
 import mx.gob.inr.ceye.ArticuloCeye
@@ -9,7 +11,9 @@ import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Cierre
 
-class UtilService {	
+class UtilService {
+	
+	SpringSecurityService springSecurityService
 	
 	def clave(entityArticulo, String tipo){		
 		def criteria = entityArticulo.createCriteria();
@@ -269,6 +273,24 @@ class UtilService {
 	   }	   
    
    } 
+   
+   /**
+    * Revisa si es un administrador del modulo o no
+    * @param almacen
+    * @return
+    */
+   def isAdmin(String almacen){
+	   
+	   def result = false
+	   if(almacen == 'F'){
+		   result = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_FARMACIA_ADMIN'} != null
+	   }
+	   else{		  
+		   result = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_CEYE_ADMIN'} != null
+	   }
+	   
+	   result
+   }
   
    
 }

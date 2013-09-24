@@ -98,7 +98,7 @@ class ArticuloCeyeController {
 				else{
 					articuloCeyeInstance = new ArticuloCeye()
 					articuloCeyeInstance.properties = articuloAlmacen.properties
-					articuloCeyeInstance.id = articuloAlmacen.id
+					articuloCeyeInstance.id = articuloAlmacen.cveArt
 					articuloCeyeInstance.descripcionAlmacen = articuloCeyeInstance.desArticulo
 					articuloCeyeInstance.unidadAlmacen = articuloCeyeInstance.unidad
 					articuloCeyeInstance.cantidadAlmacen = 1.0

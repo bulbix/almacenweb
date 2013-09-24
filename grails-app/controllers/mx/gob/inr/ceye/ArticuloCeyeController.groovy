@@ -29,8 +29,8 @@ class ArticuloCeyeController {
 		
 		if(id){		
 			articuloCeyeInstance = ArticuloCeye.get(id)
-			def articuloAlmacen = ArticuloMaterial.get(id)		
-			def convertidora = ConvertidoraCeye.get(id);
+			def articuloAlmacen = ArticuloMaterial.findWhere([cveArt:id,almacen:'F'])		
+			def convertidora = ConvertidoraCeye.get(id)
 			articuloCeyeInstance.descripcionAlmacen = articuloAlmacen.desArticulo
 			articuloCeyeInstance.unidadAlmacen = articuloAlmacen.unidad
 			articuloCeyeInstance.cantidadAlmacen = convertidora?.cantidadAlma?:1.0
@@ -44,7 +44,7 @@ class ArticuloCeyeController {
 	def save(){
 		
 		def articuloCeye = ArticuloCeye.get(params.clave)
-		def articuloAlmacen = ArticuloMaterial.get(params.clave)		
+		def articuloAlmacen = ArticuloMaterial.findWhere([cveArt:params.int('clave'),almacen:'F'])		
 		
 		if(!articuloCeye){
 			articuloCeye = new ArticuloCeye()
@@ -89,7 +89,7 @@ class ArticuloCeyeController {
 			}
 			else{
 				
-				def articuloAlmacen = ArticuloMaterial.get(params.clave)
+				def articuloAlmacen = ArticuloMaterial.findWhere([cveArt:params.int('clave'),almacen:'F'])
 				
 				if(!articuloAlmacen){
 					flash.message = "No existe la clave en el almacen"

@@ -1,7 +1,9 @@
 package mx.gob.inr.ceye
 
 import mx.gob.inr.materiales.ArticuloMaterial;
+import mx.gob.inr.materiales.ArticuloPartidaMaterial;
 import mx.gob.inr.utils.Partida;
+
 
 import org.springframework.dao.DataIntegrityViolationException
 import grails.plugins.springsecurity.Secured;
@@ -52,8 +54,9 @@ class ArticuloCeyeController {
 			articuloCeye.id = params.clave as long
 			articuloCeye.desArticulo = params.descripcionCeye
 			articuloCeye.unidad = params.unidadCeye
-			articuloCeye.partida = Partida.findWhere(partida:articuloAlmacen.partida)
-			
+			def partidaMaterial = ArticuloPartidaMaterial.findWhere([cveArt:params.int('clave'),almacen:'F'])
+			articuloCeye.partida = Partida.findWhere([partida:partidaMaterial.partida])
+						
 			def convertidoraCeye = new ConvertidoraCeye(unidadAlma:articuloAlmacen.unidad,
 														cantidadAlma:params.cantidadAlmacen as float,
 														unidadCeye:params.unidadCeye,

@@ -2,7 +2,7 @@ package mx.gob.inr.utils
 
 import mx.gob.inr.farmacia.SalidaFarmacia;
 import grails.converters.JSON
-import grails.plugin.jsonp.JSONP;
+
 
 class AutoCompleteController {
 

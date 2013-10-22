@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteFoliosAlmacen" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="86970cec-4b2d-4fd9-b4c1-5fc10cfbd8c6">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="9"/>
+	<parameter name="imagePath" class="java.lang.String"/>
+	<parameter name="almacen" class="java.lang.String"/>
+	<parameter name="txtAlmacen" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{almacen}.equalsIgnoreCase("C")==true || $P{almacen}.equalsIgnoreCase("R")==true ? "CEYE" :
+$P{almacen}.equalsIgnoreCase("S")==true || $P{almacen}.equalsIgnoreCase("T")==true ? "SUBCEYE":
+$P{almacen}.equalsIgnoreCase("Q")==true ? "CENIAQ CEYE" : ""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fechaInicial" class="java.lang.String"/>
+	<parameter name="fechaFinal" class="java.lang.String"/>
+	<parameter name="SUBREPORT_CONEXION" class="java.sql.Connection" isForPrompting="false"/>
+	<parameter name="area" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[$P{almacen}.equals("C") || $P{almacen}.equals("R") ? 3804:
+$P{almacen}.equals("S") || $P{almacen}.equals("T") ? 4103:
+$P{almacen}.equals("Q") ? 6675 : 0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="SUBREPORT_CEYE_DIR" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT
+    salida.numero_salida,
+    salida.fecha_salida
+FROM
+    salida
+where
+almacen = 'F'
+AND cve_area = $P{area}
+AND fecha_salida between $P{fechaInicial} AND $P{fechaFinal}
+ORDER BY numero_salida]]>
+	</queryString>
+	<field name="numero_salida" class="java.lang.Integer"/>
+	<field name="fecha_salida" class="java.sql.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="119" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement uuid="0bd3fa1f-daae-43cf-af8e-3286e2e702e4" x="531" y="105" width="40" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="32952eb7-134c-4c32-92af-b0be29c8de23" x="451" y="105" width="80" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="9f4c4622-5959-4a8f-a3ed-92774faf7811" x="2" y="0" width="570" height="105"/>
+				<subreportParameter name="fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="reporteName">
+					<subreportParameterExpression><![CDATA['SALIDAS DE ALMACEN DE FARMCIA']]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IMAGE_DIR">
+					<subreportParameterExpression><![CDATA[$P{IMAGE_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reporteCabecera.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e02870d2-3f2e-47c6-92b1-7f35fcb6b885" mode="Opaque" x="373" y="1" width="78" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ce12fe93-d597-4f85-bf2e-dd0cc918e8e1" mode="Opaque" x="69" y="1" width="78" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FOLIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28d06fdb-1301-41c9-bdc1-70e577bc57f7" mode="Opaque" x="231" y="1" width="78" height="10" backcolor="#999999"/>
+				<textElement textAlignment="Center">
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FECHA SALIDA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="769c406d-0ab4-44bd-b152-ed30159446de" stretchType="RelativeToBandHeight" x="45" y="0" width="328" height="15"/>
+				<subreportParameter name="fecha_salida">
+					<subreportParameterExpression><![CDATA[$F{fecha_salida}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="almacen">
+					<subreportParameterExpression><![CDATA[$P{almacen}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="folio_salida">
+					<subreportParameterExpression><![CDATA[$F{numero_salida}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{SUBREPORT_CONEXION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_CEYE_DIR} + "reporteStatusSalidaAlmacen.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

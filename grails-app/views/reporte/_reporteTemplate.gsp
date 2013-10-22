@@ -18,7 +18,7 @@
 		<table>
 		
 		
-			<g:if test="${methodName != 'reporteExistencia'}">
+			<g:if test="${!['reporteExistencia','reporteExistenciaConjunto'].contains(methodName)}">
 				<tr>
 					<td>
 						<label for="fechaInicial">Fecha Inicial</label>
@@ -32,7 +32,7 @@
 				</tr>
 			</g:if>
 			
-			<g:if test="${!methodName.contains('reportePartida') && !methodName.contains('reporteSurtimiento') }">
+			<g:if test="${!['reportePartida','reporteSurtimiento','reporteSala','reporteFoliosAlmacen'].contains(methodName)}">
 				<tr>
 					<td>
 						<label for="claveInicial">Clave Inicial</label>
@@ -54,7 +54,7 @@
 			</g:if>		
 			
 			
-			<g:if test="${methodName in ['reporteConsumo','reporteProporcionado']}">
+			<g:if test="${methodName in ['reporteConsumo','reporteProporcionado','reporteSala']}">
 				<tr>
 					<td colspan="2">
 						<label for="partida">Area</label>

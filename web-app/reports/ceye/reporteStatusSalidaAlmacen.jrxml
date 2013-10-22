@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteStatusSalidaAlmacen" language="groovy" pageWidth="612" pageHeight="792" columnWidth="612" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c12d29af-8df9-4ec8-8e71-2621f2859b86">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="fecha_salida" class="java.util.Date"/>
+	<parameter name="almacen" class="java.lang.String"/>
+	<parameter name="folio_salida" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT CASE nvl(max(1),0) WHEN 0 THEN 'DIPONIBLE' ELSE 'USADA' END as status
+FROM entrada_ceye
+WHERE id_sal_alma = $P{folio_salida}
+AND year(fecha_entrada) = year($P{fecha_salida})
+AND almacen = $P{almacen}]]>
+	</queryString>
+	<field name="status" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="9" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="e5e46b6a-fe8a-4937-a160-271d88dff33c" x="178" y="0" width="100" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fecha_salida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="463917d3-36c6-4b33-a7c0-980ed6c2f5e3" x="323" y="0" width="100" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a1a79d47-2cf7-4fcc-9cd5-cb6237bf34e9" x="19" y="0" width="100" height="9"/>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{folio_salida}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

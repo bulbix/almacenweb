@@ -37,7 +37,7 @@ function validar(){
         rules: {
         		fecha: {required:true,validateDate:true,dateToday:true,checkCierre:true},
         		folio: {required:true, uniqueFolio:true},
-        		nosala:{number:true},
+        		nosala:{number:true,min: 1,max:10},
         		cveArea:{required:true},
         		entrega:{required:true},
         		recibeauto:{required:true},
@@ -49,7 +49,7 @@ function validar(){
 		messages: {
 				fecha : {required:"Requerido"},
 				folio:{required:"Requerido"},
-				nosala:{number:"Numerico"},
+				nosala:{number:"Numerico",min:"Minimo 1",max:'Maximo 10'},
 				cveArea:{required:"Requerido"},
 				entrega:{required:"Requerido"},
 				recibeauto:{required:"Requerido"},

@@ -79,6 +79,7 @@ class ReporteController {
 			
 			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
 			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
+			params.SUBREPORT_CEYE_DIR = "${servletContext.getRealPath('/reports')}/ceye/"
 			params.locale =  new Locale("es","MX");
 			params.almacen = session.almacen
 					

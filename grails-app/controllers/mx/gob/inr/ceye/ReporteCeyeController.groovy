@@ -7,6 +7,7 @@ import grails.plugins.springsecurity.Secured;
 class ReporteCeyeController extends ReporteController {
 
 	def reporteCeyeService
+
 	
     public ReporteCeyeController(){
 		super(ArticuloCeye)
@@ -22,6 +23,15 @@ class ReporteCeyeController extends ReporteController {
 	}
 	
 	def reporteExistenciaConjunto(){
+		cargarParams()
+	}
+	
+	def reporteFoliosAlmacen(){
+		cargarParams()
+	}
+	
+	
+	def reporteSala(){
 		cargarParams()
 	}
 }

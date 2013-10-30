@@ -11,6 +11,7 @@ class CostoPromedioCeye implements Serializable {
 		articulo column:'cve_art'
 		id composite: ['articulo','almacen']
 		version false
+		cache true
 	}
 	
 	

@@ -10,6 +10,7 @@ class Cie09 {
 		table:'cie09'
 		id column:'iddiagnostico'
 		version false
+		cache usage:'read-only'
 	}
 	
 	

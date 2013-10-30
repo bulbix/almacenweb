@@ -10,6 +10,7 @@ class Partida implements Serializable {
 		table 'partidas_ceye'
 		id composite:['partida']
 		version false
+		cache usage:'read-only'
 	}
 	
 	String toString(){

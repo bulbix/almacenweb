@@ -11,6 +11,7 @@ class PaqueteTipoQuirurgicoCeye implements Serializable {
 		id composite: ['tipo']				
 		table 'paquetetipoquirurgico_ceye'
 		version false
+		cache usage:'read-only'
 	}
 	
     static constraints = {

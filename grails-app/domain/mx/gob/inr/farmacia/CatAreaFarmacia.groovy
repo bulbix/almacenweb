@@ -11,5 +11,6 @@ class CatAreaFarmacia extends CatArea {
 		id column:'cve_area'
 		version false
 		table 'cat_area'
+		cache usage:'read-only'
 	}
 }

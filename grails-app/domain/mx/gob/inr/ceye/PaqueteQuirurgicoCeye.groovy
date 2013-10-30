@@ -11,6 +11,7 @@ class PaqueteQuirurgicoCeye implements Serializable {
 		table 'paquetequirurgico_ceye'
 		articulo column:'cve_art'
 		id composite: ['articulo','tipo']
+		cache usage:'read-only'
 	}
 	
 	

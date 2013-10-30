@@ -11,7 +11,8 @@ class ArticuloFarmacia extends Articulo {
 		id column:'cve_art'
 		version false		
 		table 'articulo'
-		partida column:'partida'		
+		partida column:'partida'
+		cache true
 	}
 	
 }

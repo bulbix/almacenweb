@@ -18,12 +18,11 @@ class ArticuloCeye extends Articulo {
 	 
      static mapping = {	 
 		
-		id generator:'assigned',column:'cve_art'
-		
+		id generator:'assigned',column:'cve_art'		
 		version false		
 		table 'articulo_ceye'
-		partida column:'partida'
-		
+		partida column:'partida'		
 		sort "id"
+		cache usage:'read-only'
 	}
 }

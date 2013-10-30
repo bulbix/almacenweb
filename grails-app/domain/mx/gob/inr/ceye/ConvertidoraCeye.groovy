@@ -12,6 +12,7 @@ class ConvertidoraCeye {
 		id generator:'assigned',column:'cve_art'
 		version false
 		table 'convertidora_ceye'
+		cache usage:'read-only'
 	}
 		
     static constraints = {

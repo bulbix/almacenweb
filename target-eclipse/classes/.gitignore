@@ -1,18 +1,5 @@
-/almacenweb
-/com
-/error.gsp
-/filterpane
 /grails
-/hibernate
-/jasper.properties
-/jasperDemo
-/mx
 /org
-/spring
-/spring-security-core.properties
-/spring-security-core_de.properties
-/spring-security-core_fr.properties
-/templates
 /ApplicationResources$_run_closure1.class
 /ApplicationResources$_run_closure1_closure2.class
 /ApplicationResources.class
@@ -106,5 +93,8 @@
 /UrlMappings$__clinit__closure1_closure2.class
 /UrlMappings$__clinit__closure1_closure2_closure3.class
 /UrlMappings.class
+/almacenweb
+/com
+/mx
 /resources$_run_closure1.class
 /resources.class

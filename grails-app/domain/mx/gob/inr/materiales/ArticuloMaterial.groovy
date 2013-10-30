@@ -13,5 +13,6 @@ class ArticuloMaterial extends Articulo implements Serializable {
 		almacen column:'id_almacen'
 		id composite: ['cveArt','almacen']
 		datasource 'materiales'
+		cache true
 	}
 }

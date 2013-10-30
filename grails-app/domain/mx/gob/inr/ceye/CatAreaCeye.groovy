@@ -8,6 +8,7 @@ class CatAreaCeye extends CatArea {
 		id column:'cve_area'
 		version false
 		table 'cat_area_ceye'
+		cache usage:'read-only'
 	}
 	
     static constraints = {

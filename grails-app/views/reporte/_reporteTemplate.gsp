@@ -18,7 +18,7 @@
 		<table>
 		
 		
-			<g:if test="${!['reporteExistencia','reporteExistenciaConjunto'].contains(methodName)}">
+			<g:if test="${!['reporteExistencia'].contains(methodName)}">
 				<tr>
 					<td>
 						<label for="fechaInicial">Fecha Inicial</label>

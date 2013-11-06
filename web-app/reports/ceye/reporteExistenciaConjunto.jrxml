@@ -48,7 +48,7 @@
             entrada_detalle_ceye ed
         WHERE
             e.id_entrada = ed.id_entrada
-        AND e.fecha_entrada >  $P{fechaCierreCeye}
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
         AND ed.cve_art = artExt.cve_art
         AND e.estado_entrada='A'
         AND e.almacen = 'C'
@@ -77,7 +77,7 @@
             salida_detalle_ceye sd
         WHERE
             s.id_salida = sd.id_salida
-        AND s.fecha_salida > $P{fechaCierreCeye}
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
         AND sd.cve_art = artExt.cve_art
         AND s.estado_salida = 'A'
         AND s.almacen = 'C'
@@ -94,7 +94,7 @@
             entrada_detalle_ceye ed
         WHERE
             e.id_entrada = ed.id_entrada
-        AND e.fecha_entrada > $P{fechaCierreSubceye}
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
         AND ed.cve_art = artExt.cve_art
         AND e.estado_entrada='A'
         AND e.almacen = 'S'
@@ -123,7 +123,7 @@
             salida_detalle_ceye sd
         WHERE
             s.id_salida = sd.id_salida
-        AND s.fecha_salida > $P{fechaCierreSubceye}
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
         AND sd.cve_art = artExt.cve_art
         AND s.estado_salida = 'A'
         AND s.almacen = 'S'
@@ -140,7 +140,7 @@
             entrada_detalle_ceye ed
         WHERE
             e.id_entrada = ed.id_entrada
-        AND e.fecha_entrada > $P{fechaCierreCeniaq}
+        AND e.fecha_entrada between $P{fechaInicial} and $P{fechaFinal}
         AND ed.cve_art = artExt.cve_art
         AND e.estado_entrada='A'
         AND e.almacen = 'Q'
@@ -169,7 +169,7 @@ NVL(
             salida_detalle_ceye sd
         WHERE
             s.id_salida = sd.id_salida
-        AND s.fecha_salida > $P{fechaCierreCeniaq}
+        AND s.fecha_salida between $P{fechaInicial} and $P{fechaFinal}
         AND sd.cve_art = artExt.cve_art
         AND s.estado_salida = 'A'
         AND s.almacen = 'Q'
@@ -217,6 +217,12 @@ ORDER BY artExt.cve_art]]>
 		<band height="115" splitType="Stretch">
 			<subreport>
 				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="0" y="0" width="752" height="110"/>
+				<subreportParameter name="fechaFinal">
+					<subreportParameterExpression><![CDATA[$P{fechaFinal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="fechaInicial">
+					<subreportParameterExpression><![CDATA[$P{fechaInicial}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="reporteName">
 					<subreportParameterExpression><![CDATA['REPORTE EXISTENCIA CONJUNTO']]></subreportParameterExpression>
 				</subreportParameter>

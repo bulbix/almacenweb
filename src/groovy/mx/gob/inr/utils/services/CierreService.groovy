@@ -155,7 +155,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			if(articulo){
 			
 				def listaConcentradora = concentrarEntradaSalida(fechaCierre, articulo, almacen)
-				def cierreAnterior  = utilService.cierreAnterior(entityCierre,fechaCierre, articulo,almacen)
+				def cierreAnterior  = utilService.cierreAnterior(entityCierre,fechaCierre, almacen, articulo)
 							
 				def cierreNuevo = calcularAjusteCierre(listaConcentradora,fechaCierre, cierreAnterior, articulo,almacen)
 				

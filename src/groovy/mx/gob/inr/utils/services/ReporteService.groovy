@@ -53,7 +53,7 @@ abstract class ReporteService {
 		
 		for(articulo in articuloList){
 			
-			def cierre = utilService.cierreAnterior(entityCierre,fechaInicial,articulo,params.almacen)
+			def cierre = utilService.cierreAnterior(entityCierre,fechaInicial,params.almacen,articulo)
 			
 			if(cierre){
 				

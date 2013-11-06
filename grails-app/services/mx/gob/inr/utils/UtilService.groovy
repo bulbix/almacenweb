@@ -165,7 +165,7 @@ class UtilService {
 	   	return false
    }
    
-   def cierreAnterior(entityCierre, Date fechaCierre, Articulo articulo, String almacen){
+   def cierreAnterior(entityCierre, Date fechaCierre, String almacen, Articulo articulo = null){
 		
 		def mFechaCierre = fechaDesglosada(fechaCierre)
 		def fechaCierreAnterior = new Date()
@@ -186,8 +186,11 @@ class UtilService {
 		def cierre = entityCierre.createCriteria().get{
 			sqlRestriction("month(fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
 			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
-			eq("articulo",articulo)
+			if(articulo){
+				eq("articulo",articulo)
+			}			
 			eq("almacen", almacen)
+			maxResults(1)
 		}
 		
 		if(!cierre){			
@@ -225,9 +228,9 @@ class UtilService {
 	   if(max)
 	   	result = max
 	   
-	   return result
-	   
+	   return result	   
    }
+         
    
    String getAlmacenDescripcion(String almacen){
 	   

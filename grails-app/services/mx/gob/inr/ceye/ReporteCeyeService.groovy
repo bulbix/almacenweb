@@ -35,14 +35,14 @@ class ReporteCeyeService extends ReporteService {
 	public reporteExistenciaConjunto(params){
 		
 		
-		//def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
-		//def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
 		
-		params.fechaCierreCeye = utilService.maximaFechaCierre(CierreCeye,'C').format('yyyy-MM-dd')
-		params.fechaCierreSubceye = utilService.maximaFechaCierre(CierreCeye,'S').format('yyyy-MM-dd')
-		params.fechaCierreCeniaq = utilService.maximaFechaCierre(CierreCeye,'Q').format('yyyy-MM-dd')
-		//params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
-		//params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
+		params.fechaCierreCeye = utilService.cierreAnterior(CierreCeye,fechaInicial,'C').fechaCierre.format('yyyy-MM-dd')
+		params.fechaCierreSubceye = utilService.cierreAnterior(CierreCeye,fechaInicial,'S').fechaCierre.format('yyyy-MM-dd')
+		params.fechaCierreCeniaq = utilService.cierreAnterior(CierreCeye,fechaInicial,'Q').fechaCierre.format('yyyy-MM-dd')
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
 		
 		def reporteList = []
 		reporteList

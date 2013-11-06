@@ -104,7 +104,7 @@ $.validator.addMethod("dateToday", function (value, element) {
         var endDateArray= value.split("/");
 		var endDateObj= new Date(endDateArray[2],(endDateArray[1] - 1 ), endDateArray[0] ,0,0,0,0);
 		var startDateMilliseconds= startDateObj.getTime();
-		 var endDateMilliseconds= endDateObj.getTime();
+		var endDateMilliseconds= endDateObj.getTime();
 		
 		if(endDateMilliseconds > startDateMilliseconds )
 			return false

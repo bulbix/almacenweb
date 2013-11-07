@@ -15,6 +15,6 @@ class ArticuloPartidaMaterial implements Serializable {
 		almacen column:'id_almacen'
 		id composite: ['partida','cveArt','almacen','movimiento']
 		datasource 'materiales'
-		cache usage:'read-only'
+		cache true
 	}
 }

@@ -23,6 +23,6 @@ class ArticuloCeye extends Articulo {
 		table 'articulo_ceye'
 		partida column:'partida'		
 		sort "id"
-		cache usage:'read-only'
+		cache true
 	}
 }

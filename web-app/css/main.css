@@ -186,7 +186,7 @@ img {
 	text-decoration: underline;
 }
 
-.nav a.home, .nav a.list, .nav a.create {
+.nav a {
 	background-position: 0.7em center;
 	background-repeat: no-repeat;
 	text-indent: 25px;
@@ -202,6 +202,22 @@ img {
 
 .nav a.create {
 	background-image: url(../images/skin/database_add.png);
+}
+
+.nav a.nuevo {
+	background-image: url(../images/icons/nuevoPaciente.gif);
+}
+
+.nav a.actualizar {
+	background-image: url(../images/icons/ico_guardar.gif);
+}
+
+.nav a.cancelar {
+	background-image: url(../images/icons/ico_cancelar.gif);
+}
+
+.nav a.catalogo {
+	background-image: url(../images/icons/buscarcp.gif);
 }
 
 /* CREATE/EDIT FORMS AND SHOW PAGES */
@@ -276,7 +292,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 input:focus, select:focus, textarea:focus {	
-	border: 2px solid #0000FF;
+	border: 2px solid #FF8C00;
     background-color: #ffffff;	
 	outline: 0;
 	   -moz-box-shadow: 0 0 0.5em #ffffff;
@@ -477,9 +493,9 @@ th.desc a {
 	background: #ffffff;
 }
 
-th:hover, tr:hover {
+/*th:hover, tr:hover {
 	background: #EED1BE;
-}
+}*/
 
 /* PAGINATION */
 
@@ -627,3 +643,60 @@ a.skip {
 	height: 100px;
 }
      
+     
+     
+
+input[type=button] {
+        
+        -moz-box-shadow: 0px 1px 0px 0px #f0f7fa;
+        -webkit-box-shadow: 0px 1px 0px 0px #f0f7fa;
+        box-shadow: 0px 1px 0px 0px #f0f7fa;
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #33bdef), color-stop(1, #019ad2));
+        background:-moz-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+        background:-webkit-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+        background:-o-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+        background:-ms-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+        background:linear-gradient(to bottom, #33bdef 5%, #019ad2 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bdef', endColorstr='#019ad2',GradientType=0);
+        
+        background-color:#33bdef;
+         background-repeat: no-repeat;
+        -moz-border-radius:6px;
+        -webkit-border-radius:6px;
+        border-radius:6px;
+        
+        border:1px solid #057fd0;
+        
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:15px;
+        font-weight:bold;
+        /*padding:6px 24px;*/
+        text-decoration:none;
+        
+        text-shadow:0px -1px 0px #5b6178;
+        
+    }
+    input[type=button]:hover {
+        
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #019ad2), color-stop(1, #33bdef));
+        background:-moz-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+        background:-webkit-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+        background:-o-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+        background:-ms-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+        background:linear-gradient(to bottom, #019ad2 5%, #33bdef 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#019ad2', endColorstr='#33bdef',GradientType=0);
+        
+        background-color:#019ad2;
+    }
+    input[type=button]:active {
+        position:relative;
+        top:1px;
+    }
+/* This button was generated using CSSButtonGenerator.com */
+
+.paginateButtons a {
+    margin-left: 10px;
+}

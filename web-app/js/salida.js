@@ -272,23 +272,32 @@ function controlesHead(){
 	}*/
 	
 	$("#guardarPaquete").click(function(){	
-		if(confirm('Esta seguro de guardar el paquete?') && $(".cabecera").valid() && $("#folio").valid()){
-			guardarTodo(this)
-			$("#paqueteq").prop('disabled', true)
-			$(".busqueda").show()
+		if($(".cabecera").valid() && $("#folio").valid()){
+			
+			mostrarConfirmacion('Esta seguro de guardar el paquete?', function(){			
+				guardarTodo(this)
+				$("#paqueteq").prop('disabled', true)
+				$(".busqueda").show()
+			})
+			
+			
 		}
 	});
 	
 	$("#actualizar").click(function(){		
-		if(confirm('Esta seguro de actualizar la salida?') && $(".cabecera").valid()){
-			actualizar();
+		if($(".cabecera").valid()){			
+			mostrarConfirmacion('Esta seguro de actualizar la salida?', function(){			
+				actualizar();
+			})			
+			
 		}	
 	})
 	
 	$("#cancelar").click(function(){
-		if(confirm('Esta seguro de cancelar la salida?')){
+		
+		mostrarConfirmacion('Esta seguro de cancelar la salida?', function(){			
 			cancelar()
-		}
+		})	
 	})
 	
 }
@@ -315,7 +324,7 @@ function detalleAdd(){
 						 
 					})
 					.fail(function() {
-						alert("La clave " + $("#insumo").val() + " no existe")
+						mostrarMensaje("La clave " + $("#insumo").val() + " no existe","error")
 						limpiarRenglonDetalle()
 					})
 		 }

@@ -5,7 +5,7 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
-//grails.project.war.file = "target/${appName}-${appVersion}.war"
+grails.project.war.file = "target/${appName}.war"
 
 // uncomment (and adjust settings) to fork the JVM to isolate classpaths
 //grails.project.fork = [
@@ -44,17 +44,14 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.22'
 		compile ('cglib:cglib-nodep:2.2')
-    }
-	
-	grails.war.resources = { stagingDir, args ->
-		println "Removing export jars from WEB-INF/lib/"
-		delete(file: "${stagingDir}/WEB-INF/lib/cglib-2.2.jar")
-	}
+    }	
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.8.3"
+        runtime ":jquery:1.10.2"
+		compile ":jquery-ui:1.10.3"
         runtime ":resources:1.1.6"
+		compile ":filterpane:2.2.5"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"

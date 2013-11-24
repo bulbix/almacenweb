@@ -7,6 +7,7 @@ import mx.gob.inr.utils.domain.Entrada;
 import mx.gob.inr.utils.services.IOperacionService
 import mx.gob.inr.farmacia.EntradaFarmacia;
 import mx.gob.inr.util.services.*;
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService;
 
@@ -18,6 +19,9 @@ abstract class OperacionController<A> implements IOperacionController {
 	def filterPaneService
 	SpringSecurityService springSecurityService
 	UtilService utilService
+	
+	def exportService
+	GrailsApplication grailsApplication
 	
 	public OperacionController(entityAlmacen){
 		this.entityAlmacen = entityAlmacen		
@@ -90,6 +94,15 @@ abstract class OperacionController<A> implements IOperacionController {
 		def result = servicio.listar(params,springSecurityService.currentUser)		
 		def isAdmin = utilService.isAdmin(session.almacen)
 		
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			response.setHeader("Content-disposition", "attachment; filename=books.${params.extension}")
+
+			exportService.export(params.format, response.outputStream,result.lista, [:], [:])
+		}
+		
+		
+		
 		[almacen:session.almacen, almacenInstanceList: result.lista,
 			almacenInstanceTotal: result.total,isAdmin:isAdmin]
 		
@@ -106,7 +119,14 @@ abstract class OperacionController<A> implements IOperacionController {
 				if(it.idSalAlma)
 					it.folioAlmacen = SalidaMaterial.get(it.idSalAlma).folio;
 			}
-		}	
+		}
+		
+		if(params?.format && params.format != "html"){
+			response.contentType = grailsApplication.config.grails.mime.types[params.format]
+			response.setHeader("Content-disposition", "attachment; filename=books.${params.extension}")
+
+			exportService.export(params.format, response.outputStream,almacenList, [:], [:])
+		}
 		
 		render( view:'list',model:[almacen:session.almacen, almacenInstanceList: almacenList,
 			almacenInstanceTotal: filterPaneService.count( params, entityAlmacen ),

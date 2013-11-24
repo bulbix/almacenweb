@@ -1,5 +1,5 @@
 dataSource {
-	url = "jdbc:informix-sqli://192.168.10.12:1526/saihweb:informixserver=ol_inrserver"
+	url = "jdbc:informix-sqli://192.168.10.10:1526/saihweb:informixserver=ol_inrserver"
 	driverClassName = "com.informix.jdbc.IfxDriver"
 	username = "informix"
 	password = "informix"
@@ -16,10 +16,9 @@ dataSource_materiales {
 	dialect = "org.hibernate.dialect.InformixDialect"
 }
 
-
 hibernate {
     cache.use_second_level_cache = true
-    cache.use_query_cache = false
+    cache.use_query_cache = true
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
 	validator.apply_to_ddl = false
 	validator.autoregister_listeners = false
@@ -37,46 +36,20 @@ environments {
     }
     test {
         dataSource {          
-		   //logSql = true
+		   
         }
 		
-		dataSource_materiales {			
-			//logSql = true
+		dataSource_materiales {		
+			
 		}	
     }
     production {
-        dataSource {
-            //dbCreate = "update"
-            url = "jdbc:informix-sqli://192.168.10.12:1526/saihweb:informixserver=ol_inrserver"           
-            properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="select first 1 * from systables"
-            }
+        dataSource {			
+			jndiName = "java:comp/env/jdbc/INR/Informix"           
         }
 		
 		dataSource_materiales {
-			//dbCreate = "update"
-			url = "jdbc:informix-sqli://192.168.10.1:1526/almacenes:informixserver=ol_inrserver"			
-			properties {
-			   maxActive = -1
-			   minEvictableIdleTimeMillis=1800000
-			   timeBetweenEvictionRunsMillis=1800000
-			   numTestsPerEvictionRun=3
-			   testOnBorrow=true
-			   testWhileIdle=true
-			   testOnReturn=true
-			   validationQuery="select first 1 * from systables"
-			}
+			jndiName = "java:comp/env/jdbc/sia"
 		}
-		
-		
-		
-		
-    }
+	}
 }

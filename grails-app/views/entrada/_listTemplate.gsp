@@ -29,8 +29,12 @@
 				<thead>
 					<tr>					
 						<g:sortableColumn property="folio" title="Folio" />					
-						<g:sortableColumn property="fecha" title="Fecha" />					
-						<g:sortableColumn property="idSalAlma" title="Almacen" />					
+						<g:sortableColumn property="fecha" title="Fecha" />
+						
+						<g:if test="${almacen == 'F'}">					
+							<g:sortableColumn property="idSalAlma" title="Almacen" />
+						</g:if>	
+										
 						<g:sortableColumn property="numeroFactura" title="Remision" />
 						<g:sortableColumn property="usuario" title="Registro" />
 						
@@ -48,8 +52,12 @@
 					
 						<td>${fieldValue(bean: entradaInstance, field: "folio")}</td>					
 						<td><g:link action="create" id="${entradaInstance.id}">
-							<g:formatDate date="${entradaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>											
-						<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>					
+							<g:formatDate date="${entradaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>	
+							
+						<g:if test="${almacen == 'F'}">										
+							<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>
+						</g:if>		
+									
 						<td>${fieldValue(bean: entradaInstance, field: "numeroFactura")}</td>					
 						<td>${fieldValue(bean: entradaInstance, field: "usuario")}</td>
 						

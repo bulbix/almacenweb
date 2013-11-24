@@ -325,33 +325,41 @@ function controlesHead(){
 	}	
 	
 	$("#guardarAlmacen").click(function(){	
-		if( confirm('Esta seguro de guardar el folio de almacen?') && 
-		 $(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
-			guardarTodo(this)
-			$("#folioAlmacen").prop('disabled', true);
+		if($(".cabecera").valid() && $("#folio").valid() && $("#folioAlmacen").valid()){
+			
+			mostrarConfirmacion('Esta seguro de guardar el folio de almacen?', function(){	
+				guardarTodo(this)
+				$("#folioAlmacen").prop('disabled', true);				
+			})
 		}
 	});
 	
 	$("#guardarPaquete").click(function(){	
-		if(confirm('Esta seguro de guardar el paquete?') && 
-			$(".cabecera").valid() && $("#folio").valid() && $("#remision").valid()){
-			guardarTodo(this)
-			$("#paqueteq").prop('disabled', true)
+		if($(".cabecera").valid() && $("#folio").valid() && $("#remision").valid()){
+			
+			mostrarConfirmacion('Esta seguro de guardar el paquete?', function(){
+				guardarTodo(this)
+				$("#paqueteq").prop('disabled', true)
+			})
 		}
 	});
 	
 	$("#actualizar").click(function(){
 		
-		if(confirm('Esta seguro de actualizar la entrada?') && $(".cabecera").valid()){
-			actualizar();
+		if($(".cabecera").valid()){			
+			mostrarConfirmacion('Esta seguro de actualizar la entrada?', function(){
+				actualizar();
+			})
+			
 		}	
 	})
 	
 	
 	$("#cancelar").click(function(){
-		if(confirm('Esta seguro de cancelar la entrada?')){
+		
+		mostrarConfirmacion('Esta seguro de cancelar la entrada?', function(){
 			cancelar()
-		}
+		})
 	})
 	
 }
@@ -377,7 +385,7 @@ function detalleAdd(){
 						 }
 					})
 					.fail(function() {
-						alert("La clave " + $("#insumo").val() + " no existe")
+						mostrarMensaje("La clave " + $("#insumo").val() + " no existe","error")
 						limpiarRenglonDetalle()
 					})
 		 }

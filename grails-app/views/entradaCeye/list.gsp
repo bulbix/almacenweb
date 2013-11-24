@@ -4,6 +4,7 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'entrada.label', default: 'Entrada')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
+		
 	</head>
 	<body>
 	
@@ -23,7 +24,7 @@
 			
 	<filterpane:filterPane domain="mx.gob.inr.ceye.EntradaCeye" 
 		associatedProperties="usuario.username,area.desArea" 
-		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado,almacen"/>
+		filterProperties="folio,fecha,numeroFactura,usuario,paqueteq,area,estado"/>
 		
 		
 	</body>

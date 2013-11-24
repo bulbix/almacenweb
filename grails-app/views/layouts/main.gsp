@@ -52,12 +52,14 @@
 		
 		<div style="text-align: center">
 			<sec:ifLoggedIn>	
-				<h3><sec:username/></h3>
+				Inicio sesion como: <span style="color:blue"><g:usuarioActual/></span>
 				<a href="${createLink(controller:'logout',action: 'index')}">Cerrar Sesion</a>	
 			</sec:ifLoggedIn>
 		</div>
 		
 		
+		<div id="dialog-confirm"></div>
+		<div id="dialog-mensaje"></div>
 		
 		<g:layoutBody/>
 		

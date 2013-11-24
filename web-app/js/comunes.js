@@ -120,7 +120,7 @@ function actualizar(){
 
 	request.done(function(data) {
 		$('#detalle').trigger("reloadGrid");
-		alert(data.mensaje)
+		mostrarMensaje(data.mensaje)
 	});
 	
 }
@@ -146,7 +146,7 @@ function cancelar(){
 		});	
 		
 		$("#imprimir").show()
-		alert(data.mensaje)
+		mostrarMensaje(data.mensaje)
 	});	
 }
 
@@ -159,9 +159,7 @@ function controlesDetalle(){
 		$("#detalle").jqGrid('editGridRow',gr, {
 			   editData:{idPadre:$("#idPadre").val()},
 			   height:300,
-			   width:500,
-			   top: 500,
-			   left:0,
+			   width:500,			  
 			   reloadAfterSubmit: true,
 			   editCaption:'Editar Detalle',
 			   bSubmit:'Actualizar',
@@ -185,9 +183,7 @@ function controlesDetalle(){
 		$("#detalle").jqGrid('delGridRow',gr, {
 			   delData:{idPadre:$("#idPadre").val()},
 			   height:240,
-			   width:500,
-			   top: 500,
-			   left:0,
+			   width:500,			   
 			   reloadAfterSubmit: true,
 			   editCaption:'Borrar Detalle',
 			   bSubmit:'Borrar',
@@ -255,8 +251,71 @@ function guardarTodo(boton){
 		$('#idPadre').val(data.idPadre)
 		$('#detalle').trigger("reloadGrid");
 		$('.botonOperacion').show()
-		alert(data.mensaje)
+		mostrarMensaje(data.mensaje)
 	});
 	
 	$(boton).hide()
+}
+
+
+function mostrarMensaje(mensaje, status){
+	
+	var image = ""
+	
+	if(status != undefined){
+		
+		switch(status){
+		
+		case 'ok':
+			image = "<img  src='/almacenWeb/images/icons/paloma.gif' />"
+			break
+		case 'error':
+			image = "<img  src='/almacenWeb/images/icons/error_message.jpg' />"
+			break
+		
+		}
+	}
+	
+	var html = "<p>" + image + mensaje + "</p>"
+	
+	$( "#dialog-mensaje" ).dialog({
+		  title:'Mensaje',
+		  autoOpen: false,
+	      modal: true,
+	      buttons: {
+	        Ok: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      },
+	      resizable: false
+	})
+	
+	
+	
+	$("#dialog-mensaje" ).html(html)	       					
+	$("#dialog-mensaje" ).dialog("open");	
+}
+
+
+function mostrarConfirmacion(mensaje, functionSi){
+	
+	$( "#dialog-confirm" ).dialog({
+		  title:'Confirmacion',
+	      resizable: false,
+	      height:200,
+	      modal: true,
+	      buttons: {
+	        "Si": function(){
+	        	functionSi(); 
+	        	$( this ).dialog( "close" )
+	        },
+	        "No": function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	});
+	
+	$("#dialog-confirm" ).html(mensaje)	       					
+	$("#dialog-confirm" ).dialog("open");	
+	
 }

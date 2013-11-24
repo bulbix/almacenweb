@@ -9,6 +9,8 @@ class AlmacenTagLib {
 	
 	def utilService
 	
+	def springSecurityService
+	
 	def almacenDescripcion = { attrs, body ->
 		
 		def almacen = attrs.almacen		
@@ -45,6 +47,12 @@ class AlmacenTagLib {
 		out << g.select( name:"partida", from:partidaList, optionKey:"partida" , 
 			optionValue:"desPart", noSelection:"${['':'SELECCIONE PARTIDA']}")
 		
+	}
+	
+	def usuarioActual={ attrs, body ->
+		
+		def html = springSecurityService.currentUser.nombre
+		out << html
 	}
 
 }

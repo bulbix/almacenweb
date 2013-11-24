@@ -15,9 +15,9 @@
 		</g:link></li>
 		
 		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
-			<li><a href="${createLink(action: 'create')}">Nuevo</a></li>
-			<li><a href="#" id="actualizar" style="display:none" class="edit botonOperacion">Actualizar</a></li>	
-			<li><a href="#" id="cancelar" style="display:none" class="delete botonOperacion">Cancelar</a></li>
+			<li><a href="${createLink(action: 'create')}" class="nuevo">Nuevo</a></li>
+			<li><a href="#" id="actualizar" style="display:none" class="actualizar botonOperacion">Actualizar</a></li>	
+			<li><a href="#" id="cancelar" style="display:none" class="cancelar botonOperacion">Cancelar</a></li>
 		</sec:noAccess>
 	</ul>
 </div>
@@ -242,8 +242,8 @@
 	</table>
 	
 	<g:if test="${existeCierre == false && salidaInstance?.estado == 'A'}">
-		<input type="button" id="btnActualizar" value="Actualizar" class="busqueda" />
-		<input type="button" id="btnBorrar" value="Borrar" class="busqueda" />
+		<input type="button" id="btnActualizar" value="Actualizar Clave" class="busqueda" />
+		<input type="button" id="btnBorrar" value="Borrar Clave" class="busqueda" />
 	</g:if>
 
 	<form id="formDetalle">

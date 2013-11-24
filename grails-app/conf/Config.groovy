@@ -99,3 +99,7 @@ grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'mx.gob.inr.se
 grails.plugins.springsecurity.authority.className = 'mx.gob.inr.seguridad.Perfil'
 
 //auditLog.verbose = true
+
+auditLog {
+	tablename = "audit_log_almacen"
+  }

@@ -354,7 +354,7 @@ function detalleAdd(){
 				 $("#costolast").html($("#costo").val());				
 				 $("#solicitadolast").html($("#solicitado").val());
 				 $("#surtidolast").html($("#surtido").val());
-				 $('#disponiblelast').html(disponibilidadArticulo($("#insumo").val(),$("#fecha").val()))
+				 $('#disponiblelast').html($("#disponible").val())
 				 
 				 limpiarRenglonDetalle()
 				 $("#insumo").focus()

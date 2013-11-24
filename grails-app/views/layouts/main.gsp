@@ -29,12 +29,15 @@
 	
 		
 		<g:javascript src="i18n/grid.locale-es.js"/>
+		<g:javascript src="i18n/jquery.ui.datepicker-es.js"/>	
 		<g:javascript src="jquery.jqGrid.min.js"/>
 		<g:javascript src="jquery.maskedinput.min.js"/>
 		<g:javascript src="jquery.validate.min.js"/>
 		<g:javascript src="jquery.currency.js"/>
 		<g:javascript src="jquery.timer.js"/>
 		<g:javascript src="jquery-ui-timepicker-addon.js"/>	
+		<g:javascript src="validaciones.js"/>
+		<g:javascript src="comunes.js"/>
 	
 		<table>
 			<tr>
@@ -52,8 +55,7 @@
 		
 		<div style="text-align: center">
 			<sec:ifLoggedIn>	
-				Inicio sesion como: <span style="color:blue"><g:usuarioActual/></span>
-				<a href="${createLink(controller:'logout',action: 'index')}">Cerrar Sesion</a>	
+				Inicio sesion como: <span style="color:blue"><g:usuarioActual/></span>					
 			</sec:ifLoggedIn>
 		</div>
 		

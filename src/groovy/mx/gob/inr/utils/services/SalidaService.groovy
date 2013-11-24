@@ -356,15 +356,14 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		
 		def query =
 		"""\
-			select sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.precioUnitario,
-			sd.cantidadPedida,sum(sd.cantidadSurtida),sd.salida.fecha
-			from $entitySalidaDetalleName sd 			
+			select sd 
+			from $entitySalidaDetalleName sd 
+			join fetch sd.salida  
+			join fetch sd.articulo			 			
 			where sd.salida.id = $idSalida  
-			$searchClave
-			group by sd.articulo.id, sd.articulo.desArticulo, sd.articulo.unidad, sd.precioUnitario,
-			sd.cantidadPedida,sd.salida.fecha 
+			$searchClave	
 			
-			order by sd.articulo.id
+			order by sd.renglon asc
 
 		"""
 		
@@ -374,15 +373,23 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		
 		def totalRows = detalleCount.size();
 		def numberOfPages = Math.ceil(totalRows / maxRows)
+		
+		def results = []
+		
+		detalle.each(){ sd->
 			
-		def results = detalle?.collect {
-			[
-				 cell:[it[0], it[1]?.trim(),
-					 it[2]?.trim(), it[3],
-					  disponibilidadArticulo(it[0], it[6],params.almacen),
-					  it[4],it[5]], id: it[0]
-			]
-		}	
+			def renglon = results.find { r -> r.id == sd.articulo.id }
+			
+			if(renglon){				
+				renglon.cell[6] += sd.cantidadSurtida				
+			}
+			else{
+				results << [cell:[sd.articulo.id, sd.articulo.desArticulo?.trim(), 
+					sd.articulo.unidad?.trim(), sd.precioUnitario, disponibilidadArticulo(sd.articulo.id, sd.salida.fecha,params.almacen),
+					 sd.cantidadPedida, sd.cantidadSurtida], id: sd.articulo.id]
+			}		
+			
+		}
 		
 		
 		def jsonData = [rows: results, page: currentPage, records: totalRows, total: numberOfPages]
@@ -544,7 +551,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			$diagnostico
 			left join fetch sd.articulo art 
 			where s.id = $id 
-			order by art asc
+			order by sd.renglon asc
 		"""	
 		
 		def detalleList = entitySalidaDetalle.executeQuery(query,[])

@@ -1,8 +1,6 @@
 
 <%@ page import="mx.gob.inr.ceye.PaqueteTipoQuirurgicoCeye" %>
 
-<g:javascript src="validaciones.js"/>
-<g:javascript src="comunes.js"/>
 <g:javascript src="salida.js" />
 
 <a href="#create-salida" class="skip" tabindex="-1"><g:message
@@ -208,17 +206,18 @@
 
 
 	<table class="busqueda">
+		<caption>Ultima clave capturada</caption>
 		<thead>
 			<tr>
-				<td><label>Clave</label></td>
+				<th><label>Clave</label></th>
 
-				<td><label>Descripcion</label></td>
+				<th><label>Descripcion</label></th>
 
-				<td><label>Unidad</label></td>
-				<td><label>Costo</label></td>
-				<td><label>Disponible</label></td>
-				<td><label>Solicitado</label></td>
-				<td><label>Surtido</label></td>
+				<th><label>Unidad</label></th>
+				<th><label>Costo</label></th>
+				<th><label>Disponible</label></th>
+				<th><label>Solicitado</label></th>
+				<th><label>Surtido</label></th>
 
 			</tr>
 

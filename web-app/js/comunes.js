@@ -1,3 +1,8 @@
+$(document).ready(function() {		
+	$.datepicker.setDefaults($.datepicker.regional['es']);	
+})
+
+
 $.fn.serializeObject = function()
 {
    var o = {};
@@ -319,3 +324,4 @@ function mostrarConfirmacion(mensaje, functionSi){
 	$("#dialog-confirm" ).dialog("open");	
 	
 }
+

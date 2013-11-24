@@ -1,8 +1,6 @@
 
 <%@ page import="mx.gob.inr.ceye.PaqueteTipoQuirurgicoCeye" %>
 
-<g:javascript src="validaciones.js"/>
-<g:javascript src="comunes.js"/>
 <g:javascript src="entrada.js" />
 
 <a href="#create-entrada" class="skip" tabindex="-1"><g:message
@@ -238,22 +236,23 @@
 	
 
 	<table class="busqueda">
+		<caption>Ultima clave capturada</caption>
 		<thead>
 			<tr>
-				<td><label>Clave</label></td>
-				<td><label>Descripcion</label></td>
-				<td><label>Unidad</label></td>
+				<th><label>Clave</label></th>
+				<th><label>Descripcion</label></th>
+				<th><label>Unidad</label></th>
 				
 				<g:if test="${entradaInstance.almacen != 'F'}">
-					<td><label>Solicitado</label></td>
+					<th><label>Solicitado</label></th>
 				</g:if>
 				
-				<td><label>Cantidad</label></td>
-				<td><label>Precio U.</label></td>
+				<th><label>Cantidad</label></th>
+				<th><label>Precio U.</label></th>
 				
 				<g:if test="${entradaInstance.almacen == 'F'}">
-					<td><label>Lote</label></td>
-					<td><label>F. Caducidad</label></td>
+					<th><label>Lote</label></th>
+					<th><label>F. Caducidad</label></th>
 				</g:if>
 
 			</tr>

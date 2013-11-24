@@ -49,7 +49,7 @@ environments {
         }
 		
 		dataSource_materiales {
-			jndiName = "java:comp/env/jdbc/sia"
+			jndiName = "java:comp/env/jdbc/INR/sia"
 		}
 	}
 }

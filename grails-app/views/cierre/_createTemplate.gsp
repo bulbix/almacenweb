@@ -20,7 +20,7 @@
 			<g:link class="list" action="list">	<g:message code="default.list.label" args="[entityName]" /></g:link>
 		</li>
 		<li>
-			<li><a href="${createLink(action: 'create')}">Nuevo</a></li>	
+			<a href="${createLink(action: 'create')}" class="nuevo">Nuevo</a>
 		</li>
 	</ul>
 </div>

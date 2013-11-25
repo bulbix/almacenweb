@@ -87,7 +87,7 @@ function validar(){
 		messages: {
 				fecha : {required:"Requerido"},
 				folio:{required:"Requerido",number:"Numerico"},
-				//folioAlmacen:{numeric:"Requerido"},
+				folioAlmacen:{number:"Numerico"},
 				remision: {required:"Requerido"},				
 				supervisa:{required:"Requerido"},
 				recibe:{required:"Requerido"},
@@ -124,21 +124,24 @@ function capturar(){
 	$("#remision").keypress(function(e){	
 		 if(e.which == 13) {
 			 if($("#areaauto").val() != undefined)
-					$("#areaauto").focus()
-				else		
-					$("#supervisa").focus()		
+				$("#areaauto").focus()
+			 else		
+				 $("#supervisa").focus()		
+		 }
+		 
+		 if(this.value != ''){
+			$("#folioAlmacen").val('');
+			$("#folioAlmacen").prop('disabled', true);
+			//$(".busqueda").show()
+		 }
+		 else{
+			 $("#folioAlmacen").prop('disabled', false);
 		 }
 	});
 	
-	$("#remision").change(function(){
-		if(this.value != ''){
-			$("#folioAlmacen").val('');
-			$("#folioAlmacen").prop('disabled', true);
-		}
-		else{
-			$("#folioAlmacen").prop('disabled', false);
-		}
-	});
+	/*$("#remision").change(function(){
+		
+	});*/
 	
 	var area = $("#areaauto")
 
@@ -166,28 +169,34 @@ function capturar(){
 	});
 	
 	
-	$("#folioAlmacen").focus(function(){
-		$("#detalle").clearGridData();
-		$("#guardarAlmacen").hide()
-		$(".busqueda").hide()
-	});
+	/*$("#folioAlmacen").focus(function(){
+		
+	});*/
 	
-	$("#folioAlmacen").keypress(function(e){	
-		 if(e.which == 13) {
+	$("#folioAlmacen").keyup(function(e){	
+		 if($("#folioAlmacen").valid() && e.which == 13) {
 			 consultarDetalleMaterial();	
 		 }
-	});
-	
-	$("#folioAlmacen").change(function(){
-		
-		if(this.value != ''){
+		 else{
+			$("#detalle").clearGridData();
+			$("#guardarAlmacen").hide()
+			$(".busqueda").hide()
+		 }
+		 
+		 if(this.value != ''){
 			$("#remision").val('');
 			$("#remision").prop('disabled', true);
-		}
-		else{
+		 }
+		 else{
 			$("#remision").prop('disabled', false);
-		}
+		 }
+		 
 	});
+	
+	/*$("#folioAlmacen").change(function(){
+		
+		
+	});*/
 	
 	
 	$("#paqueteq").change(function(){

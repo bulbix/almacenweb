@@ -42,6 +42,10 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 			eq("almacen","F")
 		}
 		
+		if(!resultSalida){
+			return true
+		}
+		
 		def result = entityEntrada.createCriteria().get {
 			eq("idSalAlma",resultSalida?.id as Integer)
 		}
@@ -59,7 +63,7 @@ class EntradaFarmaciaService extends EntradaService<EntradaFarmacia>  {
 		def query = """\
 			select sd from SalidaDetalleMaterial sd join fetch sd.id.salida s 
 			where s.folio = :folio and s.fecha between :fecha1 and :fecha2 and s.almacen = 'F' 
-			and s.cveArea = :area and s.estado <> 'C' order by sd.cveArt
+			and s.cveArea = :area and s.estado <> 'C' order by sd.renglon asc
 		"""
 		
 		def fechas = utilService.fechasAnioActual()

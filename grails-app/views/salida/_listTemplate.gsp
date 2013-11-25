@@ -1,4 +1,4 @@
-<filterpane:includes />
+<r:require module="filterpane" />
 
 <a href="#list-salida" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
 		<div class="nav" role="navigation">

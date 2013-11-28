@@ -11,6 +11,7 @@ import org.springframework.security.authentication.LockedException
 import org.springframework.security.core.context.SecurityContextHolder as SCH
 import org.springframework.security.web.WebAttributes
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.apache.commons.codec.binary.Base64
 
 class LoginController {
 
@@ -131,4 +132,49 @@ class LoginController {
 	def ajaxDenied = {
 		render([error: 'access denied'] as JSON)
 	}
+	
+	/***
+	 * Ya que es metodo privado no es considerado como action
+	 * @return un usuario autenticado
+	 */
+	private def autenticar(String token){		
+		byte[] encodedBytes = Base64.decodeBase64(token.getBytes());
+		String rfc = new String(encodedBytes).split(";")[0]
+		springSecurityService.reauthenticate(rfc)
+	}
+	
+	private def controllerSufijo(String almacen){
+		
+		def result = ""
+		
+		if(['C','S','Q'].contains(almacen)){
+			result = "Ceye"
+		}
+		else if(almacen == "F"){
+			result = "Farmacia"
+		}
+		
+		result
+		
+	}
+	
+	/*****
+	 * Auetentica y redirecciona al modulo correspondiente
+	 * @return
+	 */
+	def main(){
+		autenticar(params.t)
+		
+		def sufijo = controllerSufijo(params.almacen)		
+		
+		switch(params.tipo){
+			case "entrada": case "salida": case "cierre":
+				redirect controller:"${params.tipo}${sufijo}", action: 'list', params:[almacen:params.almacen]				
+				break
+			default: //Todos los reportes
+				redirect controller:"reporte${sufijo}", action: params.tipo, params:[almacen:params.almacen]
+						
+		}
+	}	
+	
 }

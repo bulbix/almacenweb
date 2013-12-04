@@ -700,3 +700,9 @@ input[type=button] {
 .paginateButtons a {
     margin-left: 10px;
 }
+
+label {
+	font-weight:bold
+	
+	
+}

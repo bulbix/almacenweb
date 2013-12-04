@@ -330,11 +330,11 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 	
 	@Override
 	def consultarDetalle(params){
-		def sortIndex = params.sidx ?: 'id'
-		def sortOrder  = params.sord ?: 'asc'
-		def maxRows = Integer.valueOf(params.rows)
-		def currentPage = Integer.valueOf(params.page) ?: 1
-		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
+		///def sortIndex = params.sidx ?: 'id'
+		///def sortOrder  = params.sord ?: 'asc'
+		//def maxRows = Integer.valueOf(params.rows)
+		def currentPage = 1
+		//def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
 		def idSalida  = Long.parseLong(params.idPadre)
 		
 		
@@ -361,18 +361,14 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			join fetch sd.salida  
 			join fetch sd.articulo			 			
 			where sd.salida.id = $idSalida  
-			$searchClave	
-			
+			$searchClave				
 			order by sd.renglon asc
 
 		"""
 		
-		def detalleCount = entitySalidaDetalle.executeQuery(query,[])
-				
-		def detalle = entitySalidaDetalle.executeQuery(query,[],[max: maxRows, offset: rowOffset])
 		
-		def totalRows = detalleCount.size();
-		def numberOfPages = Math.ceil(totalRows / maxRows)
+				
+		def detalle = entitySalidaDetalle.executeQuery(query,[])		
 		
 		def results = []
 		
@@ -390,6 +386,10 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			}		
 			
 		}
+		
+		//def detalleCount = results.size()
+		def totalRows = results.size();
+		def numberOfPages = 1
 		
 		
 		def jsonData = [rows: results, page: currentPage, records: totalRows, total: numberOfPages]

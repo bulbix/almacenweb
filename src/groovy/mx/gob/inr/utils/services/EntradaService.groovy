@@ -324,18 +324,18 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	@Override
 	def consultarDetalle(params){
 
-		def sortIndex = params.sidx ?: 'id'
-		def sortOrder  = params.sord ?: 'asc'
-		def maxRows = Integer.valueOf(params.rows)
-		def currentPage = Integer.valueOf(params.page) ?: 1
-		def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
+		//def sortIndex = params.sidx ?: 'id'
+		//def sortOrder  = params.sord ?: 'asc'
+		//def maxRows = Integer.valueOf(params.rows)
+		def currentPage = 1
+		//def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
 		def idEntrada  = params.long('idPadre')
 
 		log.info("IDENTRADA " + params.idPadre)
 
-		def detalleCount = entityEntradaDetalle.createCriteria().list(){
+		/*def detalleCount = entityEntradaDetalle.createCriteria().list(){
 			eq('entrada.id',idEntrada)
-		}
+		}*/
 
 		//Para la busqueda
 		def searchOper = params.searchOper
@@ -346,7 +346,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		def criteria = entityEntradaDetalle.createCriteria()
 		
 
-		def detalle = criteria.list(max: maxRows, offset: rowOffset) {
+		def detalle = criteria.list {
 			eq('entrada.id',idEntrada)
 			
 			if(search == 'true'){
@@ -362,8 +362,8 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 		
 
-		def totalRows = detalleCount.size();
-		def numberOfPages = Math.ceil(totalRows / maxRows)
+		def totalRows = detalle.size();
+		def numberOfPages = 1
 
 		def results = detalle?.collect {
 			

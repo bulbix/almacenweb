@@ -77,10 +77,10 @@ function validar(){
                 supervisa:{required:true},
                 recibe:{required:true},                
                 insumo: {required:true, number:true,checkInsumo:true},
-                solicitado: {required:true,number:true},
-                cantidad: {required:true,number:true},
-                convertidoSolicitado: {required:true,number:true},
-                convertido: {required:true,number:true},
+                solicitado: {required:true,number:true,min:0,max:5000},
+                cantidad: {required:true,number:true,min:0,max:5000},
+                convertidoSolicitado: {required:true,number:true,min:0,max:5000},
+                convertido: {required:true,number:true,min:0,max:5000},
                 precio: {required:true, number:true},
                 fechaCaducidad: {required:true,validateDate:true}
         },
@@ -92,10 +92,10 @@ function validar(){
 				supervisa:{required:"Requerido"},
 				recibe:{required:"Requerido"},
 				insumo :{required:"Requerido", number:"Numerico"},
-				solicitado:{required:"Requerido",number:"Numerico"},
-				cantidad:{required:"Requerido",number:"Numerico"},
-				convertidoSolicitado:{required:"Requerido",number:"Numerico"},
-				convertido:{required:"Requerido",number:"Numerico"},
+				solicitado:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
+				cantidad:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
+				convertidoSolicitado:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
+				convertido:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
 				precio: {required:"Requerido", number:"Numerico"},
 				fechaCaducidad: {required:"Requerido"}
 							
@@ -401,7 +401,7 @@ function detalleAdd(){
 	});
 	
 	$("#solicitado").keypress(function(e){	
-		 if(e.which == 13) {
+		 if(e.which == 13 && $("#solicitado").valid()) {
 			 if(almacen != 'F'){
 					$.getJSON(url + "/convertidora",{clave:$("#insumo").val(),cantidad:this.value})
 						.done(function( json ) {							 
@@ -420,7 +420,7 @@ function detalleAdd(){
 	});
 	
 	$("#cantidad").keypress(function(e){	
-		 if(e.which == 13) {
+		 if(e.which == 13 && $("#cantidad").valid()) {
 			
 			$("#precio").focus()
 			

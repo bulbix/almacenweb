@@ -43,8 +43,8 @@ function validar(){
         		recibeauto:{required:true},
         		autorizaauto:{required:true},
         		insumo: {required:true,number:true,checkInsumo:true},
-                solicitado: {required:true,number:true},
-                surtido: {required:true,number:true,checkExistencia:true}
+                solicitado: {required:true,number:true,min:0,max:5000},
+                surtido: {required:true,number:true,checkExistencia:true,min:0,max:5000}
         },
 		messages: {
 				fecha : {required:"Requerido"},
@@ -55,8 +55,8 @@ function validar(){
 				recibeauto:{required:"Requerido"},
         		autorizaauto:{required:"Requerido"},
 				insumo :{required:"Requerido",number:"Numerico"},
-				solicitado : {required:"Requerido",number:"Numerico"},
-				surtido:{required:"Requerido",number:"Numerico"}
+				solicitado : {required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
+				surtido:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'}
 		}
   });
 }

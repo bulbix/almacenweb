@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteProporcionado" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="340"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -39,7 +39,15 @@
 	<group name="articulo">
 		<groupExpression><![CDATA[$F{articulo}.getProperty("id")]]></groupExpression>
 		<groupHeader>
-			<band height="10">
+			<band height="14">
+				<rectangle>
+					<reportElement uuid="e553dcdf-64e0-49c6-9947-2f68d043e3c9" stretchType="RelativeToBandHeight" x="0" y="0" width="574" height="13" backcolor="#F3F2F2">
+						<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
 				<textField isBlankWhenNull="true">
 					<reportElement uuid="5260cb0d-edca-43a0-a013-d1702e3d5355" x="0" y="0" width="42" height="10"/>
 					<textElement textAlignment="Center">

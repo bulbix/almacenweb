@@ -367,8 +367,16 @@ ORDER BY artExt.cve_art]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="11" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{totalEntrada} != 0 || $V{totalSalida} != 0]]></printWhenExpression>
+			<rectangle>
+				<reportElement uuid="32c85d68-d8ed-4f41-ac1d-b0d522c98cfc" stretchType="RelativeToBandHeight" x="0" y="0" width="574" height="13" backcolor="#F3F2F2">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="828cac1e-1c83-4f66-97c3-970736c0dabc" x="49" y="0" width="147" height="10"/>
 				<textElement>

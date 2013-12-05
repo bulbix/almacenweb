@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportValeSalida" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="cae6c1c3-8fae-4c1b-b7d0-2ffb98f8f263">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="251"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
@@ -34,7 +34,15 @@
 	<group name="clave">
 		<groupExpression><![CDATA[$F{articulo}.getProperty("id")]]></groupExpression>
 		<groupHeader>
-			<band height="12">
+			<band height="15">
+				<rectangle>
+					<reportElement uuid="be2c5088-f5e4-4964-8dc4-41e12408916c" stretchType="RelativeToBandHeight" x="2" y="0" width="574" height="13" backcolor="#F3F2F2">
+						<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+					</reportElement>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="552f553c-b64e-44a0-91fd-c5f4e3b70c58" x="59" y="0" width="149" height="10"/>
 					<textElement>

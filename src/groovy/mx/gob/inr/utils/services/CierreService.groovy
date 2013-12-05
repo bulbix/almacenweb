@@ -249,7 +249,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			where c.fechaCierre = ? 
 			and c.almacen = ? 
 			and c.existencia > 0 
-			order by art asc
+			order by art.partida.partida asc, art asc
 		"""	
 		
 		def cierreList = entityCierre.executeQuery(query,[fechaCierre,almacen])

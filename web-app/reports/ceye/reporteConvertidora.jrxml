@@ -120,7 +120,7 @@ INNER JOIN
 	<detail>
 		<band height="15" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="79152182-a4db-447e-9151-2426ebebc7b7" stretchType="RelativeToBandHeight" x="2" y="0" width="571" height="15" backcolor="#FDF8A1">
+				<reportElement uuid="0f4b43da-b324-494e-b9f7-e916a7b7c208" stretchType="RelativeToBandHeight" x="2" y="0" width="574" height="13" backcolor="#F3F2F2">
 					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>

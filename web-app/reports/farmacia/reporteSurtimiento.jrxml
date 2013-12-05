@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteSurtimiento" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e14dd1ae-7e89-46a9-838d-efcc1bbb0d01">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="304"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -148,6 +148,14 @@
 	</columnHeader>
 	<detail>
 		<band height="13">
+			<rectangle>
+				<reportElement uuid="249a0197-4f56-4a4f-8bdc-75a69bef8966" stretchType="RelativeToBandHeight" x="0" y="0" width="574" height="13" backcolor="#F3F2F2">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement uuid="b7e25b09-a653-433f-9fbd-43f9f171dd0b" x="0" y="0" width="42" height="12"/>
 				<textElement textAlignment="Center">

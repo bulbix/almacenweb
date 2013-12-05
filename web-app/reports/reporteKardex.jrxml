@@ -204,7 +204,15 @@ $F{tipo}.trim().equals("CIERRE") == true ? $F{importe}: 0]]></variableExpression
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="11">
+		<band height="14">
+			<rectangle>
+				<reportElement uuid="7703e047-642c-4983-bde9-b8845dbfdaaa" stretchType="RelativeToBandHeight" x="2" y="1" width="570" height="13" backcolor="#F3F2F2">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField>
 				<reportElement uuid="4a4d9fdf-1457-466b-bfcb-ebdd0c81ab6d" x="105" y="1" width="37" height="8"/>
 				<textElement textAlignment="Center">

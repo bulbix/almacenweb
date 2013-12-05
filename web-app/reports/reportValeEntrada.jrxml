@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportValeEntrada" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="358e940e-7be2-4f64-acd3-ff6c7721599d">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="251"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
@@ -240,7 +240,15 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="10">
+		<band height="13">
+			<rectangle>
+				<reportElement uuid="cc011a13-eadc-4575-baa3-cf983e2dac66" stretchType="RelativeToBandHeight" x="1" y="0" width="574" height="13" backcolor="#F3F2F2">
+					<printWhenExpression><![CDATA[new Boolean( $V{PAGE_COUNT}.intValue() % 2 ==0 )]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
 			<textField pattern="#,##0" isBlankWhenNull="true">
 				<reportElement uuid="732e3d10-f932-4018-b509-1cc2ba066ff6" x="303" y="0" width="43" height="10"/>
 				<textElement textAlignment="Right">

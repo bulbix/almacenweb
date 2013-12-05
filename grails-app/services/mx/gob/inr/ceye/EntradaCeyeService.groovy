@@ -8,7 +8,7 @@ import mx.gob.inr.farmacia.SalidaDetalleFarmacia;
 import mx.gob.inr.utils.AutoCompleteService;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.services.EntradaService;
-import mx.gob.inr.materiales.ArticuloMaterial;
+import mx.gob.inr.materiales.*;
 
 class EntradaCeyeService extends EntradaService<EntradaCeye> {
 
@@ -62,11 +62,13 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 	
 	def precioAlmacen(Long cveArt){
 		
-		def articulo = ArticuloMaterial.findWhere(cveArt:cveArt.intValue(),almacen:"F")
+		def costoPromedioMaterial = CostoPromedioMaterial.findWhere(cveArt:cveArt.intValue(),almacen:"F")
 		def precio = 0.0
 		
-		if(articulo)
-			 precio = articulo.movimientoProm
+		if(costoPromedioMaterial){
+			precio = costoPromedioMaterial.costoPromedio			
+		}
+			
 		return precio		
 	}
 	

@@ -143,8 +143,10 @@ abstract class ReporteService {
 			def sumaSalida = sumaDetalle(entitySalidaDetalle,entityCierre,params.almacen,"cantidadSurtida",articulo.id,"S")[0]
 				
 			def existencia = sumaEntrada + existenciaCierre - sumaSalida	
-					
-			reporteExistenciaList << [articulo:articulo, existencia:existencia]
+			
+			if(existencia > 0){		
+				reporteExistenciaList << [articulo:articulo, existencia:existencia]
+			}
 			
 		}
 		

@@ -335,7 +335,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 		//def maxRows = Integer.valueOf(params.rows)
 		def currentPage = 1
 		//def rowOffset = currentPage == 1 ? 0 : (currentPage - 1) * maxRows
-		def idSalida  = Long.parseLong(params.idPadre)
+		def idSalida  = params.long('idPadre')
 		
 		
 		//Para la busqueda

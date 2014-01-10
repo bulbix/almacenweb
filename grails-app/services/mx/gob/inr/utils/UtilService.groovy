@@ -13,7 +13,12 @@ import mx.gob.inr.utils.domain.Cierre
 
 class UtilService {
 	
+	
+	def grailsApplication
+	
 	SpringSecurityService springSecurityService
+	
+	
 	
 	def clave(entityArticulo, String tipo){		
 		def criteria = entityArticulo.createCriteria();
@@ -42,13 +47,24 @@ class UtilService {
 		fechaPrimero
 	}
 		
+   /*****
+    *Toma el anio de un archivo de configuracion si no existe toma el anio actual
+    * @return
+    */
    def fechasAnioActual(){
+	   
+	   	def anio  = grailsApplication.config.almacenWeb.anioActual    
+		
+		if(!anio){
+			def fecha = new Date()
+			anio = fecha.getAt(Calendar.YEAR)
+		}
 		
 		def fecha1 = new Date()
-		fecha1.set(month:0,date:1)
+		fecha1.set(month:0,date:1, year:anio)
 		
 		def fecha2 = new Date()
-		fecha2.set(month:11,date:31)
+		fecha2.set(month:11,date:31, year:anio)
 		
 		[fechaInicio:fecha1,fechaFin:fecha2]
 	}

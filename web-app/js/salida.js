@@ -69,13 +69,7 @@ function capturar(){
 		 if(e.which == 13) {
 			$("#folio").focus()		
 		 }
-	});
-	
-	fecha.focusout(function(){
-		
-	})
-	
-	
+	});	
 	
 	$("#folio").keypress(function(e){	
 		 if(e.which == 13) {
@@ -87,6 +81,12 @@ function capturar(){
 	});
 	
 	$("#nosala").keypress(function(e){	
+		 if(e.which == 13) {
+			$("#tipoVale").focus()		
+		 }
+	});
+	
+	$("#tipoVale").keypress(function(e){	
 		 if(e.which == 13) {
 			$("#areaauto").focus()		
 		 }

@@ -11,6 +11,7 @@ import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Entrada;
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.ceye.*
+import mx.gob.inr.utils.Paciente
 
 abstract class EntradaService<E extends Entrada> implements IOperacionService<E> {
 
@@ -44,8 +45,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 		if(jsonEntrada.idSalAlma)
 			entrada.idSalAlma = jsonEntrada.idSalAlma as int
-
-		entrada.numeroFactura = jsonEntrada.remision
+		
 		entrada.usuario = usuarioRegistro
 		entrada.recibio = Usuario.get(jsonEntrada.recibe)
 		entrada.supervisor = Usuario.get(jsonEntrada.supervisa)
@@ -54,10 +54,13 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 
 
 		if(entrada instanceof EntradaFarmacia){
+			entrada.numeroFactura = jsonEntrada.remision
 			entrada.devolucion  = jsonEntrada.devolucion == 'on'?'1':'0'
 		}
 		else if(entrada instanceof EntradaCeye){
 			entrada.area =  entityArea.get(jsonEntrada.cveArea)
+			entrada.paciente = Paciente.get(jsonEntrada.idPaciente)
+			entrada.tipoVale = jsonEntrada.tipoVale
 			entrada.paqueteq = jsonEntrada.paqueteq
 		}
 

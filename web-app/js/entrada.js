@@ -18,6 +18,7 @@ $(document).ready(function() {
 	});
 	
 	autoCompleteArea(function(){});
+	autoCompletePaciente(function(){})
 	
 	consultarDetalle();
 	detalleAdd();
@@ -113,20 +114,24 @@ function capturar(){
 	
 	$("#folio").keypress(function(e){	
 		 if(e.which == 13) {
-			$("#remision").focus()		
+			
+			if(almacen == 'F'){
+				$("#remision").focus()				
+			}
+			else{
+				$("#tipoVale").focus()
+			}		
 		 }
-	});
-	
-	/*$("#remision").focus(function(){		
-		$(".busqueda").show()
-	});*/
+	});	
 	
 	$("#remision").keypress(function(e){	
 		 if(e.which == 13) {
-			 if($("#areaauto").val() != undefined)
-				$("#areaauto").focus()
-			 else		
-				 $("#supervisa").focus()		
+			 if(almacen == 'F'){
+				 $("#supervisa").focus()				
+			 }
+			 else{
+				 $("#areaauto").focus()				 
+			 }
 		 }
 		 
 		 if(this.value != ''){
@@ -139,9 +144,11 @@ function capturar(){
 		 }
 	});
 	
-	/*$("#remision").change(function(){
-		
-	});*/
+	$("#tipoVale").keypress(function(e){	
+		 if(e.which == 13) {
+			$("#areaauto").focus()		
+		 }
+	});
 	
 	var area = $("#areaauto")
 
@@ -151,10 +158,28 @@ function capturar(){
 	});
 	
 	area.keypress(function(e){	
-		 if(e.which == 13) {
-			 $("#supervisa").focus()	
+		 if(e.which == 13) {			 
+			 if(almacen == 'F'){
+				 $("#supervisa").focus()				
+			 }
+			 else{
+				 $("#pacienteauto").focus()				 
+			 }			 	
 		 }
 	});
+	
+	var paciente = $("#pacienteauto")
+	
+	paciente.change( function() {
+		if(paciente.val() == "")
+			$("#idPaciente").val("")
+	});
+	
+	paciente.keypress(function(e){	
+		 if(e.which == 13) {			 
+			  $("#supervisa").focus()
+		 }
+	});	
 	
 	$("#supervisa").keypress(function(e){	
 		 if(e.which == 13) {

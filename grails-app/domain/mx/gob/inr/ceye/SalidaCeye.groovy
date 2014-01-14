@@ -11,6 +11,7 @@ class SalidaCeye extends Salida {
 	Cie09 diagnostico
 	Short nosala
 	String paqueteq
+	String tipoVale
 	
 	static hasMany = [salidasDetalle:SalidaDetalleCeye]
 	
@@ -38,6 +39,6 @@ class SalidaCeye extends Salida {
 		
 		usuario updateable: false
 		paqueteq updateable:false
-		fechaCaptura updateable:false
+		fechaCaptura updateable:false		
 	}
 }

@@ -7,10 +7,6 @@
 /hibernate
 /jasper.properties
 /jasperDemo
-/messages-filterpane.properties
-/messages-filterpane_de.properties
-/messages-filterpane_fr.properties
-/messages-filterpane_sv.properties
 /mx
 /org
 /spring
@@ -30,9 +26,10 @@
 /BuildConfig$_run_closure1_closure5.class
 /BuildConfig.class
 /Config$_run_closure1.class
-/Config$_run_closure1_closure3.class
 /Config$_run_closure1_closure4.class
+/Config$_run_closure1_closure5.class
 /Config$_run_closure2.class
+/Config$_run_closure3.class
 /Config.class
 /DataSource$_run_closure1.class
 /DataSource$_run_closure2.class
@@ -46,9 +43,7 @@
 /DataSource$_run_closure4_closure6_closure11.class
 /DataSource$_run_closure4_closure7.class
 /DataSource$_run_closure4_closure7_closure12.class
-/DataSource$_run_closure4_closure7_closure12_closure14.class
 /DataSource$_run_closure4_closure7_closure13.class
-/DataSource$_run_closure4_closure7_closure13_closure15.class
 /DataSource.class
 /DbdocUrlMappings$__clinit__closure1.class
 /DbdocUrlMappings.class
@@ -114,5 +109,3 @@
 /UrlMappings.class
 /resources$_run_closure1.class
 /resources.class
-/Config$_run_closure1_closure5.class
-/Config$_run_closure3.class

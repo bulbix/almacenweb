@@ -66,6 +66,7 @@ abstract class SalidaService<S extends Salida> implements IOperacionService<S> {
 			salida.diagnostico =  Cie09.get(jsonSalida.idProcedimiento)
 			salida.nosala = jsonSalida.nosala?jsonSalida.nosala as short:null
 			salida.paqueteq = jsonSalida.paqueteq
+			salida.tipoVale = jsonSalida.tipoVale
 		}
 				
 		return salida

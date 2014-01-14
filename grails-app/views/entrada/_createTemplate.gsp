@@ -105,9 +105,18 @@
 					</td>				
 				</g:if>
 				
-				<td><label for="remision">Remision</label> 
-					<g:textField name="remision" size="5" value="${entradaInstance?.numeroFactura}" />
-				</td>
+				
+				<g:if test="${entradaInstance?.almacen == 'F'}" >				
+					<td><label for="remision">Remision</label> 
+						<g:textField name="remision" size="5" value="${entradaInstance?.numeroFactura}" />
+					</td>
+				</g:if>
+				<g:else>
+					<td><label for="tipoVale">Tipo Vale</label>								
+						<g:select name="tipoVale" from="${['instituto', 'paciente']}" 
+							value="${entradaInstance?.tipoVale}"  />
+					</td>					
+				</g:else>
 			</tr>
 		</table>
 			
@@ -117,10 +126,18 @@
 				<tr>
 					<td >
 						<label for="areaauto">Area</label>
-						<g:textField name="areaauto" size="50" value="${entradaInstance?.area}" />
+						<g:textField name="areaauto" size="90" value="${entradaInstance?.area}" />
 						<input type="hidden" name="cveArea" id="cveArea" value="${entradaInstance?.area?.id}" />
-					</td>				
-					<td >
+					</td>
+				</tr>
+				<tr>					
+					<td>
+						<label for="pacienteauto">Paciente</label>
+						<g:textField name="pacienteauto" size="90" value="${entradaInstance?.paciente}" />
+						<input type="hidden" name="idPaciente" id="idPaciente" value="${entradaInstance?.paciente?.id}" />
+					</td>								
+				<tr>
+					<td>
 						<label for="paqueteq">Paquete Quirurgico</label>
 						<g:select name="paqueteq" from="${PaqueteTipoQuirurgicoCeye.list()}" optionKey="tipo"
 						optionValue="descripcion" value="${entradaInstance?.paqueteq}" 

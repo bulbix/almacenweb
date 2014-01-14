@@ -60,12 +60,12 @@ environments {
     development {
         grails.logging.jul.usebridge = true
 		
-		grails.config.locations = ["file:${userHome}/.grails/${appName}-config.groovy"]
+		grails.config.locations = ["file:F:/grails/app-config/${appName}-config.groovy"]
     }
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"		
-		grails.config.locations = ["/opt/grails/app-config/${appName}-config.groovy"]
+		grails.config.locations = ["file:/opt/grails/app-config/${appName}-config.groovy"]
     }
 }
 

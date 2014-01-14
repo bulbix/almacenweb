@@ -82,12 +82,17 @@
 						name="folio" 
 						value="${salidaInstance?.folio}" size="5" /></td>
 				
-				<td>		
-					<g:if test="${salidaInstance?.almacen != 'F'}">
-						<label for="nosala">No. Sala</label> <g:textField
-								 name="nosala" 	value="${salidaInstance?.nosala}" size="5" />
-					</g:if>
-				</td>
+				<g:if test="${salidaInstance?.almacen != 'F'}">
+					<td><label for="nosala">No. Sala</label> <g:textField
+						 name="nosala" 	value="${salidaInstance?.nosala}" size="5" />					
+					</td>
+					
+					<td><label for="tipoVale">Tipo Vale</label>								
+						<g:select name="tipoVale" from="${['instituto', 'paciente']}" 
+							value="${salidaInstance?.tipoVale}"  />
+					</td>			
+					
+				</g:if>
 			</tr>
 		</table>
 		

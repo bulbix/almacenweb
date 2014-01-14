@@ -1,5 +1,6 @@
 package mx.gob.inr.ceye
 
+import mx.gob.inr.utils.Paciente
 import mx.gob.inr.utils.domain.Entrada;
 
 class EntradaCeye extends Entrada {
@@ -8,6 +9,8 @@ class EntradaCeye extends Entrada {
 	
 	CatAreaCeye area
 	String paqueteq
+	String tipoVale
+	Paciente paciente
 		
 	static hasMany = [entradasDetalle:EntradaDetalleCeye]
 	
@@ -31,6 +34,8 @@ class EntradaCeye extends Entrada {
 		usuario updateable: false
 		paqueteq updateable:false
 		fechaCaptura updateable:false
+		
+		paciente column:'id_paciente'
 	}
 	
     static constraints = {

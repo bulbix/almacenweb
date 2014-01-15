@@ -10,6 +10,9 @@ import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Cierre
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+import org.springframework.web.context.request.RequestContextHolder
 
 class UtilService {
 	
@@ -53,7 +56,25 @@ class UtilService {
     */
    def fechasAnioActual(){
 	   
-	   	def anio  = grailsApplication.config.almacenWeb.anioActual    
+	   GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
+	   GrailsHttpSession session = request.session
+	   
+	   def anio  = null     
+		
+	   switch(session.almacen){		   
+		   	case "F":
+			   	anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
+		   	   	break
+	   		case "C":
+			   	anio  = grailsApplication.config.almacenWeb.ceye.anioActual
+			   	break
+	   		case "S":
+			   	anio  = grailsApplication.config.almacenWeb.subceye.anioActual
+			   	break
+			case "Q":
+				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
+				break
+	   }    
 		
 		if(!anio){
 			def fecha = new Date()

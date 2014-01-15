@@ -133,6 +133,78 @@ class ReporteCeyeService extends ReporteService {
 	}
 	
 	
+	
+	/****
+	 * 
+	 * Reporte Concentrado del Vale de Entrada 
+	 * el precio desplegado el movimiento promedio de las claves 
+	 * 
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public reporteConcentradoValeEntrada(params){
+		
+		def entityDetalle = EntradaDetalleCeye
+		def entityArea = CatAreaCeye
+		
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
+
+		
+		def reporteList = []
+		
+		def detalleList = entityDetalle.createCriteria().list(){
+			
+			projections{
+				
+				property("articulo")				
+				sum("cantidadSolicitada")
+				sum("cantidad")
+				
+				groupProperty("articulo")
+								
+				entrada{				
+					
+					property("area")					
+					
+					area{
+						if(params.area){
+								eq("id",params.area.toLong())
+						}
+					}
+										
+					between("fecha",fechaInicial, fechaFinal)
+					eq("estado","A")
+					eq("almacen",params.almacen)
+				}
+				
+				articulo{
+					partida{
+						if(params.partida){
+							eq("partida",params.partida)
+						}
+					}
+				}				
+			}
+						
+			order("articulo","asc")
+		}.each{
+		
+			it[0].movimientoProm = utilService.getMovimientoPromedio(it[0], params.almacen)		
+			reporteList << [articulo:it[0],cantidadSolicitada:it[1],cantidad:it[2],area:it[3]]		
+		}
+		
+		
+		
+		reporteList
+		
+		
+		
+	}
+	
+	
+	
 	public reporteFoliosAlmacen(params){
 		
 		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)

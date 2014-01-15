@@ -32,7 +32,8 @@
 				</tr>
 			</g:if>
 			
-			<g:if test="${!['reportePartida','reporteSurtimiento','reporteSala','reporteFoliosAlmacen'].contains(methodName)}">
+			<g:if test="${!['reportePartida','reporteSurtimiento','reporteSala','reporteFoliosAlmacen',
+							'reporteConcentradoValeEntrada'].contains(methodName)}">
 				<tr>
 					<td>
 						<label for="claveInicial">Clave Inicial</label>
@@ -54,7 +55,7 @@
 			</g:if>		
 			
 			
-			<g:if test="${methodName in ['reporteConsumo','reporteProporcionado','reporteSala']}">
+			<g:if test="${methodName in ['reporteConsumo','reporteProporcionado','reporteSala','reporteConcentradoValeEntrada']}">
 				<tr>
 					<td colspan="2">
 						<label for="partida">Area</label>

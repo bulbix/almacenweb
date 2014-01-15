@@ -533,12 +533,9 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	
 	def disponibilidadArticuloAnio(Long clave, Date fecha,String almacen, E entradaParam = null){
 		
-		def criteria = entityEntradaDetalle.createCriteria()
-		
-		Calendar fechaCal = Calendar.getInstance();
-		fechaCal.setTime(fecha);
+		def criteria = entityEntradaDetalle.createCriteria()	
  
-		int anio = fechaCal.get(Calendar.YEAR);
+		int anio = utilService.anioConfiguracion()
 		
 		def disponible = criteria.get {
 		

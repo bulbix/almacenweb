@@ -70,7 +70,9 @@ function validar(){
         rules: {
                 fecha: {required:true,validateDate:true,dateToday:true,checkCierre:true},                
                 folio: {required:true, number:true, uniqueFolio:true},
-                folioAlmacen:{number:true, uniqueFolioSalAlma:true},
+                folioAlmacen:{number:true, uniqueFolioSalAlma:function() {
+                    return $('#remision').val() != '' ;
+                }},
                 remision: {required: function() {
                     return $('#folioAlmacen').val() == undefined || $('#folioAlmacen').val() == '' ;
                 }},               

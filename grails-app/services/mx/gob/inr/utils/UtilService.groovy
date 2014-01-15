@@ -49,32 +49,44 @@ class UtilService {
 		fechaPrimero.set(month:fecha.getAt(Calendar.MONTH),date:1)
 		fechaPrimero
 	}
+	
+	/****
+	 * Se obtiene el anio en el archivo de configuracion
+	 * @return
+	 */
+	def anioConfiguracion(){
+		
+		GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
+		GrailsHttpSession session = request.session
+		
+		def anio  = null
+		 
+		switch(session.almacen){
+			case "F":
+				anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
+				break
+			case "C":
+				anio  = grailsApplication.config.almacenWeb.ceye.anioActual
+				break
+			case "S":
+				anio  = grailsApplication.config.almacenWeb.subceye.anioActual
+				break
+			case "Q":
+				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
+				break
+		}
+		
+		return anio
+		
+	}
 		
    /*****
     *Toma el anio de un archivo de configuracion si no existe toma el anio actual
     * @return
     */
-   def fechasAnioActual(){
+   def fechasAnioActual(){ 
 	   
-	   GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
-	   GrailsHttpSession session = request.session
-	   
-	   def anio  = null     
-		
-	   switch(session.almacen){		   
-		   	case "F":
-			   	anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
-		   	   	break
-	   		case "C":
-			   	anio  = grailsApplication.config.almacenWeb.ceye.anioActual
-			   	break
-	   		case "S":
-			   	anio  = grailsApplication.config.almacenWeb.subceye.anioActual
-			   	break
-			case "Q":
-				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
-				break
-	   }    
+	   def anio  = anioConfiguracion()
 		
 		if(!anio){
 			def fecha = new Date()

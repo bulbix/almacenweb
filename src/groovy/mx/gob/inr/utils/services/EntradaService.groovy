@@ -441,10 +441,11 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		
 		def entityEntradaDetalleName = entityEntradaDetalle.name
 		
-		def area = ""
+		def whereCeye = ""
 		
-		if(almacen != 'F')
-			area = " left join fetch e.area "
+		if(almacen != 'F'){
+			whereCeye = " left join fetch e.area left join fetch e.paciente "
+		}
 					
 		def query =
 		"""
@@ -453,7 +454,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			left join fetch e.recibio 
 			left join fetch e.supervisor
 			left join fetch e.usuario
-			$area
+			$whereCeye
 			left join fetch ed.articulo art 
 			where e.id = $id 
 			order by ed.renglon asc

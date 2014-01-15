@@ -29,7 +29,8 @@
 </div>
 
 <div id="imprimir" style="display:none" class="botonOperacion" >
-		<g:jasperReport jasper="reportValeEntrada" format="PDF,XLSX" delimiter=" " name="ValeEntrada" 
+		<g:jasperReport jasper="${entradaInstance?.almacen == 'F'?'farmacia':'ceye'}/reportValeEntrada" 
+				format="PDF,XLSX" delimiter=" " name="ValeEntrada" 
 			controller="${controllerName}" action="reporte">		
 			<input type="hidden" name="id" value="${entradaInstance?.id}" />
 			<input type="hidden" name="almacen" value="${entradaInstance?.almacen}" />			

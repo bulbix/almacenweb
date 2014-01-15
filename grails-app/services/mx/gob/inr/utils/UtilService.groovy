@@ -10,6 +10,9 @@ import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Cierre
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
+import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
+import org.springframework.web.context.request.RequestContextHolder
 
 class UtilService {
 	
@@ -53,20 +56,39 @@ class UtilService {
     */
    def fechasAnioActual(){
 	   
-	   	def anio  = grailsApplication.config.almacenWeb.anioActual    
+	   
+	   GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
+	   GrailsHttpSession session = request.session
+	   
+	   def anio  = null     
 		
-		if(!anio){
+	   switch(session.almacen){		   
+		   	case "F":
+			   	anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
+		   	   	break
+	   		case "C":
+			   	anio  = grailsApplication.config.almacenWeb.ceye.anioActual
+			   	break
+	   		case "S":
+			   	anio  = grailsApplication.config.almacenWeb.subceye.anioActual
+			   	break
+			case "Q":
+				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
+				break
+	   }
+	   
+	   if(!anio){
 			def fecha = new Date()
 			anio = fecha.getAt(Calendar.YEAR)
-		}
+	   }
 		
-		def fecha1 = new Date()
-		fecha1.set(month:0,date:1, year:anio)
+	   def fecha1 = new Date()
+	   fecha1.set(month:0,date:1, year:anio)
 		
-		def fecha2 = new Date()
-		fecha2.set(month:11,date:31, year:anio)
+	   def fecha2 = new Date()
+	   fecha2.set(month:11,date:31, year:anio)
 		
-		[fechaInicio:fecha1,fechaFin:fecha2]
+	   [fechaInicio:fecha1,fechaFin:fecha2]
 	}
    
    

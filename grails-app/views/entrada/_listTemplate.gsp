@@ -34,7 +34,10 @@
 						<g:if test="${almacen == 'F'}">					
 							<g:sortableColumn property="idSalAlma" title="Almacen" />
 							<g:sortableColumn property="numeroFactura" title="Remision" />
-						</g:if>											
+						</g:if>
+						<g:else>
+							<g:sortableColumn property="tipoVale" title="Tipo" />						
+						</g:else>											
 						
 						<g:sortableColumn property="usuario" title="Registro" />
 						
@@ -57,7 +60,10 @@
 						<g:if test="${almacen == 'F'}">										
 							<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>
 							<td>${fieldValue(bean: entradaInstance, field: "numeroFactura")}</td>
-						</g:if>		
+						</g:if>
+						<g:else>
+							<td>${fieldValue(bean: entradaInstance, field: "tipoVale")}</td>						
+						</g:else>		
 											
 						<td>${fieldValue(bean: entradaInstance, field: "usuario")}</td>
 						

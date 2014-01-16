@@ -70,12 +70,12 @@ function validar(){
         rules: {
                 fecha: {required:true,validateDate:true,dateToday:true,checkCierre:true},                
                 folio: {required:true, number:true, uniqueFolio:true},
-                folioAlmacen:{number:true, uniqueFolioSalAlma:function() {
-                    return $('#remision').val() != '' ;
-                }},
-                remision: {required: function() {
+                folioAlmacen:{number:true, uniqueFolioSalAlma:{depends:function() {                	
+                	return $('#remision').val() == undefined || $('#remision').val() == '' ;
+                }}},
+                remision: {required:{ depends:function() {
                     return $('#folioAlmacen').val() == undefined || $('#folioAlmacen').val() == '' ;
-                }},               
+                }}},               
                 supervisa:{required:true},
                 recibe:{required:true},                
                 insumo: {required:true, number:true,checkInsumo:true},

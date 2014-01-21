@@ -2,7 +2,11 @@ package mx.gob.inr.utils
 
 import grails.plugins.springsecurity.SpringSecurityService;
 
+import java.io.InputStream;
 import java.util.Date;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import mx.gob.inr.ceye.ArticuloCeye
 import mx.gob.inr.farmacia.ArticuloFarmacia
@@ -10,6 +14,7 @@ import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.Cierre
+
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.web.context.request.RequestContextHolder
@@ -331,6 +336,47 @@ class UtilService {
 	   }
 	   
 	   result
+   }
+   
+   
+   String getFechaActual(String format){
+	   
+	   def fecha = new Date()
+	   return fecha.format(format)
+	   
+   }
+   
+   
+   /******
+    * 
+    * Muestra un reporte generado en itext con el arreglo de bytes
+    * 
+    * 
+    * 
+    * @param response
+    * @param datos
+    * @param contentType
+    * @param nombre
+    * @throws Exception
+    */
+   public void mostrarReporte(HttpServletResponse response, InputStream datos,
+	   String contentType, String nombre) throws Exception {
+		   response.setContentType(contentType);
+		   response.setHeader("Content-disposition", "attachment;filename="
+				   + nombre);
+		   ServletOutputStream os = response.getOutputStream(); //
+		   
+		   int readBytes=0;
+		   int size=0;
+		   byte[] buffer=new byte[2048];
+		   while(  (readBytes=datos.read(buffer)) >=0){
+			   os.write(buffer, 0, readBytes);
+			   size+=readBytes;
+		   }
+		   response.setContentLength(size);
+		   os.flush();
+		   os.close();
+		   response.flushBuffer();
    }
   
    

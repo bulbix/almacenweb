@@ -2,6 +2,7 @@ package mx.gob.inr.utils
 
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.ceye.*
+import mx.gob.inr.ceye.reportes.ReporteConcentradoServicios;
 
 class ReporteController {
 	
@@ -70,27 +71,45 @@ class ReporteController {
 		cargarParams()
 	}
 	
-	
+	/*****
+	 * Genera los reportes echos en jasper
+	 * @return
+	 */
 	def reporte() {
 		
-		def methodName = params.methodName		
+		def methodName = params.methodName
 		
-		//try{			
-			
-			params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
-			params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
-			params.SUBREPORT_CEYE_DIR = "${servletContext.getRealPath('/reports')}/ceye/"
-			params.locale =  new Locale("es","MX");
-			params.almacen = session.almacen
-					
-			def data = reporteService."$methodName"(params) //Llamada dinamica del metodo 			
-			chain(controller: "jasper", action: "index", model: [data:data], params:params)
-		/*}
-		catch(Exception e){
-			flash.message= 'Revise sus parametros'
-			redirect(action:methodName,params:params)
-			return		
-		}*/
+		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
+		params.SUBREPORT_DIR = "${servletContext.getRealPath('/reports')}/"
+		params.SUBREPORT_CEYE_DIR = "${servletContext.getRealPath('/reports')}/ceye/"
+		params.locale =  new Locale("es","MX");
+		params.almacen = session.almacen
+
+		def data = reporteService."$methodName"(params) //Llamada dinamica del metodo
+		chain(controller: "jasper", action: "index", model: [data:data], params:params)
+		
+	}
+	
+	/****
+	 * Genera los reportes hechos en itext
+	 * @return
+	 */
+	def reporteItext(){	
+		
+		def imageDir = "${servletContext.getRealPath('/images')}/"
+		
+		def rango = "${params.reportDisplay} DEL " + params.fechaInicial + " AL " + params.fechaFinal	
+		
+		ReporteConcentradoServicios reporteServicio = new ReporteConcentradoServicios(utilService,imageDir)		
+
+		def data = reporteService."${params.methodName}"(params) //Llamada dinamica del metodo
+		
+		def areaList = CatAreaCeye.findAllByAlmacen(params.almacen, [sort: "id", order: "asc"])		
+		
+		byte[] bytes = reporteServicio.generarReporte(data, rango, areaList,params.almacen,params.tipoVale)
+		def datos =  new ByteArrayInputStream(bytes)
+		utilService.mostrarReporte(response, datos,'application/pdf',"${params.reportDisplay}.pdf")			
+		
 	}
 	
 	

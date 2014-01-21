@@ -65,6 +65,15 @@
 				</tr>
 			</g:if>
 			
+			<g:if test="${methodName in ['reporteConcentradoValeEntrada', 'reporteConsumo'] && almacen != 'F'}">
+				<tr>
+					<td colspan="2">
+						<label for="tipoVale">Tipo Vale</label>						
+						<g:select name="tipoVale" from="${['todos','instituto', 'paciente']}"/>		
+					</td>			
+				</tr>
+			</g:if>
+			
 							
 		</table>
 				

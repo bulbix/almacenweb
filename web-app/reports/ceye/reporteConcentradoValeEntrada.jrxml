@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportValeEntrada" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="358e940e-7be2-4f64-acd3-ff6c7721599d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporteConcentradoValeEntrada" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="358e940e-7be2-4f64-acd3-ff6c7721599d">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="9"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
@@ -16,14 +16,13 @@
 	<field name="cantidad" class="java.lang.Double">
 		<fieldDescription><![CDATA[cantidad]]></fieldDescription>
 	</field>
-	<field name="precioPromedio" class="java.lang.Double">
-		<fieldDescription><![CDATA[precioEntrada]]></fieldDescription>
-	</field>
 	<field name="articulo" class="mx.gob.inr.utils.domain.Articulo"/>
 	<field name="cantidadSolicitada" class="java.lang.Double">
 		<fieldDescription><![CDATA[cantidadSolicitada]]></fieldDescription>
 	</field>
 	<field name="area" class="mx.gob.inr.utils.domain.CatArea"/>
+	<field name="precioPromedio" class="java.lang.Double"/>
+	<field name="tipoVale" class="java.lang.String"/>
 	<variable name="importe" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{cantidad} * $F{precioPromedio}]]></variableExpression>
 	</variable>
@@ -34,7 +33,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="127" splitType="Stretch">
+		<band height="137" splitType="Stretch">
 			<subreport>
 				<reportElement uuid="12ff0bb5-7a9e-4fae-82cf-80bb226d0a3a" x="2" y="0" width="570" height="110"/>
 				<subreportParameter name="fechaFinal">
@@ -69,7 +68,7 @@
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement uuid="b91c5c1b-3782-4569-adaa-7d6cdcf099c9" x="2" y="110" width="51" height="13">
+				<reportElement uuid="b91c5c1b-3782-4569-adaa-7d6cdcf099c9" x="2" y="123" width="51" height="13">
 					<printWhenExpression><![CDATA[$F{area} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -78,13 +77,27 @@
 				<text><![CDATA[Servicio:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="b37e6b3e-26dd-4a08-937f-bb6dd785414a" x="54" y="110" width="239" height="13">
+				<reportElement uuid="b37e6b3e-26dd-4a08-937f-bb6dd785414a" x="54" y="123" width="239" height="13">
 					<printWhenExpression><![CDATA[$F{area} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{area}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b93482cd-f28f-4cbb-89b3-694a52e55167" x="2" y="110" width="51" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Tipo Vale:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8b9698f1-07a7-4f74-bc43-58392642c6ad" x="54" y="110" width="146" height="13"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoVale}.toUpperCase()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

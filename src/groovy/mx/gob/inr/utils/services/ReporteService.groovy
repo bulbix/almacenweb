@@ -365,6 +365,10 @@ abstract class ReporteService {
 					between("fecha",fechaInicial, fechaFinal)
 					eq("estado","A")
 					eq("almacen",params.almacen)
+					
+					if(params.tipoVale != "todos" && params.almacen != 'F'){
+						eq("tipoVale", params.tipoVale)
+					}
 				}
 			}
 			else{
@@ -372,6 +376,11 @@ abstract class ReporteService {
 					between("fecha",fechaInicial, fechaFinal)
 					eq("estado","A")
 					eq("almacen",params.almacen)
+					
+					if(params.tipoVale != "todos" && params.almacen != 'F'){
+						eq("tipoVale", params.tipoVale)
+					}
+					
 				}
 				
 			}

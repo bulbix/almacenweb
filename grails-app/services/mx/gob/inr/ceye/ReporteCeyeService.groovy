@@ -4,8 +4,12 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import mx.gob.inr.utils.UtilService;
+import mx.gob.inr.utils.reportes.ConcentradoServicio
 import mx.gob.inr.utils.reportes.ReporteSala
 import mx.gob.inr.utils.services.ReporteService;
+import org.hibernate.criterion.CriteriaSpecification
+
+import org.hibernate.FetchMode as FM
 
 class ReporteCeyeService extends ReporteService {
 
@@ -132,8 +136,6 @@ class ReporteCeyeService extends ReporteService {
 		
 	}
 	
-	
-	
 	/****
 	 * 
 	 * Reporte Concentrado del Vale de Entrada 
@@ -150,59 +152,166 @@ class ReporteCeyeService extends ReporteService {
 		
 		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
 		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
-
+		
+		def area = null
+		
+		if(params.area){
+			area = entityArea.get(params.area)
+		}
 		
 		def reporteList = []
 		
 		def detalleList = entityDetalle.createCriteria().list(){
 			
 			projections{
-				
-				property("articulo")				
+												
 				sum("cantidadSolicitada")
-				sum("cantidad")
-				
-				groupProperty("articulo")
+				sum("cantidad")			
 								
-				entrada{				
+				entrada{
 					
-					property("area")					
-					
-					area{
-						if(params.area){
-								eq("id",params.area.toLong())
-						}
+					if(params.area){
+						eq("area.id",params.area.toLong())					
 					}
-										
+															
 					between("fecha",fechaInicial, fechaFinal)
 					eq("estado","A")
 					eq("almacen",params.almacen)
+					
+					if(params.tipoVale != "todos"){
+						eq("tipoVale", params.tipoVale)
+					}
+					
 				}
 				
 				articulo{
-					partida{
-						if(params.partida){
-							eq("partida",params.partida)
-						}
-					}
+					groupProperty("id")
+					order("id","asc")
+					
 				}				
-			}
-						
-			order("articulo","asc")
+			}						
+			
 		}.each{
 		
-			it[0].movimientoProm = utilService.getMovimientoPromedio(it[0], params.almacen)		
-			reporteList << [articulo:it[0],cantidadSolicitada:it[1],cantidad:it[2],area:it[3]]		
+			def articulo = ArticuloCeye.read(it[2])		
+			def precioPromedio = utilService.getMovimientoPromedio(articulo, params.almacen)
+					
+			reporteList << [articulo:articulo,cantidadSolicitada:it[0],cantidad:it[1],area:area,
+				precioPromedio:precioPromedio,tipoVale:params.tipoVale]		
+		}	
+		
+		reporteList		
+	}
+	
+	/*******
+	 * 
+	 * 
+	 * 
+	 * @param params
+	 * @param tipo
+	 * @return
+	 */
+	private def reporteConcentradoServcio(params, String tipo){
+		
+		def entityArea = CatAreaCeye
+		def entityDetalle		
+		
+		if(tipo == "entrada"){
+			entityDetalle = EntradaDetalleCeye
+		}
+		else if(tipo == "salida"){			
+			entityDetalle = SalidaDetalleCeye			
 		}
 		
 		
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
 		
-		reporteList
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
 		
 		
+		def reporteList = []
 		
+		def detalleList = entityDetalle.withCriteria{		
+			
+			articulo{
+				
+				order("id","asc")
+				
+			}
+						
+			if(tipo == "entrada"){
+				entrada{		
+					
+					createAlias("entrada.area","a",CriteriaSpecification.LEFT_JOIN) 
+					
+					between("fecha",fechaInicial, fechaFinal )
+					eq("estado","A")
+					eq("almacen",params.almacen)
+					
+					if(params.tipoVale != "todos"){
+						eq("tipoVale", params.tipoVale)
+					}
+					
+				}				
+			}
+			else if(tipo == "salida"){
+				salida{
+					
+					createAlias("salida.area","a",CriteriaSpecification.LEFT_JOIN)
+					
+					between("fecha",fechaInicial, fechaFinal)
+					eq("estado","A")
+					eq("almacen",params.almacen)
+					
+					if(params.tipoVale != "todos"){
+						eq("tipoVale", params.tipoVale)
+					}
+				}				
+			}			
+			
+		}.each{ detalle ->	
+			
+			def cantidad, cveArea
+		
+			if(tipo == "entrada"){
+				cantidad = detalle?.cantidad
+				cveArea = detalle?.entrada?.area?.id
+				
+			}
+			else if(tipo == "salida"){
+				cantidad = detalle?.cantidadSurtida
+				cveArea = detalle?.salida?.area?.id
+			}
+			
+			reporteList << new ConcentradoServicio(cveArt:detalle.articulo.id,descArticulo:detalle.articulo.desArticulo,
+					unidad:detalle.articulo.unidad,
+				partida:'',cantidad:cantidad, cveArea:cveArea)
+		
+		}
+		
+		reporteList	
+		
+	}	
+	
+	/***
+	 * Concentrado de servicios de entrada
+	 * @param params
+	 * @return
+	 */
+	def reporteConcentradoServicioEntrada(params){
+		reporteConcentradoServcio(params, "entrada")
 	}
 	
+	/***
+	 * Concentrado de servicios de salida
+	 * @param params
+	 * @return
+	 */
+	def reporteConcentradoServicioSalida(params){
+		reporteConcentradoServcio(params, "salida")
+	}
 	
 	
 	public reporteFoliosAlmacen(params){

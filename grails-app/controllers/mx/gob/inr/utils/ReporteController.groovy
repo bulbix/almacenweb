@@ -3,6 +3,7 @@ package mx.gob.inr.utils
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.ceye.*
 import mx.gob.inr.ceye.reportes.ReporteConcentradoServicios;
+import mx.gob.inr.ceye.reportes.ReporteDynamicConcentradoServicios;
 
 class ReporteController {
 	
@@ -110,6 +111,26 @@ class ReporteController {
 		def datos =  new ByteArrayInputStream(bytes)
 		utilService.mostrarReporte(response, datos,'application/pdf',"${params.reportDisplay}.pdf")			
 		
+	}
+	
+	/****
+	 * Reportes Generados con Dynamic Reports
+	 * @return
+	 */
+	def reporteDynamic(){
+		
+		def imageDir = "${servletContext.getRealPath('/images')}/"
+		
+		def rango = "${params.reportDisplay} DEL " + params.fechaInicial + " AL " + params.fechaFinal
+		
+		ReporteDynamicConcentradoServicios reporteServicio = 
+			new ReporteDynamicConcentradoServicios(utilService,imageDir,response);
+
+		def data = reporteService."${params.methodName}"(params) //Llamada dinamica del metodo
+		
+		def areaList = CatAreaCeye.findAllByAlmacen(params.almacen, [sort: "id", order: "asc"])
+		
+		reporteServicio.generarReporte(data, rango, areaList,params.almacen,params.tipoVale,params.tipoImpresion)		
 	}
 	
 	

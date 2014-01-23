@@ -7,7 +7,7 @@
 </head>
 <body>
 
-	<g:render template="/reporte/reporteItextTemplate" 
+	<g:render template="/reporte/reporteDynamicTemplate" 
 	model="[methodName:'reporteConcentradoServicioEntrada',
 		   reportDisplay:'ReporteConcentradoServicioEntrada',
 		   fechaInicial:fechaInicial,

@@ -273,22 +273,36 @@ class ReporteCeyeService extends ReporteService {
 			
 		}.each{ detalle ->	
 			
-			def cantidad, cveArea
+			def cantidad, area
 		
 			if(tipo == "entrada"){
 				cantidad = detalle?.cantidad
-				cveArea = detalle?.entrada?.area?.id
+				area = detalle?.entrada?.area
 				
 			}
 			else if(tipo == "salida"){
 				cantidad = detalle?.cantidadSurtida
-				cveArea = detalle?.salida?.area?.id
+				area = detalle?.salida?.area
 			}
 			
-			reporteList << new ConcentradoServicio(cveArt:detalle.articulo.id,descArticulo:detalle.articulo.desArticulo,
-					unidad:detalle.articulo.unidad,
-				partida:'',cantidad:cantidad, cveArea:cveArea)
-		
+			def registro = reporteList.find { r -> r.cveArt == detalle.articulo.id }
+			
+			if(registro){				
+				if(area){
+					registro."cantidad_area${area.id}" += cantidad
+				}
+			}
+			else{
+				
+				if(cantidad != 0 && area){
+				
+					registro = new ConcentradoServicio(cveArt:detalle.articulo.id,descArticulo:detalle.articulo.desArticulo,
+						unidad:detalle.articulo.unidad, area:area)
+					
+					registro."cantidad_area${area.id}" = cantidad				
+					reporteList << registro
+				}
+			}		
 		}
 		
 		reporteList	

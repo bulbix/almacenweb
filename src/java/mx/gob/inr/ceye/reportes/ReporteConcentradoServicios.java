@@ -115,6 +115,7 @@ public class ReporteConcentradoServicios extends PdfPageEventHelper implements S
 			tablaWidth[1] = 18;
 			tablaWidth[2] = 8;
 			int index = 3;
+			
 			for(CatArea area:areas)
 				tablaWidth[index++] = 3;
 
@@ -190,8 +191,7 @@ public class ReporteConcentradoServicios extends PdfPageEventHelper implements S
 						vo = lista.get(x);
 				}
 
-				Integer totalArea = llenarCeldas(tabla, vo, consumos,
-						clave, descripcion, unidad, fontTabla,areas);
+				Integer totalArea = llenarCeldas(tabla, vo, consumos, clave, descripcion, unidad, fontTabla,areas);
 				consumos.clear();
 				saldos.clear();
 

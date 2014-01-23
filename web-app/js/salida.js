@@ -199,6 +199,9 @@ function consultarDetalle(){
 				rowdata,
 				rowelem){
 		},
+		loadComplete: function() {
+		    $("tr.jqgrow:odd").css("background", "#DDDDDC");
+		},
 	    pager: '#pager',
 	    editurl: url + "/actualizarDetalle",
 	    rowNum:-1,

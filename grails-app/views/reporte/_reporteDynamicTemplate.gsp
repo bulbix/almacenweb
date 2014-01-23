@@ -36,6 +36,13 @@
 						<g:select name="tipoVale" from="${['todos','instituto', 'paciente']}"/>		
 				</td>			
 			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<label for="tipoImpresion">Tipo Impresion</label>						
+						<g:select name="tipoImpresion" from="${['pdf','excel']}"/>		
+				</td>			
+			</tr>
 							
 		</table>
 				
@@ -43,7 +50,7 @@
 		<input type="hidden" name="methodName" value="${methodName}" />
 		<input type="hidden" name="reportDisplay" value="${reportDisplay}" />
 		
-		<g:actionSubmit value="Generar Reporte" action="reporteItext"/>
+		<g:actionSubmit value="Generar Reporte" action="reporteDynamic"/>
 	
 	</g:form>	
 </div>

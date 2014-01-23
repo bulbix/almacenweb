@@ -18,7 +18,7 @@ grails.project.dependency.resolution = {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
     legacyResolve false // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
 
@@ -45,6 +45,10 @@ grails.project.dependency.resolution = {
         // runtime 'mysql:mysql-connector-java:5.1.22'
 		compile ('cglib:cglib-nodep:2.2')
 		compile ('commons-codec:commons-codec:1.8')
+		compile('net.sourceforge.dynamicreports:dynamicreports-core:3.1.6'){
+			excludes 'itext'
+		}
+		compile('com.lowagie:itext:2.1.7')
     }	
 
     plugins {

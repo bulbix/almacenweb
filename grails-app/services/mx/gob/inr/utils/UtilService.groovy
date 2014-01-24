@@ -13,6 +13,7 @@ import mx.gob.inr.farmacia.ArticuloFarmacia
 import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
+import mx.gob.inr.ceye.CatAreaCeye
 import mx.gob.inr.utils.domain.Cierre
 
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
@@ -378,6 +379,22 @@ class UtilService {
 		   os.close();
 		   response.flushBuffer();
    }
+	   
+	
+	/******.
+	 * Busca las areas de ceye por almacen
+	 *   
+	 * @param almacen
+	 * @return
+	 */
+	List<CatAreaCeye> areasCeyeByAlmacen(String almacen){
+		
+		return CatAreaCeye.findAllByAlmacen(almacen, [sort: "id", order: "asc"])
+		
+	}
+	   
+	   
+	   
   
    
 }

@@ -1,34 +1,36 @@
 package mx.gob.inr.ceye.reportes;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import net.sf.dynamicreports.jasper.builder.JasperConcatenatedReportBuilder;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
-import net.sf.dynamicreports.report.builder.component.Components;
-import net.sf.dynamicreports.report.builder.style.SimpleStyleBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
-import net.sf.dynamicreports.report.builder.style.Styles;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.constant.PageType;
-import net.sf.dynamicreports.report.exception.DRException;
+import mx.gob.inr.ceye.CatAreaCeye;
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.domain.CatArea;
 import mx.gob.inr.utils.reportes.ConcentradoServicio;
 
 public class ReporteDynamicConcentradoServicios {
 	
-	
 	UtilService utilService;
 	String imageDir;
 	HttpServletResponse response;
-	
-	
 	
 	public ReporteDynamicConcentradoServicios(UtilService utilService,
 			String imageDir, HttpServletResponse response) {
@@ -38,16 +40,13 @@ public class ReporteDynamicConcentradoServicios {
 		this.response = response;
 	}
 	
-	public void generarReporte(List<ConcentradoServicio> lista,
-			String rango, List<CatArea> areas, String almacen,String tipoVale, String tipoImpresion) {
+	private JasperReportBuilder reporteArchivo(List<ConcentradoServicio> lista, String almacenAreaCeye,Map params){
 		
+		JasperReportBuilder report = report();//a new report	
 		
-		JasperReportBuilder report = report();//a new report
-		
-		
-				
-		StyleBuilder fontStyle = stl.style().setFontSize(7);
-		StyleBuilder fontTitleStyle = stl.style().setFontSize(7).setHorizontalAlignment(HorizontalAlignment.CENTER).setBold(true);
+		StyleBuilder fontStyle = stl.style().setFontSize(7).setBorder(stl.penThin());
+		StyleBuilder fontTitleStyle = stl.style(fontStyle).
+				setHorizontalAlignment(HorizontalAlignment.CENTER).setBold(true).setBackgroundColor(Color.LIGHT_GRAY);;
 		
 		TextColumnBuilder<Integer> cveArtColumn  = col.column("Clave", "cveArt", type.integerType())
 				.setWidth(7).setStyle(fontStyle).setHorizontalAlignment(HorizontalAlignment.CENTER).setTitleStyle(fontTitleStyle);
@@ -57,60 +56,99 @@ public class ReporteDynamicConcentradoServicios {
 		TextColumnBuilder<String> unidadColumn  = col.column("Unidad", "unidad", type.stringType())
 				.setWidth(10).setStyle(fontStyle).setStretchWithOverflow(true).setTitleStyle(fontTitleStyle);
 		
-		report.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE)
-		  .columns(cveArtColumn,descripcionColumn,unidadColumn);
+		report.setPageFormat(PageType.LETTER, PageOrientation.LANDSCAPE).columns(cveArtColumn,descripcionColumn,unidadColumn);		
+		
+		List<CatAreaCeye> areas = utilService.areasCeyeByAlmacen(almacenAreaCeye);		
 		
 		
-		for(CatArea area:areas){
-			
-			TextColumnBuilder<Integer> cantidadColumn  = col.column(area.toString(), "cantidad_area" + area.getId(), type.integerType())
-					.setWidth(6).setStyle(fontStyle).setHorizontalAlignment(HorizontalAlignment.CENTER).setTitleStyle(fontTitleStyle);
-			
+		TextColumnBuilder<BigDecimal> totalColumn = col.column("Total", "total", type.bigDecimalType());
+				
+				
+		for(CatArea area:areas){			
+			TextColumnBuilder<Integer> cantidadColumn  = col.column(area.getId() + " " + area.getDesArea(), "cantidad_area" + area.getId(), type.integerType())
+					.setWidth(6).setStyle(fontStyle).setHorizontalAlignment(HorizontalAlignment.CENTER).setTitleStyle(fontTitleStyle);			
 			report.columns(cantidadColumn);
+			
+			totalColumn = totalColumn.add(cantidadColumn);	
+			
 		}
 		
-		TextColumnBuilder<Integer> totalColumn  = col.column("Total", "sumaCantidadArea", type.integerType())
-				.setWidth(6).setStyle(fontStyle).setHorizontalAlignment(HorizontalAlignment.CENTER).setTitleStyle(fontTitleStyle);
+		totalColumn.setWidth(6).setStyle(fontStyle).setHorizontalAlignment(HorizontalAlignment.CENTER)
+			.setTitleStyle(fontTitleStyle).setTitle("Total").setPattern("###0");
 		
 		report.columns(totalColumn);
-				
-		Color colorLightGray = new Color(243, 243, 243);
-		SimpleStyleBuilder evenRowColor = Styles.simpleStyle().setBackgroundColor(colorLightGray);
-		report.setDetailEvenRowStyle(evenRowColor);	
+		
+		
+		String rango = params.get("reportDisplay")  + "DEL"  +params.get("fechaInicial") + " AL " + params.get("fechaFinal");		
 		
 		String titulo = "INSTITUTO NACIONAL DE REHABILITACION"+
 				"\nDEPARTAMENTO DE ALMACENES Y CONTROL DE ALMACENES\n"+
-				"\nALMACEN DE " + utilService.getAlmacenDescripcion(almacen) +
+				"\nALMACEN DE " + utilService.getAlmacenDescripcion(params.get("almacen").toString()) + " -- AREA DE " + utilService.getAlmacenDescripcion(almacenAreaCeye)+
 				"\n" + rango.toUpperCase(); 
 		
-		
-		report.title(Components.text(titulo)			  
-			  .setHorizontalAlignment(HorizontalAlignment.CENTER))
-			  .pageFooter(Components.pageXofY())//show page number on the page footer
-			  .setDataSource(lista);
-		
-		
+		BufferedImage img = null;
 		try {
-			
+			img = ImageIO.read(new File(imageDir+"logotipo.jpg"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		report.pageHeader(
+				cmp.horizontalList().add(
+				cmp.image(img).setFixedDimension(80, 80).setHorizontalAlignment(HorizontalAlignment.LEFT),	
+				cmp.text(titulo).setHorizontalAlignment(HorizontalAlignment.CENTER)
+				),
+				
+				cmp.horizontalList().add(
+				cmp.text("Tipo Vale:" + params.get("tipoVale").toString().toUpperCase()),
+				cmp.text((new Date())).setHorizontalAlignment(HorizontalAlignment.RIGHT),
+				cmp.pageXofY().setHorizontalAlignment(HorizontalAlignment.RIGHT)
+				)
+			)			
+			.highlightDetailEvenRows()		 		  
+			.setDataSource(lista);
+		
+		return report;		
+		
+	}
+	
+	/****
+	 * Genera un archivo zip con los tres reportes de areas 
+	 * @param lista
+	 * @param params
+	 */
+	public void generarReporte(List<ConcentradoServicio> lista, Map params) {	
+		
+		try {				
+			JasperConcatenatedReportBuilder report = concatenatedReport().continuousPageNumbering().concatenate(
+					reporteArchivo(lista, "C", params),
+					reporteArchivo(lista, "S", params),
+					reporteArchivo(lista, "Q", params));
+
 			OutputStream out = response.getOutputStream();
-			
+			String tipoImpresion  = params.get("tipoImpresion").toString();
+
 			if(tipoImpresion.equals("pdf")){
+				response.setHeader("Content-disposition", "attachment;filename="  + params.get("reportDisplay") + ".pdf");
 				response.setContentType("application/pdf");
 				report.toPdf(out);
 			}
 			if(tipoImpresion.equals("excel")){
+				response.setHeader("Content-disposition", "attachment;filename="  + params.get("reportDisplay") + ".xls");
 				response.setContentType("application/vnd.ms-excel");
 				report.toXls(out);
 			}	
+
+			out.close();		
+		
 			
-			out.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		finally{
-			
-		}
+		
+	
 	}
 
 }

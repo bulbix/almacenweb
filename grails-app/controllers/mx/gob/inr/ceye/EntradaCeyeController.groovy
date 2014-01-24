@@ -35,5 +35,13 @@ class EntradaCeyeController extends EntradaController<EntradaCeye> {
 		//log.info(json)
 		render jsonArray
 	}
+	
+	def listarRecibe(){
+		render entradaCeyeService.listarRecibe(params.term) as JSON
+	}
+		
+	def listarSolicita(){
+		render entradaCeyeService.listarSolicita(params.term) as JSON
+	}
   
 }

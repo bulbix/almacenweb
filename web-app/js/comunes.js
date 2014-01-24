@@ -81,6 +81,10 @@ function autoCompleteAutorizo(funcSelect){
 	autoComplete("#autorizaauto", url + "/listarAutoriza",null,funcSelect,4)
 }
 
+function autoCompleteSolicita(funcSelect){
+	autoComplete("#solicitaauto", url + "/listarSolicita",null,funcSelect,4)
+}
+
 ////FUNCIONES PERSISTENCIA////////////////////
 
 function guardar(dataDetalle){

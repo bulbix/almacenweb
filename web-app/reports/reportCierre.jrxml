@@ -179,7 +179,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{existencia}]]></textFieldExpression>
 			</textField>
-			<textField pattern="$ #,##0.0000" isBlankWhenNull="false">
+			<textField pattern="###0" isBlankWhenNull="false">
 				<reportElement uuid="9fb6178e-ec2e-483e-bd3a-0189b482dde3" mode="Transparent" x="378" y="0" width="74" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="6" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>

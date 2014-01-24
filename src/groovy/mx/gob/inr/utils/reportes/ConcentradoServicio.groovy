@@ -81,77 +81,8 @@ class ConcentradoServicio {
 	 Integer cantidad_area902=0
 	 Integer cantidad_area903=0
 	 Integer cantidad_area1000=0
-	 Integer cantidad_area1001=0
-	
-	 Integer getSumaCantidadArea(){
-		 return cantidad_area101+
-		 cantidad_area102+
-		 cantidad_area103+
-		 cantidad_area104+
-		 cantidad_area105+
-		 cantidad_area106+
-		 cantidad_area107+
-		 cantidad_area108+
-		 cantidad_area109+
-		 cantidad_area110+
-		 cantidad_area111+
-		 cantidad_area112+
-		 cantidad_area113+
-		 cantidad_area114+
-		 cantidad_area115+
-		 cantidad_area201+
-		 cantidad_area202+
-		 cantidad_area203+
-		 cantidad_area204+
-		 cantidad_area205+
-		 cantidad_area206+
-		 cantidad_area207+
-		 cantidad_area208+
-		 cantidad_area209+
-		 cantidad_area210+
-		 cantidad_area211+
-		 cantidad_area212+
-		 cantidad_area213+
-		 cantidad_area214+
-		 cantidad_area301+
-		 cantidad_area302+
-		 cantidad_area303+
-		 cantidad_area304+
-		 cantidad_area401+
-		 cantidad_area501+
-		 cantidad_area502+
-		 cantidad_area503+
-		 cantidad_area504+
-		 cantidad_area505+
-		 cantidad_area506+
-		 cantidad_area601+
-		 cantidad_area602+
-		 cantidad_area603+
-		 cantidad_area604+
-		 cantidad_area605+
-		 cantidad_area606+
-		 cantidad_area607+
-		 cantidad_area608+
-		 cantidad_area609+
-		 cantidad_area610+
-		 cantidad_area611+
-		 cantidad_area701+
-		 cantidad_area702+
-		 cantidad_area703+
-		 cantidad_area704+
-		 cantidad_area705+
-		 cantidad_area801+
-		 cantidad_area802+
-		 cantidad_area803+
-		 cantidad_area804+
-		 cantidad_area805+
-		 cantidad_area901+
-		 cantidad_area902+
-		 cantidad_area903+
-		 cantidad_area1000+
-		 cantidad_area1001
-		
-	}
-		
+	 Integer cantidad_area1001=0	
+	 
+	 BigDecimal total=0
 	
 }

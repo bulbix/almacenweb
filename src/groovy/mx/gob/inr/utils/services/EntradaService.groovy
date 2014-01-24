@@ -46,22 +46,25 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 		if(jsonEntrada.idSalAlma)
 			entrada.idSalAlma = jsonEntrada.idSalAlma as int
 		
-		entrada.usuario = usuarioRegistro
-		entrada.recibio = Usuario.get(jsonEntrada.recibe)
-		entrada.supervisor = Usuario.get(jsonEntrada.supervisa)
+		entrada.usuario = usuarioRegistro		
 		entrada.presupuesto = null
 		entrada.actividad = null
 
 
-		if(entrada instanceof EntradaFarmacia){
+		if(entrada instanceof EntradaFarmacia){			
 			entrada.numeroFactura = jsonEntrada.remision
 			entrada.devolucion  = jsonEntrada.devolucion == 'on'?'1':'0'
+			entrada.recibio = Usuario.get(jsonEntrada.recibe)
+			entrada.supervisor = Usuario.get(jsonEntrada.supervisa)
 		}
 		else if(entrada instanceof EntradaCeye){
 			entrada.area =  entityArea.get(jsonEntrada.cveArea)
 			entrada.paciente = Paciente.get(jsonEntrada.idPaciente)
 			entrada.tipoVale = jsonEntrada.tipoVale
 			entrada.paqueteq = jsonEntrada.paqueteq
+			
+			entrada.usuarioRecibe = jsonEntrada.recibeauto
+			entrada.usuarioSolicita = jsonEntrada.solicitaauto			
 		}
 
 

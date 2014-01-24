@@ -86,8 +86,25 @@ class EntradaCeyeService extends EntradaService<EntradaCeye> {
 			solicitado:it.cantidad,cantidad:it.cantidad,precioEntrada:convertido.precioRaw,noLote:null,fechaCaducidad:null]				
 		}
 		
-		results
-		
+		results		
+	}
+	
+	/****
+	 * Autocompletar los nombres del usuario recibe
+	 * @param term
+	 * @return
+	 */
+	def listarRecibe(String term){
+		autoCompleteService.listarNombre(EntradaCeye, "usuarioRecibe", term)
+	}
+	
+	/***
+	 * Autocompletar los nombres del usuario solicita
+	 * @param term
+	 * @return
+	 */
+	def listarSolicita(String term){
+		autoCompleteService.listarNombre(EntradaCeye, "usuarioSolicita", term)
 	}
 	
     

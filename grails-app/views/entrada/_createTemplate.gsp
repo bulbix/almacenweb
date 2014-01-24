@@ -114,7 +114,7 @@
 				</g:if>
 				<g:else>
 					<td><label for="tipoVale">Tipo Vale</label>								
-						<g:select name="tipoVale" from="${['instituto', 'paciente']}" 
+						<g:select name="tipoVale" from="${['instituto', 'paciente','traslado']}" 
 							value="${entradaInstance?.tipoVale}"  />
 					</td>					
 				</g:else>
@@ -150,34 +150,40 @@
 		</g:if>
 		
 		<table>
-			<tr>						
-				<td>
-				
-				<g:if test="${entradaInstance?.almacen == 'F'}">				
+			<tr>			
+				<g:if test="${entradaInstance?.almacen == 'F'}">						
+					<td>							
 						<label for="supervisa">Supervisa</label> <g:select
 						name="supervisa" from="${usuariosList}" optionKey="id"
 						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
 						noSelection="${['':'SELECCIONE SUPERVISA']}" class="cabecera" />
-				</g:if>
-				<g:else>
-					<label for="supervisa">Solicita</label> <g:select
-						name="supervisa" from="${usuariosList}" optionKey="id"
-						optionValue="nombre" value="${entradaInstance?.supervisor?.id}" 
-						noSelection="${['':'SELECCIONE SOLICITA']}" class="cabecera" />
-				</g:else>
-				
-				</td>			
-				<td><label for="recibe">Recibe</label> <g:select name="recibe"
+					</td>
+					
+					<td><label for="recibe">Recibe</label> <g:select name="recibe"
 						from="${usuariosList}" optionKey="id" optionValue="nombre" 
 						value="${entradaInstance?.recibio?.id}" 
-						noSelection="${['':'SELECCIONE RECIBE']}" class="cabecera" /></td>			
-				<g:if test="${entradaInstance?.almacen == 'F'}">
+						noSelection="${['':'SELECCIONE RECIBE']}" class="cabecera" />
+					</td>
+					
 					<td><label for="devolucion">Devolucion?</label> <g:checkBox
-						name="devolucion" value="${entradaInstance.devolucion == '1'}" /></td>
-				</g:if>
+						name="devolucion" value="${entradaInstance.devolucion == '1'}" /></td>			
+					
+				</g:if>			
 				<g:else>
+					<td>
+						<label for="solicitaauto">Solicita</label>
+						<g:textField name="solicitaauto" value="${entradaInstance?.usuarioSolicita}" class="cabecera" size="50" />
+					</td>
+					
+					<td>
+						<label for="recibeauto">Recibe</label>
+						<g:textField name="recibeauto" value="${entradaInstance?.usuarioRecibe}" class="cabecera" size="50" />	
+					</td>
+					
 					<td></td>
+					
 				</g:else>
+				
 			</tr>
 		</table>
 	

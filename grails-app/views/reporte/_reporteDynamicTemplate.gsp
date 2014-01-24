@@ -33,7 +33,7 @@
 			<tr>
 				<td colspan="2">
 					<label for="tipoVale">Tipo Vale</label>						
-						<g:select name="tipoVale" from="${['todos','instituto', 'paciente']}"/>		
+						<g:select name="tipoVale" from="${['todos','instituto', 'paciente', 'traslado']}"/>		
 				</td>			
 			</tr>
 			

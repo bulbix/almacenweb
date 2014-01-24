@@ -20,6 +20,9 @@ $(document).ready(function() {
 	autoCompleteArea(function(){});
 	autoCompletePaciente(function(){})
 	
+	autoCompleteRecibio(function(){})
+	autoCompleteSolicita(function(){})
+	
 	consultarDetalle();
 	detalleAdd();
 	capturar();
@@ -83,7 +86,12 @@ function validar(){
                 convertidoSolicitado: {required:true,number:true,min:0,max:5000},
                 convertido: {required:true,number:true,min:0,max:5000},
                 precio: {required:true, number:true},
-                fechaCaducidad: {required:true,validateDate:true}
+                fechaCaducidad: {required:true,validateDate:true},
+                
+                /*Validaciones para campos de ceye**/
+                solicitaauto:{required:true},
+                recibeauto:{required:true}  
+                
         },
 		messages: {
 				fecha : {required:"Requerido"},
@@ -98,7 +106,10 @@ function validar(){
 				convertidoSolicitado:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
 				convertido:{required:"Requerido",number:"Numerico",min:"Minimo 0",max:'Maximo 5000'},
 				precio: {required:"Requerido", number:"Numerico"},
-				fechaCaducidad: {required:"Requerido"}
+				fechaCaducidad: {required:"Requerido"},
+				
+				solicitaauto:{required:"Requerido"},
+                recibeauto:{required:"Requerido"}  
 							
 		}
   });
@@ -177,21 +188,39 @@ function capturar(){
 	
 	paciente.keypress(function(e){	
 		 if(e.which == 13) {			 
-			  $("#supervisa").focus()
+			  $("#solicitaauto").focus()
 		 }
 	});	
 	
-	$("#supervisa").keypress(function(e){	
-		 if(e.which == 13) {
-			$("#recibe").focus()		
-		 }
-	});
+	if(almacen == 'F'){
 	
-	$("#recibe").keypress(function(e){	
-		 if(e.which == 13) {
-			$("#insumo").focus()		
-		 }
-	});
+		$("#supervisa").keypress(function(e){	
+			 if(e.which == 13) {
+				$("#recibe").focus()		
+			 }
+		});
+		
+		$("#recibe").keypress(function(e){	
+			 if(e.which == 13) {
+				$("#insumo").focus()		
+			 }
+		});
+	}
+	else{
+		
+		$("#solicitaauto").keypress(function(e){	
+			 if(e.which == 13) {
+				$("#recibeauto").focus()		
+			 }
+		});
+		
+		$("#recibeauto").keypress(function(e){	
+			 if(e.which == 13) {
+				$("#insumo").focus()		
+			 }
+		});
+		
+	}
 	
 	
 	/*$("#folioAlmacen").focus(function(){

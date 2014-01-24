@@ -88,7 +88,7 @@
 					</td>
 					
 					<td><label for="tipoVale">Tipo Vale</label>								
-						<g:select name="tipoVale" from="${['instituto', 'paciente']}" 
+						<g:select name="tipoVale" from="${['instituto', 'paciente', 'traslado']}" 
 							value="${salidaInstance?.tipoVale}"  />
 					</td>			
 					

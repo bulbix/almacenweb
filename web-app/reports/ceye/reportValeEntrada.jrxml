@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportValeEntrada" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="358e940e-7be2-4f64-acd3-ff6c7721599d">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="17"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1586"/>
 	<parameter name="almacen" class="java.lang.String"/>
 	<parameter name="IMAGE_DIR" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -30,6 +30,7 @@
 	</variable>
 	<background>
 		<band height="559">
+			<printWhenExpression><![CDATA[$F{entrada}.getProperty("estado").equals("C")]]></printWhenExpression>
 			<staticText>
 				<reportElement uuid="40b7b062-d5af-4ef2-8d85-9dae9b7cdf4d" mode="Opaque" x="32" y="237" width="400" height="98" forecolor="#FF9999"/>
 				<textElement textAlignment="Center">
@@ -296,14 +297,14 @@
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[RECIBIÓ EL MATERIAL]]></text>
+				<text><![CDATA[RECIBE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="749c7699-63fa-498f-b966-02f5ec191a57" x="203" y="10" width="119" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[SUPERVISÓ]]></text>
+				<text><![CDATA[SOLICITA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="1ae7f0ef-6a56-4327-ba69-f1486cc6f0d0" x="352" y="10" width="167" height="20"/>
@@ -347,14 +348,14 @@
 				<textElement textAlignment="Center">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""+$F{entrada}.getProperty("recibio").getProperty("nombre")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{entrada}.getProperty("usuarioRecibe")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="194de2a4-760b-437b-8540-2d2e8a3bcf2e" x="203" y="30" width="119" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""+$F{entrada}.getProperty("supervisor").getProperty("nombre")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[""+$F{entrada}.getProperty("usuarioSolicita")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement uuid="a0f48264-7638-4e8d-b698-f3830c702c20" x="354" y="30" width="165" height="20"/>

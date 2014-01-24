@@ -11,6 +11,8 @@ class EntradaCeye extends Entrada {
 	String paqueteq
 	String tipoVale
 	Paciente paciente
+	String usuarioSolicita
+	String usuarioRecibe
 		
 	static hasMany = [entradasDetalle:EntradaDetalleCeye]
 	

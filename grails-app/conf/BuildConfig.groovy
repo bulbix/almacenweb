@@ -48,7 +48,7 @@ grails.project.dependency.resolution = {
 		compile('net.sourceforge.dynamicreports:dynamicreports-core:3.1.6'){
 			excludes 'itext'
 		}
-		compile('com.lowagie:itext:2.1.7')
+		compile('com.lowagie:itext:2.1.7')		
     }	
 
     plugins {

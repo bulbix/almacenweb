@@ -71,6 +71,10 @@ class ReporteController {
 		cargarParams()
 	}
 	
+	def reporteConcentradoServicioSalida(){
+		cargarParams()
+	}
+	
 	/*****
 	 * Genera los reportes echos en jasper
 	 * @return
@@ -118,7 +122,8 @@ class ReporteController {
 	 */
 	def reporteDynamic(){		
 		def imageDir = "${servletContext.getRealPath('/images')}/"
-		ReporteDynamicConcentradoServicios reporteServicio = new ReporteDynamicConcentradoServicios(utilService,imageDir,response)
+		ReporteDynamicConcentradoServicios reporteServicio =
+		 new ReporteDynamicConcentradoServicios(utilService,imageDir,response)
 		def data = reporteService."${params.methodName}"(params)
 		reporteServicio.generarReporte(data,params)		
 	}

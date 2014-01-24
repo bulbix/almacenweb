@@ -12,9 +12,6 @@
 		   reportDisplay:'ReporteConcentradoServicioSalida',
 		   fechaInicial:fechaInicial,
 		   fechaFinal:fechaFinal,
-		   claveInicial:claveInicial,
-		   claveFinal:claveFinal,
-		   partidaList:partidaList,
 		   almacen:almacen]" />
 		   
 </body>

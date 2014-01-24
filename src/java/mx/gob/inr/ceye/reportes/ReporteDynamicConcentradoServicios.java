@@ -17,6 +17,8 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import net.sf.dynamicreports.jasper.builder.JasperConcatenatedReportBuilder;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.component.HorizontalListBuilder;
+import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
@@ -40,7 +42,7 @@ public class ReporteDynamicConcentradoServicios {
 		this.response = response;
 	}
 	
-	private JasperReportBuilder reporteArchivo(List<ConcentradoServicio> lista, String almacenAreaCeye,Map params){
+	private JasperReportBuilder reporteArchivo(List<ConcentradoServicio> lista, String almacenArea, List<CatArea> areas, Map params){
 		
 		JasperReportBuilder report = report();//a new report	
 		
@@ -56,10 +58,7 @@ public class ReporteDynamicConcentradoServicios {
 		TextColumnBuilder<String> unidadColumn  = col.column("Unidad", "unidad", type.stringType())
 				.setWidth(10).setStyle(fontStyle).setStretchWithOverflow(true).setTitleStyle(fontTitleStyle);
 		
-		report.setPageFormat(PageType.LETTER, PageOrientation.LANDSCAPE).columns(cveArtColumn,descripcionColumn,unidadColumn);		
-		
-		List<CatAreaCeye> areas = utilService.areasCeyeByAlmacen(almacenAreaCeye);		
-		
+		report.setPageFormat(PageType.LETTER, PageOrientation.LANDSCAPE).columns(cveArtColumn,descripcionColumn,unidadColumn);	
 		
 		TextColumnBuilder<BigDecimal> totalColumn = col.column("Total", "total", type.bigDecimalType());
 				
@@ -79,11 +78,11 @@ public class ReporteDynamicConcentradoServicios {
 		report.columns(totalColumn);
 		
 		
-		String rango = params.get("reportDisplay")  + "DEL"  +params.get("fechaInicial") + " AL " + params.get("fechaFinal");		
+		String rango = params.get("reportDisplay")  + " DEL "  +params.get("fechaInicial") + " AL " + params.get("fechaFinal");		
 		
 		String titulo = "INSTITUTO NACIONAL DE REHABILITACION"+
 				"\nDEPARTAMENTO DE ALMACENES Y CONTROL DE ALMACENES\n"+
-				"\nALMACEN DE " + utilService.getAlmacenDescripcion(params.get("almacen").toString()) + " -- AREA DE " + utilService.getAlmacenDescripcion(almacenAreaCeye)+
+				"\nALMACEN DE " + utilService.getAlmacenDescripcion(params.get("almacen").toString()) + " -- AREA DE " + utilService.getAlmacenDescripcion(almacenArea)+
 				"\n" + rango.toUpperCase(); 
 		
 		BufferedImage img = null;
@@ -94,17 +93,27 @@ public class ReporteDynamicConcentradoServicios {
 			e1.printStackTrace();
 		}
 		
+		
+		HorizontalListBuilder encabezado2 = cmp.horizontalList();
+		
+		
+		if(params.get("almacen").toString().equals("F")){
+			encabezado2.add(cmp.text((new Date())).setHorizontalAlignment(HorizontalAlignment.RIGHT),
+					cmp.pageXofY().setHorizontalAlignment(HorizontalAlignment.RIGHT));
+		}
+		else{
+			encabezado2.add(
+					cmp.text("Tipo Vale:" + params.get("tipoVale").toString().toUpperCase()),
+					cmp.text((new Date())).setHorizontalAlignment(HorizontalAlignment.RIGHT),
+					cmp.pageXofY().setHorizontalAlignment(HorizontalAlignment.RIGHT)
+					);
+		}	
+		
 		report.pageHeader(
 				cmp.horizontalList().add(
 				cmp.image(img).setFixedDimension(80, 80).setHorizontalAlignment(HorizontalAlignment.LEFT),	
 				cmp.text(titulo).setHorizontalAlignment(HorizontalAlignment.CENTER)
-				),
-				
-				cmp.horizontalList().add(
-				cmp.text("Tipo Vale:" + params.get("tipoVale").toString().toUpperCase()),
-				cmp.text((new Date())).setHorizontalAlignment(HorizontalAlignment.RIGHT),
-				cmp.pageXofY().setHorizontalAlignment(HorizontalAlignment.RIGHT)
-				)
+				), encabezado2
 			)			
 			.highlightDetailEvenRows()		 		  
 			.setDataSource(lista);
@@ -120,11 +129,28 @@ public class ReporteDynamicConcentradoServicios {
 	 */
 	public void generarReporte(List<ConcentradoServicio> lista, Map params) {	
 		
-		try {				
-			JasperConcatenatedReportBuilder report = concatenatedReport().continuousPageNumbering().concatenate(
-					reporteArchivo(lista, "C", params),
-					reporteArchivo(lista, "S", params),
-					reporteArchivo(lista, "Q", params));
+		try {	
+			
+			JasperConcatenatedReportBuilder report=null;
+			
+			if(!params.get("almacen").toString().equals("F")){
+				
+				report = concatenatedReport().continuousPageNumbering().concatenate(
+						reporteArchivo(lista, "C", utilService.areasByAlmacen("C"), params),
+						reporteArchivo(lista, "S", utilService.areasByAlmacen("S"), params),
+						reporteArchivo(lista, "Q", utilService.areasByAlmacen("Q"), params));
+			}
+			else{//Farmmacia
+				List<CatArea> areas = utilService.areasByAlmacen("F");		
+				
+				List<List<?>> listSubList = utilService.partitionList(areas, 38);
+				
+				report = concatenatedReport().continuousPageNumbering();
+				
+				for(List subList : listSubList){					
+					report.concatenate(reporteArchivo(lista, "F", subList, params));
+				}
+			}
 
 			OutputStream out = response.getOutputStream();
 			String tipoImpresion  = params.get("tipoImpresion").toString();
@@ -138,10 +164,9 @@ public class ReporteDynamicConcentradoServicios {
 				response.setHeader("Content-disposition", "attachment;filename="  + params.get("reportDisplay") + ".xls");
 				response.setContentType("application/vnd.ms-excel");
 				report.toXls(out);
-			}	
+			}
 
-			out.close();		
-		
+			out.close();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

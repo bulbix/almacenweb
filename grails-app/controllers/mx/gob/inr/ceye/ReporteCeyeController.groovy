@@ -38,11 +38,6 @@ class ReporteCeyeController extends ReporteController {
 		cargarParams()
 	}
 	
-	
-	def reporteConcentradoServicioSalida(){
-		cargarParams()
-	}
-	
 	def reporteConcentradoServicioEntrada(){
 		cargarParams()
 	}

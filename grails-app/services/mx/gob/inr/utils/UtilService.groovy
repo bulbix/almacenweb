@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import mx.gob.inr.ceye.ArticuloCeye
 import mx.gob.inr.farmacia.ArticuloFarmacia
+import mx.gob.inr.farmacia.CatAreaFarmacia;
 import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
+import mx.gob.inr.utils.domain.CatArea
 import mx.gob.inr.ceye.CatAreaCeye
 import mx.gob.inr.utils.domain.Cierre
 
@@ -387,14 +389,20 @@ class UtilService {
 	 * @param almacen
 	 * @return
 	 */
-	List<CatAreaCeye> areasCeyeByAlmacen(String almacen){
+	List<CatArea> areasByAlmacen(String almacen){
 		
-		return CatAreaCeye.findAllByAlmacen(almacen, [sort: "id", order: "asc"])
-		
+		if(almacen != 'F'){
+			return CatAreaCeye.findAllByAlmacen(almacen, [sort: "id", order: "asc"])			
+		}
+		else{
+			return CatAreaFarmacia.findAll([sort: "id", order: "asc"])			
+		}		
 	}
-	   
-	   
-	   
+	
+	List<List<?>> partitionList(List<?> areas, Integer number){
+		
+		return areas.collate(number)		
+	}	   
   
    
 }

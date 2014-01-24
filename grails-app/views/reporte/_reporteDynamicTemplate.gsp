@@ -29,13 +29,18 @@
 					<g:textField name="fechaFinal" value="${fechaFinal.format('dd/MM/yyyy')}" size="8"/>
 				</td>
 			</tr>	
+			
+			
+			<g:if test="${almacen != 'F'}">
 						
-			<tr>
-				<td colspan="2">
-					<label for="tipoVale">Tipo Vale</label>						
-						<g:select name="tipoVale" from="${['todos','instituto', 'paciente', 'traslado']}"/>		
-				</td>			
-			</tr>
+				<tr>
+					<td colspan="2">
+						<label for="tipoVale">Tipo Vale</label>						
+							<g:select name="tipoVale" from="${['todos','instituto', 'paciente', 'traslado']}"/>		
+					</td>			
+				</tr>
+			
+			</g:if>
 			
 			<tr>
 				<td colspan="2">

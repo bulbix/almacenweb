@@ -201,113 +201,8 @@ class ReporteCeyeService extends ReporteService {
 		}	
 		
 		reporteList		
-	}
-	
-	/*******
-	 * 
-	 * 
-	 * 
-	 * @param params
-	 * @param tipo
-	 * @return
-	 */
-	private def reporteConcentradoServcio(params, String tipo){
-		
-		def entityArea = CatAreaCeye
-		def entityDetalle		
-		
-		if(tipo == "entrada"){
-			entityDetalle = EntradaDetalleCeye
-		}
-		else if(tipo == "salida"){			
-			entityDetalle = SalidaDetalleCeye			
-		}
-		
-		
-		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
-		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
-		
-		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
-		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
-		
-		
-		def reporteList = []
-		
-		def detalleList = entityDetalle.withCriteria{		
-			
-			articulo{
-				
-				order("id","asc")
-				
-			}
-						
-			if(tipo == "entrada"){
-				entrada{		
-					
-					createAlias("entrada.area","a",CriteriaSpecification.LEFT_JOIN) 
-					
-					between("fecha",fechaInicial, fechaFinal )
-					eq("estado","A")
-					eq("almacen",params.almacen)
-					
-					if(params.tipoVale != "todos"){
-						eq("tipoVale", params.tipoVale)
-					}
-					
-				}				
-			}
-			else if(tipo == "salida"){
-				salida{
-					
-					createAlias("salida.area","a",CriteriaSpecification.LEFT_JOIN)
-					
-					between("fecha",fechaInicial, fechaFinal)
-					eq("estado","A")
-					eq("almacen",params.almacen)
-					
-					if(params.tipoVale != "todos"){
-						eq("tipoVale", params.tipoVale)
-					}
-				}				
-			}			
-			
-		}.each{ detalle ->	
-			
-			def cantidad, area
-		
-			if(tipo == "entrada"){
-				cantidad = detalle?.cantidad
-				area = detalle?.entrada?.area
-				
-			}
-			else if(tipo == "salida"){
-				cantidad = detalle?.cantidadSurtida
-				area = detalle?.salida?.area
-			}
-			
-			def registro = reporteList.find { r -> r.cveArt == detalle.articulo.id }
-			
-			if(registro){				
-				if(area){
-					registro."cantidad_area${area.id}" += cantidad
-				}
-			}
-			else{
-				
-				if(cantidad != 0 && area){
-				
-					registro = new ConcentradoServicio(cveArt:detalle.articulo.id,descArticulo:detalle.articulo.desArticulo,
-						unidad:detalle.articulo.unidad, area:area)
-					
-					registro."cantidad_area${area.id}" = cantidad				
-					reporteList << registro
-				}
-			}		
-		}
-		
-		reporteList	
-		
 	}	
+	
 	
 	/***
 	 * Concentrado de servicios de entrada
@@ -316,16 +211,7 @@ class ReporteCeyeService extends ReporteService {
 	 */
 	def reporteConcentradoServicioEntrada(params){
 		reporteConcentradoServcio(params, "entrada")
-	}
-	
-	/***
-	 * Concentrado de servicios de salida
-	 * @param params
-	 * @return
-	 */
-	def reporteConcentradoServicioSalida(params){
-		reporteConcentradoServcio(params, "salida")
-	}
+	}	
 	
 	
 	public reporteFoliosAlmacen(params){

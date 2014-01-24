@@ -1,13 +1,16 @@
 package mx.gob.inr.utils.services
 
 import groovy.sql.Sql
+
 import javax.sql.DataSource
+
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.utils.UtilService;
 import mx.gob.inr.utils.reportes.*;
 import mx.gob.inr.ceye.*
 import mx.gob.inr.utils.*;
 import mx.gob.inr.materiales.SalidaMaterial;
+import org.hibernate.criterion.CriteriaSpecification
 
 abstract class ReporteService {
 		
@@ -493,4 +496,120 @@ abstract class ReporteService {
 		
 	}
 	
+		
+	/*******
+	 *
+	 *
+	 *
+	 * @param params
+	 * @param tipo
+	 * @return
+	 */
+	private def reporteConcentradoServcio(params, String tipo){
+				
+		def entityDetalle
+
+		if(params.almacen == 'F'){
+			entityDetalle = tipo=='salida'? SalidaDetalleFarmacia: EntradaDetalleFarmacia
+		}
+		else{
+			entityDetalle = tipo=='salida'? SalidaDetalleCeye: EntradaDetalleCeye
+		}
+
+
+		def fechaInicial = new Date().parse("dd/MM/yyyy", params.fechaInicial)
+		def fechaFinal = new Date().parse("dd/MM/yyyy", params.fechaFinal)
+
+		params.fechaInicial = fechaInicial.format('yyyy-MM-dd')
+		params.fechaFinal =  fechaFinal.format('yyyy-MM-dd')
+
+
+		def reporteList = []
+
+		def detalleList = entityDetalle.withCriteria{
+
+			articulo{
+
+				order("id","asc")
+
+			}
+
+			if(tipo == "entrada"){
+				entrada{
+
+					createAlias("entrada.area","a",CriteriaSpecification.LEFT_JOIN)
+
+					between("fecha",fechaInicial, fechaFinal )
+					eq("estado","A")
+					eq("almacen",params.almacen)
+
+					if(params.almacen != 'F' && params.tipoVale != "todos"){
+						eq("tipoVale", params.tipoVale)
+					}
+
+				}
+			}
+			else if(tipo == "salida"){
+				salida{
+
+					createAlias("salida.area","a",CriteriaSpecification.LEFT_JOIN)
+
+					between("fecha",fechaInicial, fechaFinal)
+					eq("estado","A")
+					eq("almacen",params.almacen)
+
+					if(params.almacen != 'F' && params.tipoVale != "todos"){
+						eq("tipoVale", params.tipoVale)
+					}
+				}
+			}
+
+		}.each{ detalle ->
+
+			def cantidad, area
+
+			if(tipo == "entrada"){
+				cantidad = detalle?.cantidad
+				area = detalle?.entrada?.area
+
+			}
+			else if(tipo == "salida"){
+				cantidad = detalle?.cantidadSurtida
+				area = detalle?.salida?.area
+			}
+
+			def registro = reporteList.find { r -> r.cveArt == detalle.articulo.id }
+
+			if(registro){
+				if(area){
+					registro."cantidad_area${area.id}" += cantidad
+				}
+			}
+			else{
+
+				if(cantidad != 0 && area){
+
+					registro = new ConcentradoServicio(cveArt:detalle.articulo.id,descArticulo:detalle.articulo.desArticulo,
+					unidad:detalle.articulo.unidad, area:area)
+
+					registro."cantidad_area${area.id}" = cantidad
+					reporteList << registro
+				}
+			}
+		}
+
+		reporteList
+
+	}
+	
+	/***
+	 * Concentrado de servicios de salida
+	 * @param params
+	 * @return
+	 */
+	def reporteConcentradoServicioSalida(params){
+		reporteConcentradoServcio(params, "salida")
+	}
+	
+			
 }

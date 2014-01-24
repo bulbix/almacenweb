@@ -1,51 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="1" failures="3" hostname="lprado-PC" id="0" name="UtilTests" package="almacenweb" tests="4" time="1.015" timestamp="2013-06-06T20:32:32">
+  <testsuite errors="1" failures="0" hostname="lprado-PC" id="0" name="ReportesCeyeTests" package="almacenweb" tests="2" time="5.732" timestamp="2014-01-22T23:01:05">
       <properties />
 
-      <testcase classname="almacenweb.UtilTests" name="encodePassword" time="0.163">
-          <failure message="org.junit.ComparisonFailure: expected:&lt;[3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea]&gt; but was:&lt;[huevos]&gt;" type="junit.framework.AssertionFailedError">	at almacenweb.UtilTests.encodePassword(UtilTests.groovy:21)
-</failure>
+      <testcase classname="almacenweb.ReportesCeyeTests" name="testReporteConcentradoServicioSalida" time="5.632" />
 
-      </testcase>
-
-      <testcase classname="almacenweb.UtilTests" name="testUsuarios" time="0.468">
-          <error message="No row with the given identifier exists: [mx.gob.inr.seguridad.Usuario#6558]" type="org.hibernate.ObjectNotFoundException">org.hibernate.ObjectNotFoundException: No row with the given identifier exists: [mx.gob.inr.seguridad.Usuario#6558]
-	at mx.gob.inr.utils.UtilService$_usuarios_closure2.doCall(UtilService.groovy:37)
-	at mx.gob.inr.utils.UtilService.usuarios(UtilService.groovy:37)
-	at almacenweb.UtilTests.testUsuarios(UtilTests.groovy:29)
+      <testcase classname="almacenweb.ReportesCeyeTests" name="testReporteConcentradoValeEntrada" time="0.086">
+          <error message="No such property: reporteList for class: almacenweb.ReportesCeyeTests" type="groovy.lang.MissingPropertyException">groovy.lang.MissingPropertyException: No such property: reporteList for class: almacenweb.ReportesCeyeTests
+	at almacenweb.ReportesCeyeTests.testReporteConcentradoValeEntrada(ReportesCeyeTests.groovy:30)
 </error>
 
       </testcase>
 
-      <testcase classname="almacenweb.UtilTests" name="testConsultar" time="0.299">
-          <failure message="java.lang.AssertionError: expected:&lt;699&gt; but was:&lt;1&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;699&gt; but was:&lt;1&gt;
-	at almacenweb.UtilTests.testConsultar(UtilTests.groovy:44)
-</failure>
-
-      </testcase>
-
-      <testcase classname="almacenweb.UtilTests" name="testFechaDesglosada" time="0.071">
-          <failure message="java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: java.lang.AssertionError: expected:&lt;2012&gt; but was:&lt;2013&gt;
-	at almacenweb.UtilTests.testFechaDesglosada(UtilTests.groovy:51)
-</failure>
-
-      </testcase>
-
-      <system-out><![CDATA[--Output from encodePassword--
---Output from testUsuarios--
-Hibernate: select perfil0_.idperfil as idperfil1_0_, perfil0_.desc_perfil as desc2_1_0_ from perfil perfil0_ where perfil0_.idperfil=?
-Hibernate: select this_.idperfil as idperfil3_0_, this_.idusuario as idusuario3_0_ from usuario_perfil this_ where this_.idperfil=?
-Hibernate: select usuario0_.idusuario as idusuario10_0_, usuario0_.account_expired as account2_10_0_, usuario0_.account_locked as account3_10_0_, usuario0_.enabled as enabled10_0_, usuario0_.nombre as nombre10_0_, usuario0_."passwordc" as passwordc6_10_0_, usuario0_.password_expired as password7_10_0_, usuario0_.rfc as rfc10_0_ from usuario usuario0_ where usuario0_.idusuario=?
---Output from testConsultar--
-Hibernate: select this_.id_entrada as id1_2_0_, this_.actividad as actividad2_0_, this_.almacen as almacen2_0_, this_.devolucion as devolucion2_0_, this_.estado_entrada as estado5_2_0_, this_.fecha_entrada as fecha6_2_0_, this_.fecha_captura as fecha7_2_0_, this_.numero_entrada as numero8_2_0_, this_.id_sal_alma as id9_2_0_, this_.ip_terminal as ip10_2_0_, this_.numero_factura as numero11_2_0_, this_.presupuesto as presupu12_2_0_, this_.recibio as recibio2_0_, this_.supervisor as supervisor2_0_, this_.id_usuario as id15_2_0_ from entrada this_
---Output from testFechaDesglosada--
+      <system-out><![CDATA[--Output from testReporteConcentradoServicioSalida--
+--Output from testReporteConcentradoValeEntrada--
 ]]></system-out>
 
-      <system-err><![CDATA[--Output from encodePassword--
---Output from testUsuarios--
---Output from testConsultar--
---Output from testFechaDesglosada--
+      <system-err><![CDATA[--Output from testReporteConcentradoServicioSalida--
+--Output from testReporteConcentradoValeEntrada--
 ]]></system-err>
 
   </testsuite>

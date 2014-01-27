@@ -2,22 +2,17 @@ package mx.gob.inr.utils
 
 import grails.plugins.springsecurity.SpringSecurityService;
 
-import java.io.InputStream;
 import java.util.Date;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream
+import javax.servlet.http.HttpServletResponse
 
 import mx.gob.inr.ceye.ArticuloCeye
 import mx.gob.inr.farmacia.ArticuloFarmacia
-import mx.gob.inr.farmacia.CatAreaFarmacia;
 import mx.gob.inr.ceye.CostoPromedioCeye
 import mx.gob.inr.seguridad.*;
 import mx.gob.inr.utils.domain.Articulo;
 import mx.gob.inr.utils.domain.CatArea
-import mx.gob.inr.ceye.CatAreaCeye
 import mx.gob.inr.utils.domain.Cierre
-
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.web.context.request.RequestContextHolder
@@ -31,17 +26,17 @@ class UtilService {
 	
 	
 	
-	def clave(entityArticulo, String tipo){		
+	def clave(entityArticulo, String tipo){
 		def criteria = entityArticulo.createCriteria();
 		
-		def number = criteria.get {			
-			projections{				
-				if(tipo == 'min')				
+		def number = criteria.get {
+			projections{
+				if(tipo == 'min')
 					min("id")
 				else if(tipo=="max")
 					max("id")
 			}
-		}		
+		}
 		number
 	}
 	
@@ -51,73 +46,84 @@ class UtilService {
 	 * @return
 	 */
 	def fechaPrimeroMes(){
-		def fecha = new Date()		
+		def fecha = new Date()
 		
 		def fechaPrimero = new Date()
 		fechaPrimero.set(month:fecha.getAt(Calendar.MONTH),date:1)
 		fechaPrimero
 	}
+	
+	/****
+	 * Se obtiene el anio en el archivo de configuracion
+	 * @return
+	 */
+	def anioConfiguracion(){
 		
-   /*****
-    *Toma el anio de un archivo de configuracion si no existe toma el anio actual
-    * @return
-    */
-   def fechasAnioActual(){
-	   
-	   
-	   GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
-	   GrailsHttpSession session = request.session
-	   
-	   def anio  = null     
+		GrailsWebRequest request = RequestContextHolder.currentRequestAttributes()
+		GrailsHttpSession session = request.session
 		
-	   switch(session.almacen){		   
-		   	case "F":
-			   	anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
-		   	   	break
-	   		case "C":
-			   	anio  = grailsApplication.config.almacenWeb.ceye.anioActual
-			   	break
-	   		case "S":
-			   	anio  = grailsApplication.config.almacenWeb.subceye.anioActual
-			   	break
+		def anio  = null
+		 
+		switch(session.almacen){
+			case "F":
+				anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
+				break
+			case "C":
+				anio  = grailsApplication.config.almacenWeb.ceye.anioActual
+				break
+			case "S":
+				anio  = grailsApplication.config.almacenWeb.subceye.anioActual
+				break
 			case "Q":
 				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
 				break
-	   }
+		}
+		
+		return anio
+		
+	}
+		
+   /*****
+	*Toma el anio de un archivo de configuracion si no existe toma el anio actual
+	* @return
+	*/
+   def fechasAnioActual(){
 	   
-	   if(!anio){
+	   def anio  = anioConfiguracion()
+		
+		if(!anio){
 			def fecha = new Date()
 			anio = fecha.getAt(Calendar.YEAR)
-	   }
+		}
 		
-	   def fecha1 = new Date()
-	   fecha1.set(month:0,date:1, year:anio)
+		def fecha1 = new Date()
+		fecha1.set(month:0,date:1, year:anio)
 		
-	   def fecha2 = new Date()
-	   fecha2.set(month:11,date:31, year:anio)
+		def fecha2 = new Date()
+		fecha2.set(month:11,date:31, year:anio)
 		
-	   [fechaInicio:fecha1,fechaFin:fecha2]
+		[fechaInicio:fecha1,fechaFin:fecha2]
 	}
    
    
    def usuarios(Long idPerfil){
 	   
-	   def perfil = Perfil.get(idPerfil)   
+	   def perfil = Perfil.get(idPerfil)
 	   
 	   def usuariosPerfilList = UsuarioPerfil.createCriteria().list(){
-		   	projections{
+			   projections{
 			   property("usuario.id")
 			}
-	   		eq("perfil",perfil)					   	   
+			   eq("perfil",perfil)
 	   }
 	   
 	   def usuariosList = Usuario.createCriteria().list {
 		   'in'("id",usuariosPerfilList)
-		    order("nombre")
+			order("nombre")
 	   }
 	   
-	   usuariosList 
-   }  
+	   usuariosList
+   }
    
    
    boolean checkFolio(entity, Integer folio, String almacen){
@@ -131,7 +137,7 @@ class UtilService {
 		   between("fecha",fechas.fechaInicio,fechas.fechaFin)
 		   eq("almacen",almacen)
 	   }
-	    
+		
 	   if(result)
 		   return true
 	   else
@@ -192,13 +198,13 @@ class UtilService {
 		   mes:cal.get(GregorianCalendar.MONTH), dia:cal.get(GregorianCalendar.DAY_OF_WEEK)]
    }
    
-   boolean checkCierre(entityCierre, Date fecha, String almacen){	   
+   boolean checkCierre(entityCierre, Date fecha, String almacen){
 	   
 	   def criteria = entityCierre.createCriteria();
 	   
 	   def fechaDesglosada = fechaDesglosada(fecha)
 	   
-	   def result = criteria.get {		   
+	   def result = criteria.get {
 		   sqlRestriction("month(fecha_cierre) = ($fechaDesglosada.mes + 1)")
 		   sqlRestriction("year(fecha_cierre) = $fechaDesglosada.anio")
 		   eq("almacen", almacen)
@@ -206,9 +212,9 @@ class UtilService {
 	   }
 	   
 	   if(result)
-	   	return true
+		   return true
 	   else
-	   	return false
+		   return false
    }
    
    def cierreAnterior(entityCierre, Date fechaCierre, String almacen, Articulo articulo = null){
@@ -218,11 +224,11 @@ class UtilService {
 		
 		Calendar cal = Calendar.getInstance();
 		
-		if(mFechaCierre.mes == 0){			
-			cal.set(mFechaCierre.anio - 1 , 11 , 1)//01/12/anio ANterior			
+		if(mFechaCierre.mes == 0){
+			cal.set(mFechaCierre.anio - 1 , 11 , 1)//01/12/anio ANterior
 		}
-		else{			
-			cal.set(mFechaCierre.anio , mFechaCierre.mes -1 , 1) //01/mes ANterior/anio Cierre			
+		else{
+			cal.set(mFechaCierre.anio , mFechaCierre.mes -1 , 1) //01/mes ANterior/anio Cierre
 		}
 		
 		fechaCierreAnterior  = cal.getTime();
@@ -234,12 +240,12 @@ class UtilService {
 			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
 			if(articulo){
 				eq("articulo",articulo)
-			}			
+			}
 			eq("almacen", almacen)
 			maxResults(1)
 		}
 		
-		if(!cierre){			
+		if(!cierre){
 			cierre = entityCierre.newInstance()
 			def result = new Date()
 			result.set(year:2000,month:0,date:1)
@@ -252,9 +258,9 @@ class UtilService {
 	}
    
    /***
-    * 
-    * @return Maxima fecha de cierre del periodo
-    */
+	*
+	* @return Maxima fecha de cierre del periodo
+	*/
    Date maximaFechaCierre(entityCierre, String almacen){
 	   
 	   def result = new Date()
@@ -272,15 +278,15 @@ class UtilService {
 	   }
 	   
 	   if(max)
-	   	result = max
+		   result = max
 	   
-	   return result	   
+	   return result
    }
-         
+		 
    
    String getAlmacenDescripcion(String almacen){
 	   
-	   def almacenMap = [F:'FARMACIA',C:'CEYE',S:'SUBCEYE',Q:'CENIAQ CEYE']	   
+	   def almacenMap = [F:'FARMACIA',C:'CEYE',S:'SUBCEYE',Q:'CENIAQ CEYE']
 	   almacenMap[almacen]
    }
    
@@ -315,32 +321,31 @@ class UtilService {
 			   eq("almacen",almacen)
 		   }
 		   
-		   if(costoPromedio){		   
+		   if(costoPromedio){
 			   costoPromedio.movimientoProm = costo
 			   costoPromedio.save([validate:false])
 		   }
-	   }	   
+	   }
    
-   } 
+   }
    
    /**
-    * Revisa si es un administrador del modulo o no
-    * @param almacen
-    * @return
-    */
+	* Revisa si es un administrador del modulo o no
+	* @param almacen
+	* @return
+	*/
    def isAdmin(String almacen){
 	   
 	   def result = false
 	   if(almacen == 'F'){
 		   result = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_FARMACIA_ADMIN'} != null
 	   }
-	   else{		  
+	   else{
 		   result = springSecurityService.authentication.authorities.find {a -> a.authority == 'ROLE_CEYE_ADMIN'} != null
 	   }
 	   
 	   result
    }
-   
    
    String getFechaActual(String format){
 	   
@@ -351,17 +356,17 @@ class UtilService {
    
    
    /******
-    * 
-    * Muestra un reporte generado en itext con el arreglo de bytes
-    * 
-    * 
-    * 
-    * @param response
-    * @param datos
-    * @param contentType
-    * @param nombre
-    * @throws Exception
-    */
+	*
+	* Muestra un reporte generado en itext con el arreglo de bytes
+	*
+	*
+	*
+	* @param response
+	* @param datos
+	* @param contentType
+	* @param nombre
+	* @throws Exception
+	*/
    public void mostrarReporte(HttpServletResponse response, InputStream datos,
 	   String contentType, String nombre) throws Exception {
 		   response.setContentType(contentType);
@@ -385,24 +390,25 @@ class UtilService {
 	
 	/******.
 	 * Busca las areas de ceye por almacen
-	 *   
+	 *
 	 * @param almacen
 	 * @return
 	 */
 	List<CatArea> areasByAlmacen(String almacen){
 		
 		if(almacen != 'F'){
-			return CatAreaCeye.findAllByAlmacen(almacen, [sort: "id", order: "asc"])			
+			return CatAreaCeye.findAllByAlmacen(almacen, [sort: "id", order: "asc"])
 		}
 		else{
-			return CatAreaFarmacia.findAll([sort: "id", order: "asc"])			
-		}		
+			return CatAreaFarmacia.findAll([sort: "id", order: "asc"])
+		}
 	}
 	
 	List<List<?>> partitionList(List<?> areas, Integer number){
 		
-		return areas.collate(number)		
-	}	   
+		return areas.collate(number)
+	}
+
   
    
 }

@@ -14,7 +14,7 @@
 	</h1>
 	
 	<g:jasperReport jasper="${reportName}" format="PDF,XLSX" delimiter=" " name=" ${reportDisplay}" 
-		controller="${controllerName}" action="reporte" id="reportForm">	
+		controller="${controllerName}" action="reporte" id="formReporte">	
 		<table>
 		
 		
@@ -76,7 +76,8 @@
 			
 							
 		</table>
-				
+		
+		<input type="hidden" id="download_token_value_id" name="download_token_value_id"/>		
 		<input type="hidden" name="almacen" value="${almacen}" />
 		<input type="hidden" name="methodName" value="${methodName}" />
 	

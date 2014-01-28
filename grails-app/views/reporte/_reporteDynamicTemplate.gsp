@@ -16,7 +16,7 @@
 	
 	<h1>${reportDisplay}</h1>
 	
-	<g:form controller="${controllerName}">		
+	<form action="/almacenWeb/${controllerName}/reporteDynamic" id="formReporte">		
 		<table>	
 			<tr>
 				<td>
@@ -50,12 +50,13 @@
 			</tr>
 							
 		</table>
-				
+		
+		<input type="hidden" id="download_token_value_id" name="download_token_value_id"/>		
 		<input type="hidden" name="almacen" value="${almacen}" />
 		<input type="hidden" name="methodName" value="${methodName}" />
 		<input type="hidden" name="reportDisplay" value="${reportDisplay}" />
 		
-		<g:actionSubmit value="Generar Reporte" action="reporteDynamic"/>
+		<input type="submit" value="Generar Reporte"/>
 	
-	</g:form>	
+	</form>	
 </div>

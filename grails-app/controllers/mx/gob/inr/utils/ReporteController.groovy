@@ -1,5 +1,6 @@
 package mx.gob.inr.utils
 
+import javax.servlet.http.Cookie
 import mx.gob.inr.farmacia.*
 import mx.gob.inr.ceye.*
 import mx.gob.inr.ceye.reportes.ReporteDynamicConcentradoServicios;
@@ -81,6 +82,9 @@ class ReporteController {
 	 */
 	def reporte() {
 		
+		Cookie reportCookie = new Cookie("fileDownloadToken", params.download_token_value_id);		
+		response.addCookie(reportCookie)	
+				
 		def methodName = params.methodName
 		
 		params.IMAGE_DIR = "${servletContext.getRealPath('/images')}/"
@@ -120,7 +124,11 @@ class ReporteController {
 	 * Reportes Generados con Dynamic Reports
 	 * @return
 	 */
-	def reporteDynamic(){		
+	def reporteDynamic(){
+		
+		Cookie reportCookie = new Cookie("fileDownloadToken", params.download_token_value_id);
+		response.addCookie(reportCookie)
+				
 		def imageDir = "${servletContext.getRealPath('/images')}/"
 		ReporteDynamicConcentradoServicios reporteServicio =
 		 new ReporteDynamicConcentradoServicios(utilService,imageDir,response)

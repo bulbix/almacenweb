@@ -36,6 +36,8 @@
 		<g:javascript src="jquery.currency.js"/>
 		<g:javascript src="jquery.timer.js"/>
 		<g:javascript src="jquery-ui-timepicker-addon.js"/>	
+		<g:javascript src="jquery.blockUI.js"/>
+		<g:javascript src="jquery.cookie.js"/>
 		<g:javascript src="validaciones.js"/>
 		<g:javascript src="comunes.js"/>
 	

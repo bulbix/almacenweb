@@ -16,6 +16,8 @@ import mx.gob.inr.utils.domain.Cierre
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsHttpSession
 import org.codehaus.groovy.grails.web.servlet.mvc.GrailsWebRequest
 import org.springframework.web.context.request.RequestContextHolder
+import mx.gob.inr.ceye.CatAreaCeye
+import mx.gob.inr.farmacia.CatAreaFarmacia
 
 class UtilService {
 	

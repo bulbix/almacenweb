@@ -403,7 +403,7 @@ function controlesHead(){
 	});
 	
 	$("#guardarPaquete").click(function(){	
-		if($(".cabecera").valid() && $("#folio").valid() && $("#remision").valid()){
+		if($(".cabecera").valid() && $("#folio").valid()){
 			
 			mostrarConfirmacion('Esta seguro de guardar el paquete?', function(){
 				guardarTodo(this)

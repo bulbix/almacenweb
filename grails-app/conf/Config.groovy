@@ -98,8 +98,9 @@ grails.plugins.springsecurity.userLookup.userDomainClassName = 'mx.gob.inr.segur
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'mx.gob.inr.seguridad.UsuarioPerfil'
 grails.plugins.springsecurity.authority.className = 'mx.gob.inr.seguridad.Perfil'
 
-//auditLog.verbose = true
-
 auditLog {
 	tablename = "audit_log_almacen"
+	//verbose = true
+	logIds = true
+	//cacheDisabled = true
   }

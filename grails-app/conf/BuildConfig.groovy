@@ -74,5 +74,7 @@ grails.project.dependency.resolution = {
         compile ':cache:1.0.1'
 		
 		runtime ':external-config-reload:latest.integration'
+		
+		compile ":audit-logging:0.5.5.3"
     }
 }

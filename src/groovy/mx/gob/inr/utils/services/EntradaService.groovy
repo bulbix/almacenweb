@@ -480,7 +480,13 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 	}
 
 	
-	
+	/****
+	 * Busca entradas para dar salida
+	 * @param clave
+	 * @param fecha
+	 * @param almacen
+	 * @return
+	 */
 	def entradasDetalle(Long clave, Date fecha, String almacen){
 
 		def criteria = entityEntradaDetalle.createCriteria()
@@ -492,6 +498,12 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 				eq("almacen", almacen)
 				eq("estado","A")
 				le("fecha",fecha)
+				
+				if(almacen != 'F'){
+					order("fecha", "desc")
+					order("folio", "desc")
+				}
+				
 			}
 
 			articulo {
@@ -499,8 +511,11 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			}
 
 			ne("existencia",cero)
-
-			order("fechaCaducidad", "asc")
+			
+			if(almacen == 'F'){
+				order("fechaCaducidad", "asc")
+			}
+							
 		}
 
 		detalle

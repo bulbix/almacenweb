@@ -329,3 +329,9 @@ function mostrarConfirmacion(mensaje, functionSi){
 	
 }
 
+function nuevaVentana(url){							
+	var popup = window.open(url);				
+	popup.moveTo(0, 0);
+	popup.resizeTo(screen.availWidth, screen.availHeight);		
+}  
+

@@ -4,9 +4,9 @@
 			<ul>				
 				<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
 					<li>
-						<g:link class="create" action="create">
-						<g:message code="default.new.label" args="[entityName]" />
-						</g:link>
+						<a href="#" onclick="nuevaVentana('/almacenWeb/${controllerName}/create')" class="create">
+							<g:message code="default.new.label" args="[entityName]" />
+						</a>
 					</li>
 				</sec:noAccess>
 				
@@ -54,8 +54,11 @@
 					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 					
 						<td>${fieldValue(bean: entradaInstance, field: "folio")}</td>					
-						<td><g:link action="create" id="${entradaInstance.id}">
-							<g:formatDate date="${entradaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>	
+						<td>
+							<a href="#" onclick="nuevaVentana('/almacenWeb/${controllerName}/create/${entradaInstance.id}')">
+								<g:formatDate date="${entradaInstance.fecha}" format="dd/MM/yyyy" />
+							</a>						
+						</td>	
 							
 						<g:if test="${almacen == 'F'}">										
 							<td>${fieldValue(bean: entradaInstance, field: "folioAlmacen")}</td>

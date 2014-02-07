@@ -4,7 +4,11 @@
 		<div class="nav" role="navigation">
 			<ul>				
 				<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
-					<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+					<li>
+						<a href="#" onclick="nuevaVentana('/almacenWeb/${controllerName}/create')" class="create">
+							<g:message code="default.new.label" args="[entityName]" />
+						</a>
+					</li>
 				</sec:noAccess>
 				
 				<li><a class="home" href="${createLink(action: 'list')}">
@@ -47,8 +51,11 @@
 						<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 						
 							<td>${fieldValue(bean: salidaInstance, field: "folio")}</td>					
-							<td><g:link action="create" id="${salidaInstance.id}">
-								<g:formatDate date="${salidaInstance.fecha}" format="dd/MM/yyyy" /></g:link></td>
+							<td>
+								<a href="#" onclick="nuevaVentana('/almacenWeb/${controllerName}/create/${salidaInstance.id}')">
+									<g:formatDate date="${salidaInstance.fecha}" format="dd/MM/yyyy" />
+								</a>	
+							</td>
 							<td>${fieldValue(bean: salidaInstance, field: "usuario")}</td>
 							<td>${fieldValue(bean: salidaInstance, field: "area")}</td>
 							

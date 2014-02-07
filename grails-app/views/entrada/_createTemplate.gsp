@@ -8,10 +8,10 @@
 
 <div class="nav" role="navigation">
 	<ul>
-		<li><g:link class="list" action="list">
+		<%--<li><g:link class="list" action="list">
 				<g:message code="default.list.label" args="[entityName]" />
 			</g:link>
-		</li>
+		</li>--%>
 		
 		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
 			<li><a href="${createLink(action: 'create')}" class="nuevo">Nuevo</a></li>
@@ -20,8 +20,8 @@
 		</sec:noAccess>
 		
 		<sec:access expression="hasRole('ROLE_CEYE')">
-			<li><a href="/almacenWeb/articuloCeye" class="catalogo" 
-			onclick="window.open(this.href, 'child', 'scrollbars,width=900,height=600'); return false">Catalogo Articulo</a>
+			<li><a href="#" class="catalogo" 
+			onclick="nuevaVentana('/almacenWeb/articuloCeye')">Catalogo Articulo</a>
 			</li>
 		</sec:access>
 		

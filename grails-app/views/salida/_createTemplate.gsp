@@ -8,9 +8,11 @@
 
 <div class="nav" role="navigation">
 	<ul>
+		<%-- 
 		<li><g:link class="list" action="list">
 				<g:message code="default.list.label" args="[entityName]" />
 		</g:link></li>
+		--%>
 		
 		<sec:noAccess expression="hasRole('ROLE_FARMACIA_LECTURA')">
 			<li><a href="${createLink(action: 'create')}" class="nuevo">Nuevo</a></li>

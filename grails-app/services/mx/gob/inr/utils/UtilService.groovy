@@ -68,16 +68,16 @@ class UtilService {
 		 
 		switch(session.almacen){
 			case "F":
-				anio  = grailsApplication.config.almacenWeb.farmacia.anioActual
+				anio  = 2015
 				break
 			case "C":
-				anio  = grailsApplication.config.almacenWeb.ceye.anioActual
+				anio  = 2015
 				break
 			case "S":
-				anio  = grailsApplication.config.almacenWeb.subceye.anioActual
+				anio  = 2015
 				break
 			case "Q":
-				anio  = grailsApplication.config.almacenWeb.ceniaqceye.anioActual
+				anio  = 2015
 				break
 		}
 		
@@ -207,8 +207,8 @@ class UtilService {
 	   def fechaDesglosada = fechaDesglosada(fecha)
 	   
 	   def result = criteria.get {
-		   sqlRestriction("month(fecha_cierre) = ($fechaDesglosada.mes + 1)")
-		   sqlRestriction("year(fecha_cierre) = $fechaDesglosada.anio")
+		   sqlRestriction("EXTRACT(MONTH FROM fecha_cierre) = ($fechaDesglosada.mes + 1)")
+		   sqlRestriction("EXTRACT(YEAR FROM  fecha_cierre) = $fechaDesglosada.anio")
 		   eq("almacen", almacen)
 		   maxResults(1)
 	   }
@@ -238,8 +238,8 @@ class UtilService {
 		def mFechaCierreAnterior = fechaDesglosada(fechaCierreAnterior)
 		
 		def cierre = entityCierre.createCriteria().get{
-			sqlRestriction("month(fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
-			sqlRestriction("year(fecha_cierre) = $mFechaCierreAnterior.anio")
+			sqlRestriction("extract (month from fecha_cierre) = ($mFechaCierreAnterior.mes + 1)")
+			sqlRestriction("extract (year from fecha_cierre) = $mFechaCierreAnterior.anio")
 			if(articulo){
 				eq("articulo",articulo)
 			}

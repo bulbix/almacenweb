@@ -2,6 +2,7 @@ package mx.gob.inr.seguridad
 
 class Perfil {
 
+	Long id
 	String authority
 
 	static mapping = {

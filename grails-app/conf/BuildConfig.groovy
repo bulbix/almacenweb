@@ -37,6 +37,8 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
+		mavenRepo "http://repo.grails.org/grails/core"
+		mavenRepo "http://repo.grails.org/grails/plugins"
     }
 
     dependencies {
@@ -48,7 +50,8 @@ grails.project.dependency.resolution = {
 		compile('net.sourceforge.dynamicreports:dynamicreports-core:3.1.6'){
 			excludes 'itext'
 		}
-		compile('com.lowagie:itext:2.1.7')		
+		compile('com.lowagie:itext:2.1.7')
+		runtime 'org.postgresql:postgresql:9.3-1100-jdbc4'
     }	
 
     plugins {

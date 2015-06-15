@@ -142,7 +142,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 	
 	def cerrarPeriodo(Date fechaCierre, String almacen){
 		
-		int minClave = utilService.clave(entityArticulo,"min")
+		int minClave = 0
 		int maxClave = utilService.clave(entityArticulo,"max")
 
 		int totalArticulos = (maxClave - minClave);
@@ -165,7 +165,7 @@ abstract class CierreService <C extends Cierre, A extends Articulo> {
 			}
 			
 			//Calculamos el porcentaje
-			double porcentaje = (contadorArticulo * 100.0) / (totalArticulos * 1.0);
+			double porcentaje = (contadorArticulo * 100.0) / (totalArticulos==0?1:totalArticulos * 1.0);
 			++contadorArticulo;
 			valueProgress = (long)porcentaje;
 			

@@ -31,7 +31,15 @@ class EntradaFarmacia extends Entrada {
 		fechaCaptura updateable:false
     }    
 
-    static constraints = {		
+    static constraints = {
+		numeroFactura(nullable:true)
+		idSalAlma(nullable:true)
+		recibio(nullable:true)
+		supervisor(nullable:true)
+		actividad(nullable:true)
+		presupuesto(nullable:true)
+		ipTerminal(nullable:true)
+		folioAlmacen(nullable:true)
     }
 	
 }

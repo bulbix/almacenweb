@@ -17,7 +17,12 @@ class SalidaDetalleFarmacia extends SalidaDetalle {
 	static belongsTo = [salida:SalidaFarmacia]
 	
 	static constraints = {
-				
+		fechaCaducidad(nullable:true)
+		noLote(nullable:true)
+		precioUnitario(nullable:true)
+		actividad(nullable:true)
+		presupuesto(nullable:true)
+		importe(nullable:true)
 	}
 	
 	static mapping = {

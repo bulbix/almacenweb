@@ -568,7 +568,7 @@ abstract class EntradaService<E extends Entrada> implements IOperacionService<E>
 			entrada {
 				eq("almacen", almacen)
 				eq("estado","A")				
-				sqlRestriction(" year(fecha_entrada)= $anio ")
+				sqlRestriction(" extract(year from fecha_entrada)= $anio ")
 			}
 		
 			articulo {

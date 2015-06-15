@@ -5,7 +5,7 @@ import mx.gob.inr.seguridad.Usuario
 interface IOperacionService <E> {
 	
 	
-	long PERFIL_FARMACIA = 8
+	long PERFIL_FARMACIA = 2
 	long PERFIL_CEYE  = 10
 	short AREA_FARMACIA = 6220
 	

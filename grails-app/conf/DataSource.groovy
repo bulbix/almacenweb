@@ -1,19 +1,17 @@
 dataSource {
-	url = "jdbc:informix-sqli://192.168.10.12:1526/saihweb:informixserver=ol_inrserver"
-	driverClassName = "com.informix.jdbc.IfxDriver"
-	username = "informix"
-	password = "informix"
-	pooled = true	
-	dialect = "org.hibernate.dialect.InformixDialect"
+	pooled = true
+    driverClassName = "org.postgresql.Driver"
+    dialect = "org.hibernate.dialect.PostgreSQLDialect"
+    username = "postgres"
+    password = "garbage"
 }
 
 dataSource_materiales {
-	url = "jdbc:informix-sqli://192.168.10.1:1526/almacenes:informixserver=ol_inrserver"
-	driverClassName = "com.informix.jdbc.IfxDriver"
-	username = "informix"
-	password = "informix"
 	pooled = true
-	dialect = "org.hibernate.dialect.InformixDialect"
+    driverClassName = "org.postgresql.Driver"
+    dialect = "org.hibernate.dialect.PostgreSQLDialect"
+    username = "postgres"
+    password = "garbage"
 }
 
 hibernate {
@@ -27,6 +25,8 @@ hibernate {
 environments {
     development {
         dataSource {
+			dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+			url = "jdbc:postgresql://localhost:5432/almacenes"
 		   logSql = true
         }
 		
@@ -36,7 +36,8 @@ environments {
     }
     test {
         dataSource {          
-		   
+			dbCreate = "update"
+			url = "jdbc:postgresql://localhost:5432/almacenes"
         }
 		
 		dataSource_materiales {		

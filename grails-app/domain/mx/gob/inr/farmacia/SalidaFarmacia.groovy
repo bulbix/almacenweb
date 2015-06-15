@@ -42,5 +42,9 @@ class SalidaFarmacia extends Salida  {
 		fechaCaptura updateable:false
 	}
 	
+	static constraints = {
+		noOrden(nullable:true)
+	}
+	
 	
 }
